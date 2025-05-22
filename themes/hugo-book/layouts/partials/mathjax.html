@@ -1,0 +1,50 @@
+{{ $mathConfig := .Site.Params.mathjax }}
+{{ if .Params.mathjax }}
+  {{ $mathConfig = merge $mathConfig .Params.mathjax }}
+{{ end }}
+
+{{ if or .Params.math $mathConfig.enable }}
+<script>
+  // Get chapter number from page parameters
+  const chapterNum = {{ .Params.chapter | default 0 }};
+  
+
+MathJax = {
+  section: chapterNum,
+  loader: {load: ['[tex]/tagformat']},
+  tex: {
+      packages: {'[+]': ['tagformat']},
+      inlineMath: {{ $mathConfig.inlineMath | jsonify | safeJS }},
+      displayMath: {{ $mathConfig.displayMath | jsonify | safeJS }},
+      processEnvironments: true,
+      processRefs: true,
+      tags: '{{ $mathConfig.tags | default "ams" }}',
+    tagformat: {
+      number: (n) => MathJax.config.section + '.' + n,
+      id: (tag) => 'eqn-id:' + tag
+    }
+  },
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      MathJax.startup.input[0].preFilters.add(({math}) => {
+        if (math.inputData.recompile) {
+          MathJax.config.section = math.inputData.recompile.section;
+        }
+      });
+      MathJax.startup.input[0].postFilters.add(({math}) => {
+        if (math.inputData.recompile) {
+          math.inputData.recompile.section = MathJax.config.section;
+        }
+      });
+    }
+  },
+    options: {
+      skipHtmlTags: {{ $mathConfig.skipHtmlTags | jsonify | safeJS }},
+    }
+
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+{{ end }}

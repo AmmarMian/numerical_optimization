@@ -1,0 +1,7 @@
+{{- $label := .Get 0 -}}
+{{- $theoremNumber := $.Page.Store.Get $label -}}
+{{- if $theoremNumber -}}
+<a href="#{{ $label }}">Theorem {{ $theoremNumber }}</a>
+{{- else -}}
+<a href="#{{ $label }}">this theorem</a>
+{{- end -}}

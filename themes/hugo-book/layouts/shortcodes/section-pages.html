@@ -1,0 +1,8 @@
+<div class="section-toc">
+  <h2>{{ default "Content" (.Get 0) }}</h2>
+  <ul>
+    {{ range .Page.Pages.ByWeight }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  </ul>
+</div>

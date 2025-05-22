@@ -1,0 +1,17 @@
+{{ $chapter := $.Page.Params.chapter | default "0" }}
+{{ $counter := add ($.Page.Scratch.Get "definition_counter" | default 0) 1 }}
+{{ $.Page.Scratch.Set "definition_counter" $counter }}
+{{ $name := .Get 0 }}
+{{ $label := .Get 1 | default (printf "definition-%s-%d" $chapter $counter) }}
+{{ $definitionNumber := (printf "%v.%d" $chapter $counter) }}
+
+<!-- Store the definition reference for later use -->
+{{ $.Page.Store.Set $label $definitionNumber }}
+
+<div id="{{ $label }}" class="theorem-box">
+  <p class="theorem-title"><strong>Definition {{ $definitionNumber }} {{ if $name }}({{ $name }}){{ end }}</strong></p>
+  <div class="theorem-content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>
+

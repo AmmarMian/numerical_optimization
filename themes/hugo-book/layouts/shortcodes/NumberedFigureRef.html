@@ -1,0 +1,7 @@
+{{ $label := .Get 0 }}
+{{ $figureNumber := $.Page.Store.Get $label }}
+{{ if $figureNumber }}
+<a href="#{{ $label }}">{{ $figureNumber }}</a>
+{{ else }}
+<a href="#{{ $label }}">this figure</a>
+{{ end }}

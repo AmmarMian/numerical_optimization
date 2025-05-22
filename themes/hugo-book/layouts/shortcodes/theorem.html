@@ -1,0 +1,16 @@
+{{ $chapter := $.Page.Params.chapter | default "0" }}
+{{ $counter := add ($.Page.Scratch.Get "theorem_counter" | default 0) 1 }}
+{{ $.Page.Scratch.Set "theorem_counter" $counter }}
+{{ $name := .Get 0 }}
+{{ $label := .Get 1 | default (printf "theorem-%s-%d" $chapter $counter) }}
+{{ $theoremNumber := (printf "%v.%d" $chapter $counter) }}
+
+<!-- Store the theorem reference for later use -->
+{{ $.Page.Store.Set $label $theoremNumber }}
+
+<div id="{{ $label }}" class="theorem-box">
+  <p class="theorem-title"><strong>Theorem {{ $theoremNumber }} {{ if $name }}({{ $name }}){{ end }}</strong></p>
+  <div class="theorem-content">
+    {{ .Inner | markdownify }}
+  </div>
+</div>

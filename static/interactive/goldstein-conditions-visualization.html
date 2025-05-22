@@ -1,0 +1,497 @@
+        if (isDescentDirection) {
+          const stepSize = 0.05; // Grid size<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goldstein Conditions Visualization</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', sans-serif; margin: 20px; }
+    body {
+      transform: scale(.75);
+      transform-origin: top left;
+    }
+    h2, h3 { font-weight: 500; }
+    .slider-container, .editor-row { margin: 10px 0; }
+    label { margin-right: 10px; font-weight: 500; }
+    .axis path, .axis line { fill: none; stroke: #333; shape-rendering: crispEdges; }
+    .curve { fill: none; stroke: steelblue; stroke-width: 2; }
+    .lower-bound { stroke: purple; stroke-width: 2; stroke-dasharray: 5,5; }
+    .upper-bound { stroke: green; stroke-width: 2; stroke-dasharray: 5,5; }
+    .alpha-point { fill: orange; stroke: #fff; stroke-width: 1.5; }
+    .goldstein-area { fill: lightgreen; opacity: 0.5; }
+    .annotation { font-size: 14px; fill: gray; font-weight: 500; }
+    .legend { font-size: 12px; }
+    p { margin: 5px 0; }
+    .info-container { margin-top: 10px; }
+    .status { font-weight: bold; }
+    .satisfied { color: green; }
+    .not-satisfied { color: red; }
+    #tooltip { z-index: 10; }
+    .alpha-point { cursor: move; }
+    .function-editor { background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 15px; display: none; }
+    .editor-row { display: flex; align-items: center; margin: 10px 0; }
+    #function-input, #derivative-input { flex-grow: 1; padding: 5px; font-family: monospace; }
+    #update-function-btn, #toggle-editor-btn { margin-top: 10px; padding: 5px 15px; background-color: #4CAF50; color: white; 
+                          border: none; border-radius: 4px; cursor: pointer; }
+    #update-function-btn:hover, #toggle-editor-btn:hover { background-color: #45a049; }
+    .descent-warning { background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin: 10px 0; display: none; }
+    /* Make sure the curve is drawn on top of the acceptable area */
+    .curve { pointer-events: none; }
+    .explanation { background-color: #e9f7fe; padding: 15px; border-radius: 5px; margin: 15px 0; }
+  </style>
+</head>
+<body>
+  <h2>Goldstein Conditions Visualization</h2>
+  
+  <div class="explanation">
+    <p>The Goldstein conditions ensure sufficient decrease in line search methods using upper and lower bounds. 
+       For a step size α to be acceptable, the function value φ(α) must lie between two bounds:</p>
+    <p><strong>Lower bound:</strong> φ(0) + (1-c)·α·φ'(0) ≤ φ(α)</p>
+    <p><strong>Upper bound:</strong> φ(α) ≤ φ(0) + c·α·φ'(0)</p>
+    <p>Where c is a parameter in (0, 0.5). Note that the upper bound is identical to the Armijo condition.</p>
+  </div>
+  
+  <div id="descent-warning" class="descent-warning">
+    <strong>Warning:</strong> The Goldstein conditions only apply when starting in a descent direction (φ'(0) < 0).
+  </div>
+
+  <button id="toggle-editor-btn">Show Function Editor</button>
+  
+  <div class="function-editor" id="function-editor">
+    <h3>Function Editor</h3>
+    <div class="editor-row">
+      <label for="function-input">φ(α) = </label>
+      <input id="function-input" type="text" value="1-Math.sin(a) -a/2" style="width: 500px;">
+    </div>
+    <div class="editor-row">
+      <label for="derivative-input">φ'(α) = </label>
+      <input id="derivative-input" type="text" value="-Math.cos(a) -1/2" style="width: 500px;">
+    </div>
+    <button id="update-function-btn">Update Function</button>
+    <div id="function-error" style="color: red; margin-top: 5px;"></div>
+  </div>
+
+  <div class="slider-container">
+    <label>c (Goldstein parameter): <span id="c-value">0.1</span></label>
+    <input id="c-slider" type="range" min="0.01" max="0.49" step="0.01" value="0.1">
+  </div>
+  
+  <div class="slider-container">
+    <label>α: <span id="alpha-value">2.00</span></label>
+    <input id="alpha-slider" type="range" min="0" max="10" step="0.01" value="2">
+  </div>
+  
+  <svg width="800" height="400"></svg>
+  <!-- Tooltip container -->
+  <div id="tooltip" style="position: absolute; visibility: hidden; background-color: rgba(0,0,0,0.8); color: white; padding: 8px; border-radius: 4px; font-size: 12px; pointer-events: none;"></div>
+
+  <script>
+    // Function and its derivative - will be updated by user
+    let phiFunction = "return 1-Math.sin(a) -a/2;";
+    let phiPrimeFunction = "return -Math.cos(a) -1/2;";
+    
+    // Function wrapper to safely evaluate user-provided functions
+    function phi(a) {
+      try {
+        return new Function('a', phiFunction)(a);
+      } catch (error) {
+        console.error("Error in function calculation:", error);
+        return 0; // Default value on error
+      }
+    }
+
+    function phiPrime(a) {
+      try {
+        return new Function('a', phiPrimeFunction)(a);
+      } catch (error) {
+        console.error("Error in derivative calculation:", error);
+        return 0; // Default value on error
+      }
+    }
+
+    const svg = d3.select('svg');
+    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    const width = +svg.attr('width') - margin.left - margin.right;
+    const height = +svg.attr('height') - margin.top - margin.bottom;
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const tooltip = d3.select('#tooltip');
+
+    // Setup scales
+    const xScale = d3.scaleLinear().domain([0, 10]).range([0, width]);
+    const yData = d3.range(0, 10.01, 0.1).map(phi);
+    const yExtent = d3.extent(yData);
+    const yPadding = (yExtent[1] - yExtent[0]) * 0.2;
+    const yScale = d3.scaleLinear()
+      .domain([yExtent[0] - yPadding, yExtent[1] + yPadding])
+      .nice()
+      .range([height, 0]);
+
+    // Add axes
+    g.append('g')
+      .attr('class', 'axis x-axis')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale));
+
+    g.append('g')
+      .attr('class', 'axis y-axis')
+      .call(d3.axisLeft(yScale));
+
+    // Add axis labels
+    g.append('text')
+      .attr('transform', `translate(${width/2}, ${height + margin.bottom})`)
+      .style('text-anchor', 'middle')
+      .text('α (step size)');
+
+    g.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', -margin.left)
+      .attr('x', -height/2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text('φ(α)');
+
+    // Create groups for the visualizations
+    const goldsteinRegions = g.append('g').attr('class', 'goldstein-regions');
+
+    // Lines for visualization
+    const lowerBoundLine = g.append('line').attr('class', 'lower-bound');
+    const upperBoundLine = g.append('line').attr('class', 'upper-bound');
+    const alphaPoint = g.append('circle').attr('class', 'alpha-point').attr('r', 5);
+
+    // Draw the curve
+    const line = d3.line()
+      .x(d => xScale(d))
+      .y(d => yScale(phi(d)))
+      .curve(d3.curveBasis);
+
+    g.append('path')
+      .datum(d3.range(0, 10, 0.1))
+      .attr('class', 'curve')
+      .attr('d', line);
+
+    // Add legend
+    const legend = g.append('g')
+      .attr('class', 'legend')
+      .attr('transform', `translate(${width - 240}, 20)`);
+
+    legend.append('rect')
+      .attr('width', 240)
+      .attr('height', 120)
+      .attr('fill', 'white')
+      .attr('stroke', '#ccc');
+
+    // Line 1 - Upper Bound
+    legend.append('line')
+      .attr('x1', 10)
+      .attr('y1', 20)
+      .attr('x2', 30)
+      .attr('y2', 20)
+      .attr('class', 'upper-bound');
+
+    legend.append('text')
+      .attr('x', 40)
+      .attr('y', 25)
+      .text('Upper bound (φ(0) + c·α·φ\'(0))');
+
+    // Line 2 - Lower Bound
+    legend.append('line')
+      .attr('x1', 10)
+      .attr('y1', 45)
+      .attr('x2', 30)
+      .attr('y2', 45)
+      .attr('class', 'lower-bound');
+
+    legend.append('text')
+      .attr('x', 40)
+      .attr('y', 50)
+      .text('Lower bound (φ(0) + (1-c)·α·φ\'(0))');
+    
+    // Area - Goldstein
+    legend.append('rect')
+      .attr('x', 10)
+      .attr('y', 70)
+      .attr('width', 20)
+      .attr('height', 10)
+      .attr('class', 'goldstein-area');
+
+    legend.append('text')
+      .attr('x', 40)
+      .attr('y', 80)
+      .text('Goldstein conditions satisfied');
+
+    function update() {
+      const c = +d3.select('#c-slider').property('value');
+      const alpha = +d3.select('#alpha-slider').property('value');
+      
+      d3.select('#c-value').text(c.toFixed(2));
+      d3.select('#alpha-value').text(alpha.toFixed(2));
+
+      // Calculate values
+      const phi0 = phi(0);
+      const funcVal = phi(alpha);
+      const grad0 = phiPrime(0);
+      
+      // Upper bound is the same as the Armijo condition
+      const upperBoundVal = phi0 + c * alpha * grad0;
+      
+      // Lower bound is the symmetric condition
+      const lowerBoundVal = phi0 + (1 - c) * alpha * grad0;
+      
+      // Check conditions
+      const isDescentDirection = grad0 < 0;
+      const isGoldsteinSatisfied = isDescentDirection && 
+                                  funcVal <= upperBoundVal && 
+                                  funcVal >= lowerBoundVal;
+      
+      // Show/hide descent direction warning
+      const warningEl = document.getElementById('descent-warning');
+      warningEl.style.display = isDescentDirection ? 'none' : 'block';
+
+      // Update upper bound line
+      const ubX0 = 0;
+      const ubX1 = 10;
+      const ubY0 = phi0;
+      const ubY1 = phi0 + c * ubX1 * grad0;
+      
+      upperBoundLine
+        .attr('x1', xScale(ubX0))
+        .attr('y1', yScale(ubY0))
+        .attr('x2', xScale(ubX1))
+        .attr('y2', yScale(ubY1));
+        
+      // Update lower bound line
+      const lbX0 = 0;
+      const lbX1 = 10;
+      const lbY0 = phi0;
+      const lbY1 = phi0 + (1 - c) * lbX1 * grad0;
+      
+      lowerBoundLine
+        .attr('x1', xScale(lbX0))
+        .attr('y1', yScale(lbY0))
+        .attr('x2', xScale(lbX1))
+        .attr('y2', yScale(lbY1));
+
+      // Update alpha point and make it draggable
+      alphaPoint
+        .attr('cx', xScale(alpha))
+        .attr('cy', yScale(phi(alpha)))
+        .call(d3.drag()
+          .on('start', dragStarted)
+          .on('drag', dragged)
+          .on('end', dragEnded))
+        .on('mouseover', function() {
+          showTooltip(alpha);
+        })
+        .on('mouseout', function() {
+          hideTooltip();
+        });
+
+      // Add tooltip behavior to the curve
+      svg.on('mousemove', function(event) {
+        const mouseX = d3.pointer(event)[0] - margin.left;
+        if (mouseX >= 0 && mouseX <= width) {
+          const x = xScale.invert(mouseX);
+          if (x >= 0 && x <= 10) {
+            showTooltip(x);
+          }
+        }
+      }).on('mouseout', hideTooltip);
+
+      // Functions for tooltip
+      function showTooltip(x) {
+        const funcValAtX = phi(x);
+        const upperBoundValAtX = phi0 + c * x * grad0;
+        const lowerBoundValAtX = phi0 + (1 - c) * x * grad0;
+        
+        const isDescentDirection = grad0 < 0;
+        const isUpperBoundSatisfied = isDescentDirection && funcValAtX <= upperBoundValAtX;
+        const isLowerBoundSatisfied = isDescentDirection && funcValAtX >= lowerBoundValAtX;
+        const isGoldsteinSatisfiedAtX = isUpperBoundSatisfied && isLowerBoundSatisfied;
+        
+        const tooltip = d3.select('#tooltip');
+        tooltip.style('visibility', 'visible')
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 30) + 'px')
+          .html(`
+            <strong>α: ${x.toFixed(2)}</strong><br>
+            φ(α): ${funcValAtX.toFixed(3)}<br>
+            Upper bound: ${upperBoundValAtX.toFixed(3)}<br>
+            Lower bound: ${lowerBoundValAtX.toFixed(3)}<br>
+            ${isDescentDirection ? 
+              `<span style="color:${isUpperBoundSatisfied ? 'lightgreen' : 'pink'}">
+                Upper bound: ${isUpperBoundSatisfied ? 'SATISFIED' : 'NOT SATISFIED'}
+              </span><br>
+              <span style="color:${isLowerBoundSatisfied ? 'lightgreen' : 'pink'}">
+                Lower bound: ${isLowerBoundSatisfied ? 'SATISFIED' : 'NOT SATISFIED'}
+              </span><br>
+              <span style="color:${isGoldsteinSatisfiedAtX ? 'lightgreen' : 'pink'}">
+                <strong>Goldstein: ${isGoldsteinSatisfiedAtX ? 'SATISFIED' : 'NOT SATISFIED'}</strong>
+              </span>` : 
+              '<span style="color:orange">Not a descent direction (φ\'(0) ≥ 0)</span>'}
+          `);
+      }
+
+      function hideTooltip() {
+        d3.select('#tooltip').style('visibility', 'hidden');
+      }
+
+      // Drag functions
+      function dragStarted() {
+        d3.select(this).raise().attr('stroke', 'black');
+      }
+
+      function dragged(event) {
+        const x = Math.max(0, Math.min(10, xScale.invert(event.x)));
+        d3.select(this)
+          .attr('cx', xScale(x))
+          .attr('cy', yScale(phi(x)));
+        
+        // Update the alpha slider
+        d3.select('#alpha-slider').property('value', x);
+        d3.select('#alpha-value').text(x.toFixed(2));
+        
+        // Show tooltip while dragging
+        showTooltip(x);
+        
+        // Update visualization
+        update();
+      }
+
+      function dragEnded() {
+        d3.select(this).attr('stroke', '#fff');
+      }
+
+      // Clear all visualization regions
+      goldsteinRegions.selectAll('*').remove();
+      
+      if (isDescentDirection) {
+        const stepSize = 0.05; // Grid size for checking
+        const alphaGrid = d3.range(0, 10 + stepSize, stepSize);
+        
+        // Find regions for Goldstein conditions
+        const satisfiedGoldsteinRanges = findSatisfiedRanges(alphaGrid, 
+          a => {
+            const fVal = phi(a);
+            const upperBound = phi0 + c * a * grad0;
+            const lowerBound = phi0 + (1 - c) * a * grad0;
+            return fVal <= upperBound && fVal >= lowerBound;
+          });
+          
+        drawRegions(satisfiedGoldsteinRanges, goldsteinRegions, 'goldstein-area');
+      }
+
+      // Helper function to find continuous ranges where a condition is satisfied
+      function findSatisfiedRanges(grid, conditionFn) {
+        const satisfiedRanges = [];
+        let currentRange = null;
+        
+        for (let i = 0; i < grid.length; i++) {
+          const a = grid[i];
+          const satisfied = conditionFn(a);
+          
+          if (satisfied && currentRange === null) {
+            // Start a new satisfied range
+            currentRange = { start: a };
+          } else if (!satisfied && currentRange !== null) {
+            // End the current satisfied range
+            currentRange.end = grid[i-1];
+            satisfiedRanges.push(currentRange);
+            currentRange = null;
+          }
+        }
+        
+        // Handle the case where the last range extends to the end
+        if (currentRange !== null) {
+          currentRange.end = grid[grid.length - 1];
+          satisfiedRanges.push(currentRange);
+        }
+        
+        return satisfiedRanges;
+      }
+      
+      // Helper function to draw visualization regions - now filling entire vertical strips
+      function drawRegions(ranges, container, className) {
+        ranges.forEach(range => {
+          // For each range of acceptable alpha values, draw a vertical rectangle spanning the entire height
+          container.append('rect')
+            .attr('x', xScale(range.start))
+            .attr('y', 0) // Top of the chart
+            .attr('width', xScale(range.end) - xScale(range.start))
+            .attr('height', height) // Full height of the chart
+            .attr('class', className);
+        });
+      }
+    }
+
+    // Initialize and set up event listeners
+    d3.selectAll('input[type="range"]').on('input', update);
+    
+    // Function editor toggle
+    d3.select('#toggle-editor-btn').on('click', function() {
+      const editor = document.getElementById('function-editor');
+      const currentDisplay = editor.style.display;
+      editor.style.display = currentDisplay === 'none' ? 'block' : 'none';
+      this.textContent = currentDisplay === 'none' ? 'Hide Function Editor' : 'Show Function Editor';
+    });
+    
+    // Function editor event listener
+    d3.select('#update-function-btn').on('click', updateFunctions);
+    
+    function updateFunctions() {
+      const functionInput = d3.select('#function-input').property('value');
+      const derivativeInput = d3.select('#derivative-input').property('value');
+      const errorDiv = d3.select('#function-error');
+      
+      // Test the functions with a sample value
+      try {
+        const testFunc = new Function('a', `return ${functionInput};`);
+        const testDeriv = new Function('a', `return ${derivativeInput};`);
+        
+        // Test with a few values to make sure it works
+        [0, 1, 5].forEach(a => {
+          testFunc(a);
+          testDeriv(a);
+        });
+        
+        // If we get here, the functions are valid
+        phiFunction = `return ${functionInput};`;
+        phiPrimeFunction = `return ${derivativeInput};`;
+        
+        // Clear any previous error
+        errorDiv.text('');
+        
+        // Update the visualization with the new functions
+        redrawVisualization();
+      } catch (error) {
+        // Show error message
+        errorDiv.text(`Error: ${error.message}`);
+      }
+    }
+    
+    function redrawVisualization() {
+      // Recalculate y-scale domain based on new function
+      const yData = d3.range(0, 10.01, 0.1).map(phi);
+      const yExtent = d3.extent(yData);
+      const yPadding = (yExtent[1] - yExtent[0]) * 0.2;
+      yScale.domain([yExtent[0] - yPadding, yExtent[1] + yPadding]).nice();
+      
+      // Update y-axis
+      g.select('.axis.y-axis').call(d3.axisLeft(yScale));
+      
+      // Update curve - remove old curve first
+      g.select('.curve').remove();
+      g.append('path')
+        .datum(d3.range(0, 10, 0.1))
+        .attr('class', 'curve')
+        .attr('d', line);
+      
+      // Update visualization
+      update();
+    }
+    
+    update();
+  </script>
+</body>
+</html>

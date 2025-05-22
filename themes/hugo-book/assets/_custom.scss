@@ -1,0 +1,68 @@
+/* You can add custom styles here. */
+
+// @import "plugins/numbered";
+.theorem-box {
+  padding: 0rem 1rem;
+  background-color: #fefefe;
+  border-left: 4px solid #dddddd;
+  border-radius: 0 4px 4px 0;
+}
+
+.theorem-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.theorem-content {
+  padding-left: 1rem;
+}
+
+.proof-box {
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.proof-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.proof-content {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.qed {
+  display: block;
+  text-align: right;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.center-content {
+  text-align: center;
+}
+
+/* Numbered figure styling */
+figure[id^="figure-"] {
+  padding: 10px;
+  margin: 20px 0;
+}
+
+figure[id^="figure-"] figcaption {
+  margin-top: 10px;
+  text-align: center;
+  font-style: italic;
+}
+
+figure[id^="figure-"] figcaption p strong {
+  font-weight: 600;
+  font-style: normal;
+}

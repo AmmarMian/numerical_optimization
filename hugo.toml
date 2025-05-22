@@ -1,0 +1,25 @@
+baseURL = 'https://example.org/'
+languageCode = 'fr'
+title = 'Numerical optimization'
+theme = "hugo-book"
+
+[params]
+  # (Optional, default light) Sets color theme: light, dark or auto.
+  # Theme 'auto' switches between dark and light modes based on browser/os preferences
+  BookTheme = 'light'
+
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[params.mathjax]
+  enable = true
+  inlineMath = [['\\(', '\\)'], ['$', '$']]
+  displayMath = [['\\[', '\\]'], ['$$', '$$']]
+  processEnvironments = true
+  processRefs = true
+  skipHtmlTags = ['script', 'noscript', 'style', 'textarea', 'pre']
+  tags = "ams"
+  useLabelIds = true

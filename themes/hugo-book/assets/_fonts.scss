@@ -1,0 +1,67 @@
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url('/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff') format('woff'),
+       url('/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf') format('truetype'),
+       url('/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot') format('embedded-opentype'),
+       url('/fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.svg') format('svg');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'ET Book';
+  font-style: italic;
+  font-weight: 400;
+  font-display: fallback;
+  src: url('/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.woff') format('woff'),
+       url('/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.ttf') format('truetype'),
+       url('/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.eot') format('embedded-opentype'),
+       url('/fonts/et-book/et-book-display-italic-old-style-figures/et-book-display-italic-old-style-figures.svg') format('svg');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url('/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff') format('woff'),
+       url('/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf') format('truetype'),
+       url('/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot') format('embedded-opentype'),
+       url('/fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.svg') format('svg');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'ET Book';
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url('/fonts/et-book/et-book-semi-bold-old-style-figures/et-book-semi-bold-old-style-figures.woff') format('woff'),
+       url('/fonts/et-book/et-book-semi-bold-old-style-figures/et-book-semi-bold-old-style-figures.ttf') format('truetype'),
+       url('/fonts/et-book/et-book-semi-bold-old-style-figures/et-book-semi-bold-old-style-figures.eot') format('embedded-opentype'),
+       url('/fonts/et-book/et-book-semi-bold-old-style-figures/et-book-semi-bold-old-style-figures.svg') format('svg');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* For the monospace font, you can either keep Roboto Mono or choose another monospace font */
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(https://fonts.gstatic.com/s/robotomono/v23/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_ROW4AJi8SJQt.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {
+  font-family: 'ET Book', serif;
+  font-weight: 500;
+  font-size: 1.1em
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+}

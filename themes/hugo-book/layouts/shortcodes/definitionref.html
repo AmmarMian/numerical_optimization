@@ -1,0 +1,9 @@
+{{ $label := .Get 0 }}
+{{ $definitionNumber := $.Page.Store.Get $label }}
+
+{{ if $definitionNumber }}
+<a href="#{{ $label }}">Definition {{ $definitionNumber }}</a>
+{{ else }}
+<a href="#{{ $label }}">this definition</a>
+{{ end }}
+

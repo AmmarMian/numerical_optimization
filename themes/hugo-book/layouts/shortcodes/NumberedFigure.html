@@ -1,0 +1,49 @@
+{{ $chapter := $.Page.Params.chapter | default "0" }}
+{{ $counter := add ($.Page.Scratch.Get "figure_counter" | default 0) 1 }}
+{{ $.Page.Scratch.Set "figure_counter" $counter }}
+{{ $label := .Get "label" | default (printf "figure-%s-%d" $chapter $counter) }}
+{{ $figureNumber := (printf "%v.%d" $chapter $counter) }}
+<!-- Store the figure reference for later use -->
+{{ $.Page.Store.Set $label $figureNumber }}
+
+<figure id="{{ $label }}"{{ with .Get "class" }} class="{{ . }}"{{ end }}{{ with .Get "align" }} style="text-align: {{ . }};"{{ end }}>
+  {{- if .Get "link" -}}
+    <a href="{{ .Get "link" }}"{{ with .Get "target" }} target="{{ . }}"{{ end }}{{ with .Get "rel" }} rel="{{ . }}"{{ end }}>
+  {{- end -}}
+  {{- $u := urls.Parse (.Get "src") -}}
+  {{- $src := $u.String -}}
+  {{- if not $u.IsAbs -}}
+    {{- with or (.Page.Resources.Get $u.Path) (resources.Get $u.Path) -}}
+      {{- $src = .RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+  <img src="{{ $src }}"
+    {{- if or (.Get "alt") (.Get "caption") }}
+    alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get "caption" | markdownify| plainify }}{{ end }}"
+    {{- end -}}
+    {{- with .Get "width" }} width="{{ . }}"{{ end -}}
+    {{- with .Get "height" }} height="{{ . }}"{{ end -}}
+    {{- with .Get "loading" }} loading="{{ . }}"{{ end -}}
+  ><!-- Closing img tag -->
+  {{- if .Get "link" }}</a>{{ end -}}
+  
+  <!-- Caption is mandatory for numbered figures -->
+  <figcaption>
+    {{ with (.Get "title") -}}
+      <h4>{{ . }}</h4>
+    {{- end -}}
+    <p>
+      <strong>Figure {{ $figureNumber }}:</strong> 
+      {{- with .Get "caption" -}}
+        {{ . | markdownify }}
+      {{- else -}}
+        [Caption required]
+      {{- end -}}
+      {{- with .Get "attrlink" }}
+        <a href="{{ . }}">
+      {{- end -}}
+      {{- .Get "attr" | markdownify -}}
+      {{- if .Get "attrlink" }}</a>{{ end -}}
+    </p>
+  </figcaption>
+</figure>
