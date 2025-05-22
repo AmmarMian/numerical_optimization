@@ -12,7 +12,7 @@ bookToc: false
 {{< center >}}
 <div style="margin-left:-100px; ">
 {{< figure
-  src="/tikZ/main_illustration/main.svg"
+  src="./tikZ/main_illustration/main.svg"
   alt="Himmelblau's Function"
   width="400px"
 >}}
