@@ -35,7 +35,6 @@ At the end of this course, the students should:
 
 * Be able to recognize convex optimization problems that arise in scientific fields and design appropriate cost functions
 * Have an understanding of how such problems are solved, and gain some experience in solving them
-* Know common approaches to non-convex optimization problems
 * Have knowledge of the underlying tools behind training of machine learning models
 * Be able to implement backpropagation and stochastic optimization algorithms for large models
 
@@ -83,7 +82,7 @@ We then move on to more complicated problems:
 
 | Session | Duration | Content | Date | Room |
 |---------|----------|---------|------|------|
-| CM5 | 1.5h | Trust regions methods and their convergence | 12 June 2025 10am | B-120 |
+| CM5 | 1.5h | Newton / Quasi Newton methods | 12 June 2025 10am | B-120 |
 | CM6 | 1.5h | Proximal methods | 12 June 2025 1.15pm | B-120 |
 | TD3 | 1.5h | Use of proximal methods in image processing | 12 June 2025 3pm | C-213 |
 
