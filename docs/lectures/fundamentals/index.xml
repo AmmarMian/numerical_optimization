@@ -84,12 +84,12 @@ function attains its least value. A formal definition is :&lt;/p></description><
  Wolfe conditions
  &lt;a class="anchor" href="#wolfe-conditions">#&lt;/a>
 &lt;/h3>
-&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;iframe style="border:none;" scrolling="no" src="../../../../interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation">&lt;/iframe>
 &lt;h3 id="goldenstein-conditions">
  Goldenstein conditions
  &lt;a class="anchor" href="#goldenstein-conditions">#&lt;/a>
 &lt;/h3>
-&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;iframe style="border:none;" scrolling="no" src="../../../../interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation">&lt;/iframe>
 &lt;h2 id="search-directions">
  Search directions
  &lt;a class="anchor" href="#search-directions">#&lt;/a>
