@@ -17,7 +17,7 @@ Let us try to characterizes the nature of the solutions under this setup.
 ## What is a solution ?
 
 {{<NumberedFigure
-  src=" ../../../../tikZ/local_global_minima/main.svg"
+  src=" ../../../../../../tikZ/local_global_minima/main.svg"
   alt="Local vs global"
   width="600px"
   caption="Local and global minimum can coexist."
