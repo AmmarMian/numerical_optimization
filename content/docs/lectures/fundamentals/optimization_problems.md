@@ -40,7 +40,7 @@ TODO. Lorem
 
 {{< center >}}
 {{< NumberedFigure
-  src="./tikZ/himmelblau/main_2D.svg"
+  src="../../../../tikZ/himmelblau/main_2D.svg"
   caption="An example of multiple local minima"
   alt="Himmelblau's Function"
   width="500px"
