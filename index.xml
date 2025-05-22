@@ -52,21 +52,7 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
 &lt;p>We begin our study of linear algebra with the fundamental concept of a vector space, which formalizes the notion of vectors and their operations. This abstraction allows us to work with many different types of mathematical objects using the same underlying principles.&lt;/p></description></item><item><title>2. Convexity theory</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</guid><description>&lt;h1 id="convexity-theory">
  Convexity theory
  &lt;a class="anchor" href="#convexity-theory">#&lt;/a>
-&lt;/h1>
-&lt;h2 id="tanto-oblite">
- Tanto oblite
- &lt;a class="anchor" href="#tanto-oblite">#&lt;/a>
-&lt;/h2>
-&lt;p>Lorem markdownum pectora novis patenti igne sua opus aurae feras materiaque
-illic demersit imago et aristas questaque posset. Vomit quoque suo inhaesuro
-clara. Esse cumque, per referri triste. Ut exponit solisque communis in tendens
-vincetis agisque iamque huic bene ante vetat omina Thebae rates. Aeacus servat
-admonitu concidit, ad resimas vultus et rugas vultu &lt;strong>dignamque&lt;/strong> Siphnon.&lt;/p>
-&lt;p>Quam iugulum regia simulacra, plus meruit humo pecorumque haesit, ab discedunt
-dixit: ritu pharetramque. Exul Laurenti orantem modo, per densum missisque labor
-manibus non colla unum, obiectat. Tu pervia collo, fessus quae Cretenque Myconon
-crate! Tegumenque quae invisi sudore per vocari quaque plus ventis fluidos. Nodo
-perque, fugisse pectora sorores.&lt;/p></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
+&lt;/h1></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
  Stochastic optimization
  &lt;a class="anchor" href="#stochastic-optimization">#&lt;/a>
 &lt;/h1></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
@@ -146,10 +132,18 @@ function attains its least value. A formal definition is :&lt;/p></description><
 &lt;h2 id="rate-of-convergence">
  Rate of convergence
  &lt;a class="anchor" href="#rate-of-convergence">#&lt;/a>
-&lt;/h2></description></item><item><title>5. Unconstrained optimization : trust region</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</guid><description>&lt;h1 id="unconstrained-optimization---trust-region-methods">
- Unconstrained optimization - Trust region methods
- &lt;a class="anchor" href="#unconstrained-optimization---trust-region-methods">#&lt;/a>
-&lt;/h1></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+&lt;/h2></description></item><item><title>5. Unconstrained optimization : Second-order</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</guid><description>&lt;h1 id="unconstrained-optimization----second-order-methods">
+ Unconstrained optimization - Second-order methods
+ &lt;a class="anchor" href="#unconstrained-optimization----second-order-methods">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="newton-methods">
+ Newton methods
+ &lt;a class="anchor" href="#newton-methods">#&lt;/a>
+&lt;/h2>
+&lt;h2 id="quasi-newton-methods">
+ Quasi-Newton methods
+ &lt;a class="anchor" href="#quasi-newton-methods">#&lt;/a>
+&lt;/h2></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
  Constrained optimization methods
  &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
 &lt;/h1>
