@@ -1,0 +1,15 @@
+{
+  "name": "Numerical optimization",
+  "short_name": "Numerical optimization",
+  "start_url": "/numerical_optimization/",
+  "scope": "/numerical_optimization/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/numerical_optimization/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}

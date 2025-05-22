@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Introduction on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/</link><description>Recent content in Introduction on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/index.xml" rel="self" type="application/rss+xml"/><item><title>1. From Linear regression to perceptron</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</guid><description>&lt;h1 id="from-linear-regression-to-perceptron">
+ From Linear regression to perceptron
+ &lt;a class="anchor" href="#from-linear-regression-to-perceptron">#&lt;/a>
+&lt;/h1></description></item><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
+ Optimization problems
+ &lt;a class="anchor" href="#optimization-problems">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="unconstrained-vs-constrained">
+ unconstrained vs constrained
+ &lt;a class="anchor" href="#unconstrained-vs-constrained">#&lt;/a>
+&lt;/h2>
+&lt;p>What we are interested in these lectures is to solve problems of the form :&lt;/p>
+&lt;p>\begin{equation}
+\underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{(arg)min}} f(\mathbf{x}),
+\label{eq: optim general unconstrained}
+\end{equation}
+where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained Optimization&lt;/strong> problem.&lt;/p>
+&lt;p>If additionally, we add a set of equalities constraints functions:
+$$
+\{h_i : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq i \leq N \}
+$$
+and inequalities constraints functions:
+$$
+\{g_j : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq j \leq M \}
+$$
+and define the set $\mathcal{S} = \{\mathbf{x} \in \mathbb{R}^d \,/\, \forall\,(i, j),\, h_i(\mathbf{x})=0,\, g_j(\mathbf{x})\leq 0\}$ and want to solve:
+\begin{equation}
+\underset{\mathbf{x}\in\mathcal{S}}{\operatorname{(arg)min}} f(\mathbf{x}),
+\label{eq: optim general constrained}
+\end{equation}
+then the problem is said to be a &lt;strong>constrained optimization&lt;/strong> problem.&lt;/p></description></item><item><title>1. Proximal methods</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</guid><description>&lt;h1 id="non-convex-problems">
+ Non-convex problems
+ &lt;a class="anchor" href="#non-convex-problems">#&lt;/a>
+&lt;/h1></description></item><item><title>Differentiation</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</guid><description>&lt;h1 id="fundamentals-of-multivariate-differentiation">
+ Fundamentals of Multivariate Differentiation
+ &lt;a class="anchor" href="#fundamentals-of-multivariate-differentiation">#&lt;/a>
+&lt;/h1>
+&lt;p>Multivariate calculus extends the fundamental concepts of single-variable calculus to functions of several variables. This powerful mathematical framework allows us to analyze and describe phenomena in multiple dimensions, making it essential for physics, engineering, economics, statistics, and many other disciplines. This document provides a comprehensive introduction to multivariate differentiation, building from basic principles to advanced applications.&lt;/p>
+&lt;h2 id="1-functions-of-several-variables">
+ 1. Functions of Several Variables
+ &lt;a class="anchor" href="#1-functions-of-several-variables">#&lt;/a>
+&lt;/h2>
+&lt;p>We begin by defining functions that map points from higher-dimensional spaces to either real numbers or other multi-dimensional spaces.&lt;/p></description></item><item><title>Linear Algebra</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</guid><description>&lt;h1 id="fundamentals-of-linear-algebra">
+ Fundamentals of Linear Algebra
+ &lt;a class="anchor" href="#fundamentals-of-linear-algebra">#&lt;/a>
+&lt;/h1>
+&lt;p>Linear algebra is one of the foundational branches of mathematics, with applications spanning from engineering and computer science to economics and physics. This document introduces the key concepts and theorems of linear algebra in a structured progression, demonstrating how each idea builds upon previous ones to form a coherent mathematical framework.&lt;/p>
+&lt;h2 id="1-vectors-and-vector-spaces">
+ 1. Vectors and Vector Spaces
+ &lt;a class="anchor" href="#1-vectors-and-vector-spaces">#&lt;/a>
+&lt;/h2>
+&lt;p>We begin our study of linear algebra with the fundamental concept of a vector space, which formalizes the notion of vectors and their operations. This abstraction allows us to work with many different types of mathematical objects using the same underlying principles.&lt;/p></description></item><item><title>2. Convexity theory</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</guid><description>&lt;h1 id="convexity-theory">
+ Convexity theory
+ &lt;a class="anchor" href="#convexity-theory">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="tanto-oblite">
+ Tanto oblite
+ &lt;a class="anchor" href="#tanto-oblite">#&lt;/a>
+&lt;/h2>
+&lt;p>Lorem markdownum pectora novis patenti igne sua opus aurae feras materiaque
+illic demersit imago et aristas questaque posset. Vomit quoque suo inhaesuro
+clara. Esse cumque, per referri triste. Ut exponit solisque communis in tendens
+vincetis agisque iamque huic bene ante vetat omina Thebae rates. Aeacus servat
+admonitu concidit, ad resimas vultus et rugas vultu &lt;strong>dignamque&lt;/strong> Siphnon.&lt;/p>
+&lt;p>Quam iugulum regia simulacra, plus meruit humo pecorumque haesit, ab discedunt
+dixit: ritu pharetramque. Exul Laurenti orantem modo, per densum missisque labor
+manibus non colla unum, obiectat. Tu pervia collo, fessus quae Cretenque Myconon
+crate! Tegumenque quae invisi sudore per vocari quaque plus ventis fluidos. Nodo
+perque, fugisse pectora sorores.&lt;/p></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
+ Stochastic optimization
+ &lt;a class="anchor" href="#stochastic-optimization">#&lt;/a>
+&lt;/h1></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
+ Support Vector Machine
+ &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
+&lt;/h1></description></item><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="notations">
+ Notations
+ &lt;a class="anchor" href="#notations">#&lt;/a>
+&lt;/h2>
+&lt;p>Let us start by defining the notation used troughout all the lectures and practical labs.&lt;/p>
+&lt;h3 id="basic-notation">
+ Basic Notation
+ &lt;a class="anchor" href="#basic-notation">#&lt;/a>
+&lt;/h3>
+&lt;p>Scalars are represented by italic letters (e.g., $x$, $y$, $\lambda$). Vectors are denoted by bold lowercase letters (e.g., $\mathbf{v}$, $\mathbf{x}$), while matrices are represented by bold uppercase letters (e.g., $\mathbf{A}$, $\mathbf{B}$). The dimensionality of a vector $\mathbf{v} \in \mathbb{R}^n$ indicates it contains $n$ elements, and similarly, a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ has $m$ rows and $n$ columns.&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
+ Neural Networks
+ &lt;a class="anchor" href="#neural-networks">#&lt;/a>
+&lt;/h1></description></item><item><title>3. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
+ Unconstrained optimization - basics
+ &lt;a class="anchor" href="#unconstrained-optimization---basics">#&lt;/a>
+&lt;/h1>
+&lt;p>We hereby consider problems without any constraints on the set of admissible solutions, i.e we aim to solve:
+$$
+\underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{argmin}} f(\mathbf{x}).
+$$&lt;/p>
+&lt;p>Let us try to characterizes the nature of the solutions under this setup.&lt;/p>
+&lt;h2 id="what-is-a-solution-">
+ What is a solution ?
+ &lt;a class="anchor" href="#what-is-a-solution-">#&lt;/a>
+&lt;/h2>
+
+
+
+
+
+
+
+
+&lt;figure id="figure-%!s(int=3)-1">&lt;img src="http://ammarmian.github.io/numerical_optimization/tikZ/local_global_minima/main.svg"
+ alt="Local vs global" width="600px">
+ &lt;figcaption>
+ &lt;p>
+ &lt;strong>Figure 3.1:&lt;/strong>Local and global minimum can coexist.&lt;/p>
+ &lt;/figcaption>
+&lt;/figure>
+
+&lt;p>Generally, we would be happiest if we found a global minimizer of $f$ , a point where the
+function attains its least value. A formal definition is :&lt;/p></description></item><item><title>4. Modern trends</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</guid><description>&lt;h1 id="modern-trends">
+ Modern trends
+ &lt;a class="anchor" href="#modern-trends">#&lt;/a>
+&lt;/h1></description></item><item><title>4. Unconstrained optimization : linesearch</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</guid><description>&lt;h1 id="unconstrained-optimization---linesearch-methods">
+ Unconstrained optimization - Linesearch methods
+ &lt;a class="anchor" href="#unconstrained-optimization---linesearch-methods">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="step-length-conditions">
+ Step-length conditions
+ &lt;a class="anchor" href="#step-length-conditions">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="wolfe-conditions">
+ Wolfe conditions
+ &lt;a class="anchor" href="#wolfe-conditions">#&lt;/a>
+&lt;/h3>
+&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;h3 id="goldenstein-conditions">
+ Goldenstein conditions
+ &lt;a class="anchor" href="#goldenstein-conditions">#&lt;/a>
+&lt;/h3>
+&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;h2 id="search-directions">
+ Search directions
+ &lt;a class="anchor" href="#search-directions">#&lt;/a>
+&lt;/h2>
+&lt;h2 id="rate-of-convergence">
+ Rate of convergence
+ &lt;a class="anchor" href="#rate-of-convergence">#&lt;/a>
+&lt;/h2></description></item><item><title>5. Unconstrained optimization : trust region</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</guid><description>&lt;h1 id="unconstrained-optimization---trust-region-methods">
+ Unconstrained optimization - Trust region methods
+ &lt;a class="anchor" href="#unconstrained-optimization---trust-region-methods">#&lt;/a>
+&lt;/h1></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+ Constrained optimization methods
+ &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
+&lt;/h1>
+&lt;p>Lorem&lt;/p>
+&lt;p>$$
+\mathbf{X} = \operatorname{argmin} || \mathbf{Y} - \mathbf{A}\mathbf{X} \|_2 + \mathcal{R}(\mathbf{X})
+$$&lt;/p></description></item><item><title>I - Linear Regression with gradient</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-using-gradient-descent">
+ Linear Regression using Gradient descent
+ &lt;a class="anchor" href="#linear-regression-using-gradient-descent">#&lt;/a>
+&lt;/h1></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
+ Remote sensing project
+ &lt;a class="anchor" href="#remote-sensing-project">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="option-1--denoising">
+ Option 1 : Denoising
+ &lt;a class="anchor" href="#option-1--denoising">#&lt;/a>
+&lt;/h2>
+&lt;h2 id="option-2--pansharpening">
+ Option 2 : Pansharpening
+ &lt;a class="anchor" href="#option-2--pansharpening">#&lt;/a>
+&lt;/h2></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
+ Digit recognition with multi-layer perceptron
+ &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
+&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment">
+ Lab environment
+ &lt;a class="anchor" href="#lab-environment">#&lt;/a>
+&lt;/h1></description></item></channel></rss>

@@ -1,0 +1,67 @@
+\documentclass{standalone}
+\usepackage{tikz, pgfplots}
+\begin{document}
+% Preamble: 
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{patchplots}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=15cm,
+    height=11cm,
+    % Remove ticks but keep the box
+    % Keep the ais box
+    axis lines=box,
+    scale only axis,
+    trim axis left,
+    trim axis right
+]
+% Original surface plot
+\addplot3 [
+    patch,
+    patch type=bilinear,
+    mesh/color input=explicit mathparse,
+    mesh/colorspace explicit color output=cmyk,
+    domain=0:1.5,
+    samples=60,
+    point meta={
+        symbolic={
+            (sin(deg(x*pi*2))+1)/2, % R
+            (sin(deg(y*pi*2))+1)/2, % G
+            0 % B
+        }
+    },
+] {sin(deg(x*pi*2))+sin(deg(y*pi*2))};
+\pgfmathsetmacro{\zvalue}{sin(deg(0.4*pi*2)) + sin(deg(0.2*pi*2))}
+\addplot3 [only marks, mark=*, mark size=1.5pt, color=black] coordinates {
+    (0.4, 0.2, \zvalue)
+};
+% First descent point: following the gradient
+\pgfmathsetmacro{\xnext}{0.5 }
+\pgfmathsetmacro{\ynext}{0.25}
+\pgfmathsetmacro{\znext}{sin(deg(\xnext*pi*2)) + sin(deg(\ynext*pi*2))}
+% Connect the first point to the second point
+\addplot3 [-, thick, color=black] coordinates {
+    (0.4, 0.2, \zvalue)
+    (\xnext, \ynext, \znext)
+};
+% Add a point at the second location
+\addplot3 [only marks, mark=*, mark size=1.5pt, color=black] coordinates {
+    (\xnext, \ynext, \znext)
+};
+% Second descent: another step in the gradient direction
+\pgfmathsetmacro{\xfinal}{\xnext + 0.15}
+\pgfmathsetmacro{\yfinal}{\ynext - 0.05}
+\pgfmathsetmacro{\zfinal}{sin(deg(\xfinal*pi*2)) + sin(deg(\yfinal*pi*2))}
+% Connect the second point to the final point
+\addplot3 [-, thick, color=black] coordinates {
+    (\xnext, \ynext, \znext)
+    (\xfinal, \yfinal, \zfinal)
+};
+% Add the final point
+\addplot3 [only marks, mark=*, mark size=1.5pt, color=black] coordinates {
+    (\xfinal, \yfinal, \zfinal)
+};
+\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,1 @@
+unset surface; set cntrparam levels discrete 0.1,0.2,0.4,0.6,0.8,1.0,1.5,2.0,2.5; set contour; set table "main_contourtmp0.table"; splot "main_contourtmp0.dat";

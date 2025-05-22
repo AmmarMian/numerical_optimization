@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Practical labs on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/</link><description>Recent content in Practical labs on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/practical_labs/index.xml" rel="self" type="application/rss+xml"/><item><title>I - Linear Regression with gradient</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-using-gradient-descent">
+ Linear Regression using Gradient descent
+ &lt;a class="anchor" href="#linear-regression-using-gradient-descent">#&lt;/a>
+&lt;/h1></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
+ Remote sensing project
+ &lt;a class="anchor" href="#remote-sensing-project">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="option-1--denoising">
+ Option 1 : Denoising
+ &lt;a class="anchor" href="#option-1--denoising">#&lt;/a>
+&lt;/h2>
+&lt;h2 id="option-2--pansharpening">
+ Option 2 : Pansharpening
+ &lt;a class="anchor" href="#option-2--pansharpening">#&lt;/a>
+&lt;/h2></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
+ Digit recognition with multi-layer perceptron
+ &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
+&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment">
+ Lab environment
+ &lt;a class="anchor" href="#lab-environment">#&lt;/a>
+&lt;/h1></description></item></channel></rss>

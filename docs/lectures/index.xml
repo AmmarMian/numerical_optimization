@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lectures on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/</link><description>Recent content in Lectures on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/lectures/index.xml" rel="self" type="application/rss+xml"/><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="notations">
+ Notations
+ &lt;a class="anchor" href="#notations">#&lt;/a>
+&lt;/h2>
+&lt;p>Let us start by defining the notation used troughout all the lectures and practical labs.&lt;/p>
+&lt;h3 id="basic-notation">
+ Basic Notation
+ &lt;a class="anchor" href="#basic-notation">#&lt;/a>
+&lt;/h3>
+&lt;p>Scalars are represented by italic letters (e.g., $x$, $y$, $\lambda$). Vectors are denoted by bold lowercase letters (e.g., $\mathbf{v}$, $\mathbf{x}$), while matrices are represented by bold uppercase letters (e.g., $\mathbf{A}$, $\mathbf{B}$). The dimensionality of a vector $\mathbf{v} \in \mathbb{R}^n$ indicates it contains $n$ elements, and similarly, a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ has $m$ rows and $n$ columns.&lt;/p></description></item></channel></rss>

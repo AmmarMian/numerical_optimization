@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>I - Fundamentals on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/</link><description>Recent content in I - Fundamentals on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/index.xml" rel="self" type="application/rss+xml"/><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
+ Optimization problems
+ &lt;a class="anchor" href="#optimization-problems">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="unconstrained-vs-constrained">
+ unconstrained vs constrained
+ &lt;a class="anchor" href="#unconstrained-vs-constrained">#&lt;/a>
+&lt;/h2>
+&lt;p>What we are interested in these lectures is to solve problems of the form :&lt;/p>
+&lt;p>\begin{equation}
+\underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{(arg)min}} f(\mathbf{x}),
+\label{eq: optim general unconstrained}
+\end{equation}
+where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained Optimization&lt;/strong> problem.&lt;/p>
+&lt;p>If additionally, we add a set of equalities constraints functions:
+$$
+\{h_i : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq i \leq N \}
+$$
+and inequalities constraints functions:
+$$
+\{g_j : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq j \leq M \}
+$$
+and define the set $\mathcal{S} = \{\mathbf{x} \in \mathbb{R}^d \,/\, \forall\,(i, j),\, h_i(\mathbf{x})=0,\, g_j(\mathbf{x})\leq 0\}$ and want to solve:
+\begin{equation}
+\underset{\mathbf{x}\in\mathcal{S}}{\operatorname{(arg)min}} f(\mathbf{x}),
+\label{eq: optim general constrained}
+\end{equation}
+then the problem is said to be a &lt;strong>constrained optimization&lt;/strong> problem.&lt;/p></description></item><item><title>2. Convexity theory</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</guid><description>&lt;h1 id="convexity-theory">
+ Convexity theory
+ &lt;a class="anchor" href="#convexity-theory">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="tanto-oblite">
+ Tanto oblite
+ &lt;a class="anchor" href="#tanto-oblite">#&lt;/a>
+&lt;/h2>
+&lt;p>Lorem markdownum pectora novis patenti igne sua opus aurae feras materiaque
+illic demersit imago et aristas questaque posset. Vomit quoque suo inhaesuro
+clara. Esse cumque, per referri triste. Ut exponit solisque communis in tendens
+vincetis agisque iamque huic bene ante vetat omina Thebae rates. Aeacus servat
+admonitu concidit, ad resimas vultus et rugas vultu &lt;strong>dignamque&lt;/strong> Siphnon.&lt;/p>
+&lt;p>Quam iugulum regia simulacra, plus meruit humo pecorumque haesit, ab discedunt
+dixit: ritu pharetramque. Exul Laurenti orantem modo, per densum missisque labor
+manibus non colla unum, obiectat. Tu pervia collo, fessus quae Cretenque Myconon
+crate! Tegumenque quae invisi sudore per vocari quaque plus ventis fluidos. Nodo
+perque, fugisse pectora sorores.&lt;/p></description></item><item><title>3. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
+ Unconstrained optimization - basics
+ &lt;a class="anchor" href="#unconstrained-optimization---basics">#&lt;/a>
+&lt;/h1>
+&lt;p>We hereby consider problems without any constraints on the set of admissible solutions, i.e we aim to solve:
+$$
+\underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{argmin}} f(\mathbf{x}).
+$$&lt;/p>
+&lt;p>Let us try to characterizes the nature of the solutions under this setup.&lt;/p>
+&lt;h2 id="what-is-a-solution-">
+ What is a solution ?
+ &lt;a class="anchor" href="#what-is-a-solution-">#&lt;/a>
+&lt;/h2>
+
+
+
+
+
+
+
+
+&lt;figure id="figure-%!s(int=3)-1">&lt;img src="http://ammarmian.github.io/numerical_optimization/tikZ/local_global_minima/main.svg"
+ alt="Local vs global" width="600px">
+ &lt;figcaption>
+ &lt;p>
+ &lt;strong>Figure 3.1:&lt;/strong>Local and global minimum can coexist.&lt;/p>
+ &lt;/figcaption>
+&lt;/figure>
+
+&lt;p>Generally, we would be happiest if we found a global minimizer of $f$ , a point where the
+function attains its least value. A formal definition is :&lt;/p></description></item><item><title>4. Unconstrained optimization : linesearch</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</guid><description>&lt;h1 id="unconstrained-optimization---linesearch-methods">
+ Unconstrained optimization - Linesearch methods
+ &lt;a class="anchor" href="#unconstrained-optimization---linesearch-methods">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="step-length-conditions">
+ Step-length conditions
+ &lt;a class="anchor" href="#step-length-conditions">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="wolfe-conditions">
+ Wolfe conditions
+ &lt;a class="anchor" href="#wolfe-conditions">#&lt;/a>
+&lt;/h3>
+&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;h3 id="goldenstein-conditions">
+ Goldenstein conditions
+ &lt;a class="anchor" href="#goldenstein-conditions">#&lt;/a>
+&lt;/h3>
+&lt;iframe style="border:none;" scrolling="no" src="http://ammarmian.github.io/numerical_optimization/interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation">&lt;/iframe>
+&lt;h2 id="search-directions">
+ Search directions
+ &lt;a class="anchor" href="#search-directions">#&lt;/a>
+&lt;/h2>
+&lt;h2 id="rate-of-convergence">
+ Rate of convergence
+ &lt;a class="anchor" href="#rate-of-convergence">#&lt;/a>
+&lt;/h2></description></item><item><title>5. Unconstrained optimization : trust region</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_trustregions/</guid><description>&lt;h1 id="unconstrained-optimization---trust-region-methods">
+ Unconstrained optimization - Trust region methods
+ &lt;a class="anchor" href="#unconstrained-optimization---trust-region-methods">#&lt;/a>
+&lt;/h1></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+ Constrained optimization methods
+ &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
+&lt;/h1>
+&lt;p>Lorem&lt;/p>
+&lt;p>$$
+\mathbf{X} = \operatorname{argmin} || \mathbf{Y} - \mathbf{A}\mathbf{X} \|_2 + \mathcal{R}(\mathbf{X})
+$$&lt;/p></description></item></channel></rss>
