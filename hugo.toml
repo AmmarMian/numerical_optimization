@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'http://ammarmian.github.io/numerical_optimization'
 languageCode = 'fr'
 title = 'Numerical optimization'
 theme = "hugo-book"
