@@ -63,7 +63,7 @@ $$&lt;/p>
 
 
 
-&lt;figure id="figure-%!s(int=3)-1">&lt;img src="http://ammarmian.github.io/numerical_optimization/tikZ/local_global_minima/main.svg"
+&lt;figure id="figure-%!s(int=3)-1">&lt;img src="%20../../../../tikZ/local_global_minima/main.svg"
  alt="Local vs global" width="600px">
  &lt;figcaption>
  &lt;p>
