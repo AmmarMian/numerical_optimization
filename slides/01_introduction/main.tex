@@ -1,0 +1,262 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[default,oldstyle,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+
+\usepackage[natbib=true,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+\usepackage{pgf-pie}  
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{svg}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{math}
+\usetikzlibrary{backgrounds,calc,positioning}
+\usepackage{qrcode}
+
+\usetheme{main}
+
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+
+
+\title[Numerical optimization]{Numerical optimization : theory and applications}
+
+\date[]{}
+\author[AM]{\textbf{Ammar Mian} \\ \footnotesize Associate professor, LISTIC, Université Savoie Mont Blanc}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+% \newcommand{\alert}[1]{{\textbf{\alert{#1}}}}
+
+
+%\input{macros.tex}
+
+
+\AtBeginBibliography{\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     END OF PREAMBLE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%
+
+
+  
+\begin{frame}[noframenumbering,plain]
+\titlepage
+\end{frame}
+\begingroup
+\setbeamercolor{background canvas}{bg=main}
+\setbeamercolor{titlelike}{fg=text-light, bg=light}
+\begin{frame}[noframenumbering,plain]{Outline}
+    \tableofcontents[]
+\end{frame}
+
+\endgroup
+
+\AtBeginSection[]{
+        \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[plain, noframenumbering]
+        \tableofcontents[currentsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+\AtBeginSubsection[]
+{
+    \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[noframenumbering, plain, label=]
+        % \frametitle{Plan}  
+        \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Introduction}
+
+\subsection{Course organization}
+
+\begin{frame}{Online ressources}
+
+  The syllabus, course monograph and slides are available at:
+
+  \medskip
+
+  \begin{figure}[h]
+    \qrcode[height=1.5in] {https://ammarmian.github.io/numerical_optimization/}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}{Book ressources}
+  \begin{block}{Main book}
+    \fullcite{nocedal1999numerical}
+  \end{block}
+  \begin{block}{Additional in convex optimization}
+    \fullcite{boyd2004convex}
+  \end{block}
+  \begin{block}{For reminders}
+    \fullcite{magnus2019matrix}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Part I - Fundamentals}
+
+  \textbf{Oranisation of first week}
+  \begin{table}[h]
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllll}
+Session & Duration & Content                                                                   & Date               & Room  \\
+\hline
+CM1     & 1.5h     & Introduction, Linear algebra and Differentiation reminders, and exercices & 2 June 2025 10am   & B-120 \\
+CM2     & 1.5h     & Steepest descent algorithm, Newton method and convexity                   & 2 June 2025 1.15pm & B-120 \\
+TD1     & 1.5h     & Application to linear regression                                          & 2 June 2025 3pm    & C-213 \\
+CM3     & 1.5h     & Linesearch algorithms and their convergence                               & 3 June 2025 10am   & B-120 \\
+CM4     & 1.5h     & Constrained optimization : linear programming and lagrangian methods      & 3 June 2025 1.15pm & B-120 \\
+TD2     & 1.5h     & Implementation of Linesearch methods                                      & 3 June 2025 3pm    & C-213
+\end{tabular}
+  }
+
+  \medskip
+
+  Then on 5 June 2025 at 1pm, a project on Implementation of inverse problems for image processing, by \emph{Yassine Mhiri}.
+\end{table}
+  
+\end{frame}
+
+\subsection{The setup}
+\begin{frame}{Numerical optimization}
+
+  What is this course about ?
+
+  \pause
+
+  \begin{block}{Numerical optimization}
+    Numerical optimization is the computational process of finding the best solution to a mathematical problem when analytical (exact) methods are impractical or impossible.
+  \end{block}
+
+
+  What problem ? 
+  \pause
+
+  \begin{itemize}
+    \item \textbf{Variables : } $\mathbf{x}_1$, $\dots$, $\mathbf{x}_d$ organised as $\mathbf{x}\in\mathbb{R}^d$
+    \item \textbf{Objective function:} $f:\mathcal{X}\subset\mathbb{R}^d \mapsto \mathbb{R}$
+    \item \textbf{Constraints :} $\mathcal{S} = \{\mathbf{x}\in\mathcal{X} : h_{1,\dots,p}(\mathbf{x})=0,\, g_{1,\dots,q}(\mathbf{x})\geq 0\}$
+  \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Practical examples (1/3)}
+
+  \begin{block}{Cable factory}
+    \small
+    A factory produces copper cables of 5mm and 10mm diameter, on which the profit is respectively 2 and 7 euros per meter. The copper available to the factory allows for the production of 20 km of 5mm diameter cable per week. The production of 10mm cable requires 4 times more copper than that of 5mm cable. For demand reasons, the weekly production of 5mm cable must not exceed 15 km, and for logistical reasons, the production of 10mm cable must not represent more than 40\% of the total production.
+  \end{block}
+  \pause
+
+  $\rightarrow$ How to know what is the most profitable setup ?
+
+\end{frame}
+
+
+\begin{frame}{Practical exmaples (2/3)}
+
+  \begin{block}{Image denoising}
+    \begin{figure}[h]
+      \includegraphics[height=3cm]{figures/denoising.png}
+    \end{figure}
+
+  \end{block}
+  
+    \pause  
+
+    $\rightarrow$ How to model the wanted signal and then find the best one among all possible signals ?
+\end{frame}
+
+\begin{frame}{Practical examples (3/3)}
+  \begin{block}{Portfolio optimization}
+    \small
+    An investor has \$1M to allocate between 3 assets: stocks (expected return 8\%, risk 15\%), bonds (expected return 4\%, risk 5\%), and real estate (expected return 6\%, risk 10\%). The correlations between assets are: stocks-bonds = 0.2, stocks-real estate = 0.3, bonds-real estate = 0.1. The investor wants to maximize expected return while keeping portfolio risk below 8\%.
+  \end{block}
+  \pause
+  
+  \vspace{0.3cm}
+  \textbf{Mathematical formulation:}
+  \begin{equation}
+    \max_{\mathbf{w}} \quad  \sum_{i=1}^{3} w_i \mu_i 
+    s.t \quad \sqrt{\mathbf{w}^\mathrm{T} \boldsymbol{\Sigma} \mathbf{w}} \leq 0.08,\, \sum_{i=1}^{3} w_i = 1,\, w_i \geq 0, \quad i = 1,2,3
+  \end{equation}
+  
+  where $w_i$ = weight in asset $i$, $\mu_i$ = expected return, $\Sigma$ = covariance matrix
+  
+  \pause
+  $\rightarrow$ How to find the optimal balance between risk and return?
+\end{frame}
+
+
+\section{Linear Algebra}
+
+\subsection{Vectors and matrices}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Matrix decompositions}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Useful results}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\section{Differentiation}
+
+\subsection{Monovariate reminders}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Extension to Multivariate setup}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Matrix functions}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}
+
+

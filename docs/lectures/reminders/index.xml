@@ -11,9 +11,11 @@
  Fundamentals of Linear Algebra
  &lt;a class="anchor" href="#fundamentals-of-linear-algebra">#&lt;/a>
 &lt;/h1>
-&lt;p>Linear algebra is one of the foundational branches of mathematics, with applications spanning from engineering and computer science to economics and physics. This document introduces the key concepts and theorems of linear algebra in a structured progression, demonstrating how each idea builds upon previous ones to form a coherent mathematical framework.&lt;/p>
-&lt;h2 id="1-vectors-and-vector-spaces">
- 1. Vectors and Vector Spaces
- &lt;a class="anchor" href="#1-vectors-and-vector-spaces">#&lt;/a>
+&lt;h2 id="1---introduction">
+ 1 - Introduction
+ &lt;a class="anchor" href="#1---introduction">#&lt;/a>
 &lt;/h2>
-&lt;p>We begin our study of linear algebra with the fundamental concept of a vector space, which formalizes the notion of vectors and their operations. This abstraction allows us to work with many different types of mathematical objects using the same underlying principles.&lt;/p></description></item></channel></rss>
+&lt;blockquote>
+&lt;p>Linear algebra is one of the foundational branches of mathematics, with applications spanning from engineering and computer science to economics and physics. This document is extracted from the textbook &lt;strong>Matrix Differential Calculus with Applications in Statistics and Econometrics&lt;/strong> from Jan R. Magnus; Heinz Neudecker, adapting the notations to the ones used in the lectures.&lt;/p>
+&lt;/blockquote>
+&lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item></channel></rss>
