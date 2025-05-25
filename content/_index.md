@@ -53,9 +53,9 @@ The course will first start with fundamental mathematical concepts of optimizati
 * Gradient Methods
 * Second-order methods
 
- Session | Duration | Content | Date | Room |
----------|----------|---------|------|----------|
- CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 |
+ Session | Duration | Content | Date | Room | Slides |
+---------|----------|---------|------|----------|---|
+ CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 | [Slides](./slides/01_introduction/main.pdf) |
  CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 |
  TD1 | 1.5h | Application to linear regression | 2 June 2025 3pm | C-213 |
  CM3 | 1.5h | Linesearch algorithms and their convergence | 3 June 2025 10am | B-120 |
