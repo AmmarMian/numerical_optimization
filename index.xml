@@ -51,32 +51,13 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
 &lt;blockquote>
 &lt;p>Linear algebra is one of the foundational branches of mathematics, with applications spanning from engineering and computer science to economics and physics. This document is extracted from the textbook &lt;strong>Matrix Differential Calculus with Applications in Statistics and Econometrics&lt;/strong> from Jan R. Magnus; Heinz Neudecker, adapting the notations to the ones used in the lectures.&lt;/p>
 &lt;/blockquote>
-&lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item><item><title>2. Convexity theory</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</guid><description>&lt;h1 id="convexity-theory">
- Convexity theory
- &lt;a class="anchor" href="#convexity-theory">#&lt;/a>
-&lt;/h1></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
+&lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
  Stochastic optimization
  &lt;a class="anchor" href="#stochastic-optimization">#&lt;/a>
 &lt;/h1></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
  Support Vector Machine
  &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
-&lt;/h1></description></item><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
- Introduction
- &lt;a class="anchor" href="#introduction">#&lt;/a>
-&lt;/h1>
-&lt;h2 id="notations">
- Notations
- &lt;a class="anchor" href="#notations">#&lt;/a>
-&lt;/h2>
-&lt;p>Let us start by defining the notation used troughout all the lectures and practical labs.&lt;/p>
-&lt;h3 id="basic-notation">
- Basic Notation
- &lt;a class="anchor" href="#basic-notation">#&lt;/a>
-&lt;/h3>
-&lt;p>Scalars are represented by italic letters (e.g., $x$, $y$, $\lambda$). Vectors are denoted by bold lowercase letters (e.g., $\mathbf{v}$, $\mathbf{x}$), while matrices are represented by bold uppercase letters (e.g., $\mathbf{A}$, $\mathbf{B}$). The dimensionality of a vector $\mathbf{v} \in \mathbb{R}^n$ indicates it contains $n$ elements, and similarly, a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ has $m$ rows and $n$ columns.&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
- Neural Networks
- &lt;a class="anchor" href="#neural-networks">#&lt;/a>
-&lt;/h1></description></item><item><title>3. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
+&lt;/h1></description></item><item><title>2. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
  Unconstrained optimization - basics
  &lt;a class="anchor" href="#unconstrained-optimization---basics">#&lt;/a>
 &lt;/h1>
@@ -97,44 +78,87 @@ $$&lt;/p>
 
 
 
-&lt;figure id="figure-%!s(int=3)-1">&lt;img src="%20../../../../../../tikZ/local_global_minima/main.svg"
+&lt;figure id="figure-%!s(int=2)-1">&lt;img src="%20../../../../../../tikZ/local_global_minima/main.svg"
  alt="Local vs global" width="600px">
  &lt;figcaption>
  &lt;p>
- &lt;strong>Figure 3.1:&lt;/strong>Local and global minimum can coexist.&lt;/p>
+ &lt;strong>Figure 2.1: &lt;/strong>Local and global minimum can coexist.&lt;/p>
  &lt;/figcaption>
 &lt;/figure>
 
 &lt;p>Generally, we would be happiest if we found a global minimizer of $f$ , a point where the
-function attains its least value. A formal definition is :&lt;/p></description></item><item><title>4. Modern trends</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</guid><description>&lt;h1 id="modern-trends">
+function attains its least value. A formal definition is :&lt;/p></description></item><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="notations">
+ Notations
+ &lt;a class="anchor" href="#notations">#&lt;/a>
+&lt;/h2>
+&lt;p>Let us start by defining the notation used troughout all the lectures and practical labs.&lt;/p>
+&lt;h3 id="basic-notation">
+ Basic Notation
+ &lt;a class="anchor" href="#basic-notation">#&lt;/a>
+&lt;/h3>
+&lt;p>Scalars are represented by italic letters (e.g., $x$, $y$, $\lambda$). Vectors are denoted by bold lowercase letters (e.g., $\mathbf{v}$, $\mathbf{x}$), while matrices are represented by bold uppercase letters (e.g., $\mathbf{A}$, $\mathbf{B}$). The dimensionality of a vector $\mathbf{v} \in \mathbb{R}^n$ indicates it contains $n$ elements, and similarly, a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ has $m$ rows and $n$ columns.&lt;/p></description></item><item><title>3. Convexity theory</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/convexity/</guid><description>&lt;h1 id="convexity-theory">
+ Convexity theory
+ &lt;a class="anchor" href="#convexity-theory">#&lt;/a>
+&lt;/h1>
+&lt;p>Convexity is a powerful property of functions and sets that simplifies the analysis of optimization problems and the characterization of global minimizers. In this chapter, we will explore the concepts of convex sets, convex functions, and their implications for unconstrained optimization.&lt;/p>
+&lt;h2 id="convex-sets">
+ Convex sets
+ &lt;a class="anchor" href="#convex-sets">#&lt;/a>
+&lt;/h2>
+&lt;p>Let us first start by defining the convexity of a given set $\mathcal{S}\subset\mathbb{R}^d$:&lt;/p>
+
+
+
+
+
+
+
+
+
+
+&lt;div id="convex_set" class="theorem-box">
+ &lt;p class="theorem-title">&lt;strong>Definition 3.1 (Convex set)&lt;/strong>&lt;/p>
+ &lt;div class="theorem-content">
+ Let $\mathcal{S}\subset\mathbb{R}^d$ be a set. The set $\mathcal{S}$ is convex if, for any two points $\mathbf{x}, \mathbf{y} \in \mathcal{S}$, the line segment that connects them is also contained in $\mathcal{S}$, that is,
+\begin{equation}
+\mathbf{x}, \mathbf{y} \in \mathcal{S} \implies \lambda \mathbf{x} + (1-\lambda) \mathbf{y} \in \mathcal{S}, \quad \forall \lambda \in [0, 1].
+\label{eq:convex_set}
+\end{equation}
+ &lt;/div>
+&lt;/div>
+
+
+&lt;div class="center-container">
+ &lt;div class="center-content">
+ 
+
+
+
+
+
+
+
+
+&lt;figure id="convex_set">&lt;img src="%20../../../../../../tikZ/convex_set/main.svg"
+ alt="Zig zag" width="400px">
+ &lt;figcaption>
+ &lt;p>
+ &lt;strong>Figure 3.1: &lt;/strong>Convex set&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
+ Neural Networks
+ &lt;a class="anchor" href="#neural-networks">#&lt;/a>
+&lt;/h1></description></item><item><title>4. Modern trends</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</guid><description>&lt;h1 id="modern-trends">
  Modern trends
  &lt;a class="anchor" href="#modern-trends">#&lt;/a>
 &lt;/h1></description></item><item><title>4. Unconstrained optimization : linesearch</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</guid><description>&lt;h1 id="unconstrained-optimization---linesearch-methods">
  Unconstrained optimization - Linesearch methods
  &lt;a class="anchor" href="#unconstrained-optimization---linesearch-methods">#&lt;/a>
 &lt;/h1>
-&lt;h2 id="step-length-conditions">
- Step-length conditions
- &lt;a class="anchor" href="#step-length-conditions">#&lt;/a>
-&lt;/h2>
-&lt;h3 id="wolfe-conditions">
- Wolfe conditions
- &lt;a class="anchor" href="#wolfe-conditions">#&lt;/a>
-&lt;/h3>
-&lt;iframe style="border:none;" scrolling="no" src="../../../../interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation">&lt;/iframe>
-&lt;h3 id="goldenstein-conditions">
- Goldenstein conditions
- &lt;a class="anchor" href="#goldenstein-conditions">#&lt;/a>
-&lt;/h3>
-&lt;iframe style="border:none;" scrolling="no" src="../../../../interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation">&lt;/iframe>
-&lt;h2 id="search-directions">
- Search directions
- &lt;a class="anchor" href="#search-directions">#&lt;/a>
-&lt;/h2>
-&lt;h2 id="rate-of-convergence">
- Rate of convergence
- &lt;a class="anchor" href="#rate-of-convergence">#&lt;/a>
-&lt;/h2></description></item><item><title>5. Unconstrained optimization : Second-order</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</guid><description>&lt;h1 id="unconstrained-optimization----second-order-methods">
+&lt;p>All algorithms for unconstrained minimization require the user to supply a starting point, which we usually denote by $\mathbf{x}_0$. The user with knowledge about the application and the data set may be in a good position to choose $\mathbf{x}_0$ to be a reasonable estimate of the solution. Otherwise, the starting point must be chosen in some arbitrary manner.&lt;/p>
+&lt;p>Beginning at $\mathbf{x}_0$, optimization algorithms generate a sequence of iterates $\left\{\mathbf{x}_k\right\}_{k=0}^{\infty}$ that terminate when either no more progress can be made or when it seems that a solution point has been approximated with sufficient accuracy. In deciding how to move from one iterate $\mathbf{x}_k$ to the next, the algorithms use information about the function $f$ at $\mathbf{x}_k$, and possibly also information from earlier iterates $\mathbf{x}_0, \mathbf{x}_1, \ldots, \mathbf{x}_{k-1}$. They use this information to find a new iterate $\mathbf{x}_{k+1}$ with a lower function value than $\mathbf{x}_k$. (There exist nonmonotone algorithms that do not insist on a decrease in $f$ at every step, but even these algorithms require $f$ to be decreased after some prescribed number $m$ of iterations. That is, they enforce $f\left(\mathbf{x}_k\right)&amp;lt;f\left(\mathbf{x}_{k-m}\right)$.)&lt;/p></description></item><item><title>5. Unconstrained optimization : Second-order</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_newton/</guid><description>&lt;h1 id="unconstrained-optimization----second-order-methods">
  Unconstrained optimization - Second-order methods
  &lt;a class="anchor" href="#unconstrained-optimization----second-order-methods">#&lt;/a>
 &lt;/h1>
