@@ -690,10 +690,10 @@ $$
 where $i$ denotes the imaginary unit with the property $i^2=-1$. The complex conjugate of $\mathbf{Z}$, denoted by $\mathbf{Z}^mathrm{H}$, is defined as
 
 $$
-\mathbf{Z}^mathrm{H}=\mathbf{A}^{\mathrm{T}}-i \mathbf{B}^{\mathrm{T}}
+\mathbf{Z}^\mathrm{H}=\mathbf{A}^{\mathrm{T}}-i \mathbf{B}^{\mathrm{T}}
 $$
 
-If $\mathbf{Z}$ is real, then $\mathbf{Z}^mathrm{H}=\mathbf{Z}^{\mathrm{T}}$. If $\mathbf{Z}$ is a scalar, say $\zeta$, we usually write $\bar{\zeta}$ instead of $\zeta^mathrm{H}$.
+If $\mathbf{Z}$ is real, then $\mathbf{Z}^\mathrm{H}=\mathbf{Z}^{\mathrm{T}}$. If $\mathbf{Z}$ is a scalar, say $\zeta$, we usually write $\bar{\zeta}$ instead of $\zeta^mathrm{H}$.
 
 A square complex matrix $\mathbf{Z}$ is said to be Hermitian if $\mathbf{Z}^{\mathrm{H}}=\mathbf{Z}$ (the complex equivalent to a symmetric matrix), skew-Hermitian if $\mathbf{Z}^{\mathrm{H}}=-\mathbf{Z}$ (the complex equivalent to a skew-symmetric matrix), and unitary if $\mathbf{Z}^{\mathrm{H}} \mathbf{Z}=\mathbf{I}$ (the complex equivalent to an orthogonal matrix).
 

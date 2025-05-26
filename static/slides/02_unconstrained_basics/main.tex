@@ -1,0 +1,147 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[default,oldstyle,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+
+\usepackage[natbib=true,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+\usepackage{pgf-pie}  
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{svg}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{math}
+\usetikzlibrary{backgrounds,calc,positioning}
+\usepackage{qrcode}
+
+\usetheme{main}
+
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+
+
+\title[Numerical optimization]{Numerical optimization : theory and applications}
+
+\date[]{}
+\author[AM]{\textbf{Ammar Mian} \\ \footnotesize Associate professor, LISTIC, Université Savoie Mont Blanc}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+% \newcommand{\alert}[1]{{\textbf{\alert{#1}}}}
+
+
+%\input{macros.tex}
+
+
+\AtBeginBibliography{\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     END OF PREAMBLE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%
+
+
+  
+\begin{frame}[noframenumbering,plain]
+\titlepage
+\end{frame}
+\begingroup
+\setbeamercolor{background canvas}{bg=main}
+\setbeamercolor{titlelike}{fg=text-light, bg=light}
+\begin{frame}[noframenumbering,plain]{Outline}
+    \tableofcontents[]
+\end{frame}
+
+\endgroup
+
+\AtBeginSection[]{
+        \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[plain, noframenumbering]
+        \tableofcontents[currentsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+\AtBeginSubsection[]
+{
+    \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[noframenumbering, plain, label=]
+        % \frametitle{Plan}  
+        \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Introduction}
+
+\subsection{Unconstrained}
+
+\begin{frame}{Setup}
+
+\end{frame}
+
+
+\section{Taylor's theorem}
+
+\subsection{Vectors and matrices}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Matrix decompositions}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Useful results}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\section{Differentiation}
+
+\subsection{Monovariate reminders}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Extension to Multivariate setup}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+\subsection{Matrix functions}
+
+\begin{frame}{Title}
+Content
+\end{frame}
+
+
+
+
+
+
+
+
+\end{document}
+
+
