@@ -2,12 +2,25 @@
  Fundamentals of Multivariate Differentiation
  &lt;a class="anchor" href="#fundamentals-of-multivariate-differentiation">#&lt;/a>
 &lt;/h1>
-&lt;p>Multivariate calculus extends the fundamental concepts of single-variable calculus to functions of several variables. This powerful mathematical framework allows us to analyze and describe phenomena in multiple dimensions, making it essential for physics, engineering, economics, statistics, and many other disciplines. This document provides a comprehensive introduction to multivariate differentiation, building from basic principles to advanced applications.&lt;/p>
-&lt;h2 id="1-functions-of-several-variables">
- 1. Functions of Several Variables
- &lt;a class="anchor" href="#1-functions-of-several-variables">#&lt;/a>
-&lt;/h2>
-&lt;p>We begin by defining functions that map points from higher-dimensional spaces to either real numbers or other multi-dimensional spaces.&lt;/p></description></item><item><title>Linear Algebra</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</guid><description>&lt;h1 id="fundamentals-of-linear-algebra">
+&lt;p>Soon to be added.&lt;/p>
+&lt;!-- Multivariate calculus extends the fundamental concepts of single-variable calculus to functions of several variables. This powerful mathematical framework allows us to analyze and describe phenomena in multiple dimensions, making it essential for physics, engineering, economics, statistics, and many other disciplines. This document provides a comprehensive introduction to multivariate differentiation, building from basic principles to advanced applications. -->
+&lt;!---->
+&lt;!-- ## 1. Functions of Several Variables -->
+&lt;!---->
+&lt;!-- We begin by defining functions that map points from higher-dimensional spaces to either real numbers or other multi-dimensional spaces. -->
+&lt;!---->
+&lt;!-- 
+
+
+
+
+
+
+
+
+
+&lt;div id="multivariate-function" class="theorem-box">
+ &lt;p class="theorem-title">&lt;strong>Definition A.1 (Function of Several Variables)&lt;/strong>&lt;/p></description></item><item><title>Linear Algebra</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</guid><description>&lt;h1 id="fundamentals-of-linear-algebra">
  Fundamentals of Linear Algebra
  &lt;a class="anchor" href="#fundamentals-of-linear-algebra">#&lt;/a>
 &lt;/h1>
