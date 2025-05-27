@@ -1,7 +1,7 @@
 ---
-title: "5. Unconstrained optimization : Second-order "
-weight: 5
-chapter: 5
+title: "1. Unconstrained optimization : Second-order "
+weight: 1
+chapter: 1
 ---
 
 # Unconstrained optimization -  Second-order methods

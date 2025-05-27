@@ -1,8 +1,8 @@
 ---
-title: 1. Proximal methods
-weight: 1
+title: 2. Proximal methods
+weight: 2.
 ---
 
-# Non-convex problems
+# Proximal methods
 
 Soon to be added.

@@ -4,7 +4,8 @@ type: docs
 bookToc: false
 ---
 
-# Numerical Optimization for Data Science and Machine Learning
+# Numerical Optimization: theory and applications
+
 
 
 {{% columns ratio="1:2" %}} <!-- begin columns block -->
@@ -57,15 +58,16 @@ The course will first start with fundamental mathematical concepts of optimizati
 ---------|----------|---------|------|----------|---|
  CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 | [Slides](./slides/01_introduction/main.pdf) |
  CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 |
- TD1 | 1.5h | Application to linear regression | 2 June 2025 3pm | C-213 |
+ TD1 | 1.5h | Application to linear regression (1/2) | 2 June 2025 3pm | C-213 |
  CM3 | 1.5h | Linesearch algorithms and their convergence | 3 June 2025 10am | B-120 |
- CM4 | 1.5h | Constrained optimization : linear programming and lagrangian methods | 3 June 2025 1.15pm | B-120 |
- TD2 | 1.5h | Implementation of Linesearch methods | 3 June 2025 3pm | C-213 |
+ TD2 | 1.5h | Linesearch in linear regression (2/2)| 3 June 2025 1.15pm | C-213 |
+ CM4 | 1.5h | Constrained optimization : linear programming and lagrangian methods | 3 June 2025 3pm | B-120 |
 
 ### Part II - Application to Image / Remote Sensing Problems (Week 1)
 
-Then we will apply those concepts in practice in inverse problem solving with examples in image denoising and pansharpening problems in remote sensing:
+Then we will apply those concepts in practice in inverse problem solving with examples in image denoising problems in remote sensing:
 
+* Formulating an unconstrained optimization problem and solving it
 * Formulating a cost function with constraints (sparsity, smoothness, etc)
 * Numerical implementation in python
 
@@ -77,7 +79,7 @@ Then we will apply those concepts in practice in inverse problem solving with ex
 
 We then move on to more complicated problems:
 
-* Trust regions methods 
+* Newton and quasi-Newton methods
 * Proximal algorithms
 
 | Session | Duration | Content | Date | Room |
