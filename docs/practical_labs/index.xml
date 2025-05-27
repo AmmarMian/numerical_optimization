@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Practical labs on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/</link><description>Recent content in Practical labs on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/practical_labs/index.xml" rel="self" type="application/rss+xml"/><item><title>I - Linear Regression with gradient</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-using-gradient-descent">
- Linear Regression using Gradient descent
- &lt;a class="anchor" href="#linear-regression-using-gradient-descent">#&lt;/a>
-&lt;/h1></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Practical labs on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/</link><description>Recent content in Practical labs on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/practical_labs/index.xml" rel="self" type="application/rss+xml"/><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
+ Linear Regression models
+ &lt;a class="anchor" href="#linear-regression-models">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>In this lab session, we will explore the fundamental concepts of numerical optimization through the lens of linear regression. We&amp;rsquo;ll begin with the simplest case and gradually build up to more complex scenarios, comparing analytical solutions with numerical methods at each step.&lt;/p>
+&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
  Remote sensing project
  &lt;a class="anchor" href="#remote-sensing-project">#&lt;/a>
 &lt;/h1>
@@ -15,7 +21,40 @@
 &lt;/h2></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
  Digit recognition with multi-layer perceptron
  &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
-&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment">
- Lab environment
- &lt;a class="anchor" href="#lab-environment">#&lt;/a>
-&lt;/h1></description></item></channel></rss>
+&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
+ Lab Environment Setup
+ &lt;a class="anchor" href="#lab-environment-setup">#&lt;/a>
+&lt;/h1>
+&lt;p>Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using &lt;strong>uv&lt;/strong>, a fast and reliable Python package manager written in Rust.&lt;/p>
+&lt;h2 id="why-uv">
+ Why uv?
+ &lt;a class="anchor" href="#why-uv">#&lt;/a>
+&lt;/h2>
+&lt;p>For this course, we&amp;rsquo;re using &lt;a href="https://docs.astral.sh/uv/">uv&lt;/a> instead of traditional tools like pip or conda because:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>⚡ Blazing Fast&lt;/strong>: uv is 10-100x faster than traditional package managers like pip, making dependency installation nearly instantaneous&lt;/li>
+&lt;li>&lt;strong>🔧 All-in-One&lt;/strong>: A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more&lt;/li>
+&lt;li>&lt;strong>🔒 Reproducible&lt;/strong>: Automatic lock files ensure everyone has identical environments&lt;/li>
+&lt;li>&lt;strong>🐍 Python Version Management&lt;/strong>: Automatically downloads and manages Python versions when needed&lt;/li>
+&lt;li>&lt;strong>📦 Modern Standards&lt;/strong>: Built around &lt;code>pyproject.toml&lt;/code> and modern Python packaging practices&lt;/li>
+&lt;/ul>
+&lt;h2 id="prerequisites">
+ Prerequisites
+ &lt;a class="anchor" href="#prerequisites">#&lt;/a>
+&lt;/h2>
+&lt;p>&lt;strong>Good news!&lt;/strong> uv doesn&amp;rsquo;t require Python to be pre-installed - it can manage Python installations for you. However, having Python already installed won&amp;rsquo;t hurt.&lt;/p></description></item><item><title>Backtracking memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</guid><description>&lt;h1 id="backtracking-procedure-for-step-size-selection">
+ Backtracking procedure for step size selection
+ &lt;a class="anchor" href="#backtracking-procedure-for-step-size-selection">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>The backtracking line search is a fundamental technique in optimization algorithms for determining an appropriate step size that ensures sufficient decrease in the objective function. This procedure is particularly useful in gradient-based methods where choosing an optimal step size analytically is difficult or computationally expensive.&lt;/p>
+&lt;h2 id="mathematical-setup">
+ Mathematical setup
+ &lt;a class="anchor" href="#mathematical-setup">#&lt;/a>
+&lt;/h2>
+&lt;p>Consider the optimization problem:
+$\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p>
+&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item></channel></rss>

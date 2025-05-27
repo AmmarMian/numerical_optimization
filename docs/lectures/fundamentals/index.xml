@@ -3,7 +3,7 @@
  &lt;a class="anchor" href="#optimization-problems">#&lt;/a>
 &lt;/h1>
 &lt;h2 id="unconstrained-vs-constrained">
- unconstrained vs constrained
+ Unconstrained vs constrained
  &lt;a class="anchor" href="#unconstrained-vs-constrained">#&lt;/a>
 &lt;/h2>
 &lt;p>What we are interested in these lectures is to solve problems of the form :&lt;/p>
@@ -11,7 +11,7 @@
 \underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{(arg)min}} f(\mathbf{x}),
 \label{eq: optim general unconstrained}
 \end{equation}
-where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained Optimization&lt;/strong> problem.&lt;/p>
+where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained optimization&lt;/strong> problem.&lt;/p>
 &lt;p>If additionally, we add a set of equalities constraints functions:
 $$
 \{h_i : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq i \leq N \}
@@ -111,14 +111,7 @@ function attains its least value. A formal definition is :&lt;/p></description><
  Unconstrained optimization - Second-order methods
  &lt;a class="anchor" href="#unconstrained-optimization----second-order-methods">#&lt;/a>
 &lt;/h1>
-&lt;h2 id="newton-methods">
- Newton methods
- &lt;a class="anchor" href="#newton-methods">#&lt;/a>
-&lt;/h2>
-&lt;h2 id="quasi-newton-methods">
- Quasi-Newton methods
- &lt;a class="anchor" href="#quasi-newton-methods">#&lt;/a>
-&lt;/h2></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+&lt;p>We have seen in the previous chapter that first-order methods, such as steepest descent, are often used to find a local minimum of a function $f(\mathbf{x})$. However, these methods can be slow to converge, especially when the function has ill-conditioned Hessian or when the initial guess is far from the solution. Second-order methods, which use information about the curvature of the function, can provide faster convergence rates.&lt;/p></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
  Constrained optimization methods
  &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
 &lt;/h1>

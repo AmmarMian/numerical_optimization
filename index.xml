@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Introduction on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/</link><description>Recent content in Introduction on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/index.xml" rel="self" type="application/rss+xml"/><item><title>1. From Linear regression to perceptron</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</guid><description>&lt;h1 id="from-linear-regression-to-perceptron">
  From Linear regression to perceptron
  &lt;a class="anchor" href="#from-linear-regression-to-perceptron">#&lt;/a>
-&lt;/h1></description></item><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
  Optimization problems
  &lt;a class="anchor" href="#optimization-problems">#&lt;/a>
 &lt;/h1>
 &lt;h2 id="unconstrained-vs-constrained">
- unconstrained vs constrained
+ Unconstrained vs constrained
  &lt;a class="anchor" href="#unconstrained-vs-constrained">#&lt;/a>
 &lt;/h2>
 &lt;p>What we are interested in these lectures is to solve problems of the form :&lt;/p>
@@ -14,7 +15,7 @@
 \underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{(arg)min}} f(\mathbf{x}),
 \label{eq: optim general unconstrained}
 \end{equation}
-where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained Optimization&lt;/strong> problem.&lt;/p>
+where $\mathbf{x}\in\mathbb{R}^d$ and $f:\mathcal{D}_f \mapsto \mathbb{R} $ is a scalar-valued function with domain $\mathcal{D}_f$. Under this formulation, the problem is said to be an &lt;strong>unconstrained optimization&lt;/strong> problem.&lt;/p>
 &lt;p>If additionally, we add a set of equalities constraints functions:
 $$
 \{h_i : \mathbb{R}^d \mapsto \mathbb{R} \, /\, 1 \leq i \leq N \}
@@ -31,7 +32,8 @@ and define the set $\mathcal{S} = \{\mathbf{x} \in \mathbb{R}^d \,/\, \forall\,(
 then the problem is said to be a &lt;strong>constrained optimization&lt;/strong> problem.&lt;/p></description></item><item><title>1. Proximal methods</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</guid><description>&lt;h1 id="non-convex-problems">
  Non-convex problems
  &lt;a class="anchor" href="#non-convex-problems">#&lt;/a>
-&lt;/h1></description></item><item><title>Differentiation</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</guid><description>&lt;h1 id="fundamentals-of-multivariate-differentiation">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>Differentiation</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</guid><description>&lt;h1 id="fundamentals-of-multivariate-differentiation">
  Fundamentals of Multivariate Differentiation
  &lt;a class="anchor" href="#fundamentals-of-multivariate-differentiation">#&lt;/a>
 &lt;/h1>
@@ -54,10 +56,12 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
 &lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item><item><title>2. Stochastic optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/stochastic/</guid><description>&lt;h1 id="stochastic-optimization">
  Stochastic optimization
  &lt;a class="anchor" href="#stochastic-optimization">#&lt;/a>
-&lt;/h1></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
  Support Vector Machine
  &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
-&lt;/h1></description></item><item><title>2. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>2. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
  Unconstrained optimization - basics
  &lt;a class="anchor" href="#unconstrained-optimization---basics">#&lt;/a>
 &lt;/h1>
@@ -150,10 +154,12 @@ function attains its least value. A formal definition is :&lt;/p></description><
  &lt;strong>Figure 3.1: &lt;/strong>Convex set&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
  Neural Networks
  &lt;a class="anchor" href="#neural-networks">#&lt;/a>
-&lt;/h1></description></item><item><title>4. Modern trends</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</guid><description>&lt;h1 id="modern-trends">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>4. Modern trends</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/modern/</guid><description>&lt;h1 id="modern-trends">
  Modern trends
  &lt;a class="anchor" href="#modern-trends">#&lt;/a>
-&lt;/h1></description></item><item><title>4. Unconstrained optimization : linesearch</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</guid><description>&lt;h1 id="unconstrained-optimization---linesearch-methods">
+&lt;/h1>
+&lt;p>Soon to be added.&lt;/p></description></item><item><title>4. Unconstrained optimization : linesearch</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_linesearch/</guid><description>&lt;h1 id="unconstrained-optimization---linesearch-methods">
  Unconstrained optimization - Linesearch methods
  &lt;a class="anchor" href="#unconstrained-optimization---linesearch-methods">#&lt;/a>
 &lt;/h1>
@@ -162,24 +168,23 @@ function attains its least value. A formal definition is :&lt;/p></description><
  Unconstrained optimization - Second-order methods
  &lt;a class="anchor" href="#unconstrained-optimization----second-order-methods">#&lt;/a>
 &lt;/h1>
-&lt;h2 id="newton-methods">
- Newton methods
- &lt;a class="anchor" href="#newton-methods">#&lt;/a>
-&lt;/h2>
-&lt;h2 id="quasi-newton-methods">
- Quasi-Newton methods
- &lt;a class="anchor" href="#quasi-newton-methods">#&lt;/a>
-&lt;/h2></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+&lt;p>We have seen in the previous chapter that first-order methods, such as steepest descent, are often used to find a local minimum of a function $f(\mathbf{x})$. However, these methods can be slow to converge, especially when the function has ill-conditioned Hessian or when the initial guess is far from the solution. Second-order methods, which use information about the curvature of the function, can provide faster convergence rates.&lt;/p></description></item><item><title>6. Constrained optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
  Constrained optimization methods
  &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
 &lt;/h1>
 &lt;p>Lorem&lt;/p>
 &lt;p>$$
 \mathbf{X} = \operatorname{argmin} || \mathbf{Y} - \mathbf{A}\mathbf{X} \|_2 + \mathcal{R}(\mathbf{X})
-$$&lt;/p></description></item><item><title>I - Linear Regression with gradient</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-using-gradient-descent">
- Linear Regression using Gradient descent
- &lt;a class="anchor" href="#linear-regression-using-gradient-descent">#&lt;/a>
-&lt;/h1></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
+$$&lt;/p></description></item><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
+ Linear Regression models
+ &lt;a class="anchor" href="#linear-regression-models">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>In this lab session, we will explore the fundamental concepts of numerical optimization through the lens of linear regression. We&amp;rsquo;ll begin with the simplest case and gradually build up to more complex scenarios, comparing analytical solutions with numerical methods at each step.&lt;/p>
+&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
  Remote sensing project
  &lt;a class="anchor" href="#remote-sensing-project">#&lt;/a>
 &lt;/h1>
@@ -193,7 +198,40 @@ $$&lt;/p></description></item><item><title>I - Linear Regression with gradient</
 &lt;/h2></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
  Digit recognition with multi-layer perceptron
  &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
-&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment">
- Lab environment
- &lt;a class="anchor" href="#lab-environment">#&lt;/a>
-&lt;/h1></description></item></channel></rss>
+&lt;/h1></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
+ Lab Environment Setup
+ &lt;a class="anchor" href="#lab-environment-setup">#&lt;/a>
+&lt;/h1>
+&lt;p>Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using &lt;strong>uv&lt;/strong>, a fast and reliable Python package manager written in Rust.&lt;/p>
+&lt;h2 id="why-uv">
+ Why uv?
+ &lt;a class="anchor" href="#why-uv">#&lt;/a>
+&lt;/h2>
+&lt;p>For this course, we&amp;rsquo;re using &lt;a href="https://docs.astral.sh/uv/">uv&lt;/a> instead of traditional tools like pip or conda because:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>⚡ Blazing Fast&lt;/strong>: uv is 10-100x faster than traditional package managers like pip, making dependency installation nearly instantaneous&lt;/li>
+&lt;li>&lt;strong>🔧 All-in-One&lt;/strong>: A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more&lt;/li>
+&lt;li>&lt;strong>🔒 Reproducible&lt;/strong>: Automatic lock files ensure everyone has identical environments&lt;/li>
+&lt;li>&lt;strong>🐍 Python Version Management&lt;/strong>: Automatically downloads and manages Python versions when needed&lt;/li>
+&lt;li>&lt;strong>📦 Modern Standards&lt;/strong>: Built around &lt;code>pyproject.toml&lt;/code> and modern Python packaging practices&lt;/li>
+&lt;/ul>
+&lt;h2 id="prerequisites">
+ Prerequisites
+ &lt;a class="anchor" href="#prerequisites">#&lt;/a>
+&lt;/h2>
+&lt;p>&lt;strong>Good news!&lt;/strong> uv doesn&amp;rsquo;t require Python to be pre-installed - it can manage Python installations for you. However, having Python already installed won&amp;rsquo;t hurt.&lt;/p></description></item><item><title>Backtracking memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</guid><description>&lt;h1 id="backtracking-procedure-for-step-size-selection">
+ Backtracking procedure for step size selection
+ &lt;a class="anchor" href="#backtracking-procedure-for-step-size-selection">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>The backtracking line search is a fundamental technique in optimization algorithms for determining an appropriate step size that ensures sufficient decrease in the objective function. This procedure is particularly useful in gradient-based methods where choosing an optimal step size analytically is difficult or computationally expensive.&lt;/p>
+&lt;h2 id="mathematical-setup">
+ Mathematical setup
+ &lt;a class="anchor" href="#mathematical-setup">#&lt;/a>
+&lt;/h2>
+&lt;p>Consider the optimization problem:
+$\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p>
+&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item></channel></rss>
