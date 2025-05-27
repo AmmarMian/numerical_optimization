@@ -1,0 +1,501 @@
+        <div class="instructions">
+            <strong>📊 Interactive Mode:</strong> Click anywhere on the chart to add new data points! Watch how the regression line updates in real-time.
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="resetToDefault()">Reset to Default Data</button>
+            <button class="btn danger" onclick="clearAllData()">Clear All Points</button>
+        </div><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Regression Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: black;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: normal;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .chart-container {
+            position: relative;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .axis {
+            font-size: 12px;
+            color: black;
+        }
+        
+        .axis-label {
+            font-size: 14px;
+            fill: black;
+        }
+        
+        .grid line {
+            stroke: #ddd;
+            stroke-width: 1;
+        }
+        
+        .data-point {
+            fill: white;
+            stroke: black;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+        
+        .data-point:hover {
+            fill: black;
+        }
+        
+        .regression-line {
+            fill: none;
+            stroke: black;
+            stroke-width: 2;
+        }
+        
+        .error-line {
+            stroke: black;
+            stroke-width: 1;
+            opacity: 0.7;
+        }
+        
+        .error-line:hover {
+            opacity: 1;
+            stroke-width: 2;
+        }
+        
+        .instructions {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: black;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: white;
+            color: black;
+            border: 1px solid black;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: black;
+            color: white;
+        }
+        
+        .formula {
+            border: 1px solid #ccc;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            text-align: center;
+            color: black;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: white;
+            color: black;
+            border: 1px solid black;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Least Squares Linear Regression</h1>
+        <p class="subtitle">Interactive visualization of the analytical solution L(α, β) = 1/n∑(αx<sub>i</sub> + β - y<sub>i</sub>)²</p>
+        
+        <div class="chart-container">
+            <svg id="chart"></svg>
+            <div class="tooltip"></div>
+        </div>
+        
+        <div class="formula" id="equation"></div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: white; border: 1px solid black; border-radius: 50%; width: 12px; height: 12px;"></div>
+                <span>Data Points (x<sub>i</sub>, y<sub>i</sub>)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: black;"></div>
+                <span>Fitted Line ŷ = αx + β</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: black;"></div>
+                <span>Residuals e<sub>i</sub> = y<sub>i</sub> - ŷ<sub>i</sub></span>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="slope-value">0.00</div>
+                <div class="stat-label">Slope (α)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="intercept-value">0.00</div>
+                <div class="stat-label">Intercept (β)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="r-squared-value">0.00</div>
+                <div class="stat-label">R² Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="mse-value">0.00</div>
+                <div class="stat-label">Mean Squared Error</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data points with some realistic scatter
+        let data = [
+            {x: 1, y: 2.3}, {x: 2, y: 3.8}, {x: 3, y: 4.1}, 
+            {x: 4, y: 5.5}, {x: 5, y: 6.2}, {x: 6, y: 6.8},
+            {x: 7, y: 7.9}, {x: 8, y: 8.1}, {x: 9, y: 9.4}
+        ];
+
+        const defaultData = [...data]; // Keep a copy of default data
+
+        // Calculate regression coefficients using the analytical solution
+        function calculateRegression(data) {
+            if (data.length < 2) return { slope: 0, intercept: 0, xMean: 0, yMean: 0 };
+            
+            const n = data.length;
+            const xMean = d3.mean(data, d => d.x);
+            const yMean = d3.mean(data, d => d.y);
+            
+            // α = Σ(xi - x̄)(yi - ȳ) / Σ(xi - x̄)²
+            const numerator = d3.sum(data, d => (d.x - xMean) * (d.y - yMean));
+            const denominator = d3.sum(data, d => Math.pow(d.x - xMean, 2));
+            
+            if (denominator === 0) return { slope: 0, intercept: yMean, xMean, yMean };
+            
+            const slope = numerator / denominator;
+            const intercept = yMean - slope * xMean;
+            
+            return { slope, intercept, xMean, yMean };
+        }
+
+        function calculateRSquared(data, slope, intercept) {
+            if (data.length < 2) return 0;
+            const yMean = d3.mean(data, d => d.y);
+            const ssRes = d3.sum(data, d => Math.pow(d.y - (slope * d.x + intercept), 2));
+            const ssTot = d3.sum(data, d => Math.pow(d.y - yMean, 2));
+            return ssTot === 0 ? 1 : 1 - (ssRes / ssTot);
+        }
+
+        function calculateMSE(data, slope, intercept) {
+            if (data.length === 0) return 0;
+            const sumSquaredErrors = d3.sum(data, d => Math.pow(d.y - (slope * d.x + intercept), 2));
+            return sumSquaredErrors / data.length;
+        }
+
+        // Set up dimensions and margins
+        const margin = {top: 20, right: 30, bottom: 60, left: 60};
+        const width = 800 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        // Create SVG
+        const svg = d3.select("#chart")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Add click area for adding points
+        const clickArea = g.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", "transparent")
+            .attr("cursor", "crosshair")
+            .on("click", function(event) {
+                const [mouseX, mouseY] = d3.pointer(event);
+                const newX = xScale.invert(mouseX);
+                const newY = yScale.invert(mouseY);
+                
+                // Add new point
+                data.push({x: newX, y: newY});
+                updateVisualization();
+            });
+
+        // Set up scales
+        const xScale = d3.scaleLinear()
+            .domain([0, 10])
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 12])
+            .range([height, 0]);
+
+        // Add grid
+        const xGrid = g.append("g")
+            .attr("class", "grid")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale)
+                .tickSize(-height)
+                .tickFormat("")
+            );
+
+        const yGrid = g.append("g")
+            .attr("class", "grid")
+            .call(d3.axisLeft(yScale)
+                .tickSize(-width)
+                .tickFormat("")
+            );
+
+        // Add axes
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale));
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(yScale));
+
+        // Add axis labels
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("y");
+
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", `translate(${width / 2}, ${height + margin.bottom - 20})`)
+            .style("text-anchor", "middle")
+            .text("x");
+
+        // Create containers for dynamic elements
+        const regressionLineGroup = g.append("g").attr("class", "regression-line-group");
+        const errorLinesGroup = g.append("g").attr("class", "error-lines-group");
+        const pointsGroup = g.append("g").attr("class", "points-group");
+
+        // Tooltip
+        const tooltip = d3.select(".tooltip");
+
+        function updateVisualization() {
+            // Calculate regression
+            const regression = calculateRegression(data);
+            const rSquared = calculateRSquared(data, regression.slope, regression.intercept);
+            const mse = calculateMSE(data, regression.slope, regression.intercept);
+
+            // Update regression line
+            const line = d3.line()
+                .x(d => xScale(d))
+                .y(d => yScale(regression.slope * d + regression.intercept));
+
+            const regressionPath = regressionLineGroup.selectAll(".regression-line")
+                .data([0]);
+
+            regressionPath.enter()
+                .append("path")
+                .attr("class", "regression-line")
+                .merge(regressionPath)
+                .transition()
+                .duration(500)
+                .attr("d", line([0, 10]));
+
+            // Update error lines
+            const errorLines = errorLinesGroup.selectAll(".error-line")
+                .data(data);
+
+            errorLines.enter()
+                .append("line")
+                .attr("class", "error-line")
+                .merge(errorLines)
+                .transition()
+                .duration(300)
+                .attr("x1", d => xScale(d.x))
+                .attr("y1", d => yScale(d.y))
+                .attr("x2", d => xScale(d.x))
+                .attr("y2", d => yScale(regression.slope * d.x + regression.intercept));
+
+            errorLines.exit().remove();
+
+            // Update data points
+            const points = pointsGroup.selectAll(".data-point")
+                .data(data);
+
+            const pointsEnter = points.enter()
+                .append("circle")
+                .attr("class", "data-point")
+                .attr("r", 0)
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y));
+
+            pointsEnter.merge(points)
+                .on("mouseover", function(event, d) {
+                    const predicted = regression.slope * d.x + regression.intercept;
+                    const error = d.y - predicted;
+                    
+                    tooltip
+                        .style("opacity", 1)
+                        .html(`
+                            <strong>Data Point</strong><br>
+                            x: ${d.x.toFixed(1)}<br>
+                            y: ${d.y.toFixed(1)}<br>
+                            ŷ: ${predicted.toFixed(2)}<br>
+                            Error: ${error.toFixed(2)}
+                        `)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.style("opacity", 0);
+                })
+                .on("dblclick", function(event, d) {
+                    // Remove point on double-click
+                    event.stopPropagation();
+                    data = data.filter(point => point !== d);
+                    updateVisualization();
+                })
+                .transition()
+                .duration(300)
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
+                .attr("r", 6);
+
+            // Animate new points
+            pointsEnter
+                .transition()
+                .duration(500)
+                .attr("r", 6);
+
+            points.exit()
+                .transition()
+                .duration(300)
+                .attr("r", 0)
+                .remove();
+
+            // Update equation and stats
+            if (data.length >= 2) {
+                document.getElementById("equation").innerHTML = 
+                    `ŷ = ${regression.slope.toFixed(3)}x + ${regression.intercept.toFixed(3)}`;
+                
+                document.getElementById("slope-value").textContent = regression.slope.toFixed(3);
+                document.getElementById("intercept-value").textContent = regression.intercept.toFixed(3);
+                document.getElementById("r-squared-value").textContent = rSquared.toFixed(3);
+                document.getElementById("mse-value").textContent = mse.toFixed(3);
+            } else {
+                document.getElementById("equation").innerHTML = 
+                    `Add at least 2 points to calculate regression`;
+                document.getElementById("slope-value").textContent = "—";
+                document.getElementById("intercept-value").textContent = "—";
+                document.getElementById("r-squared-value").textContent = "—";
+                document.getElementById("mse-value").textContent = "—";
+            }
+        }
+
+        // Control functions
+        function resetToDefault() {
+            data = [...defaultData];
+            updateVisualization();
+        }
+
+        function clearAllData() {
+            data = [];
+            updateVisualization();
+        }
+
+        // Initial visualization
+        updateVisualization();
+
+        // Add instruction for double-click to remove
+        setTimeout(() => {
+            const instructions = document.querySelector('.instructions');
+            instructions.innerHTML += '<br><small>💡 Tip: Double-click any point to remove it!</small>';
+        }, 2000);
+    </script>
+</body>
+</html>

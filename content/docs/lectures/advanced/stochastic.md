@@ -4,3 +4,5 @@ weight: 2
 ---
 
 # Stochastic optimization
+
+Soon to be added.

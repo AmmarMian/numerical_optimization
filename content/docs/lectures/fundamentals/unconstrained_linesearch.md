@@ -100,114 +100,260 @@ $$
 
 It follows that $f\left(\mathbf{x}\_k+\epsilon \mathbf{p}\_k\right)<f\left(\mathbf{x}\_k\right)$ for all positive but sufficiently small values of $\epsilon$.
 
-Another important search direction-perhaps the most important one of all-is the Newton direction. This direction is derived from the second-order Taylor series approximation to $f\left(\mathbf{x}\_k+\mathbf{p}\right)$, which is
-$$
-f\left(\mathbf{x}\_k+\mathbf{p}\right) \approx f\_k+\mathbf{p}^{\mathrm{T}} \nabla f\_k+\frac{1}{2} \mathbf{p}^{\mathrm{T}} \nabla^2 f\_k \mathbf{p} \stackrel{\text { def }}{=} m\_k(\mathbf{p})
-$$
 
-Assuming for the moment that $\nabla^2 f\_k$ is positive definite, we obtain the Newton direction by finding the vector $\mathbf{p}$ that minimizes $m\_k(\mathbf{p})$. By simply setting the derivative of $m\_k(\mathbf{p})$ to zero, we obtain the following explicit formula:
-
-\begin{equation}
-\mathbf{p}\_k^{\mathrm{N}}=-\nabla^2 f\_k^{-1} \nabla f\_k
-\label{eq:newton_direction}
-\end{equation}
-
-The Newton direction is reliable when the difference between the true function $f\left(\mathbf{x}\_k+ \mathbf{p}\right)$ and its quadratic model $m\_k(\mathbf{p})$ is not too large. By comparing \eqref{eq:quadratic_model} with \eqref{eq:taylor_expansion}, we see that the only difference between these functions is that the matrix $\nabla^2 f\left(\mathbf{x}\_k+t \mathbf{p}\right)$ in the third term of the expansion has been replaced by $\nabla^2 f\_k=\nabla^2 f\left(\mathbf{x}\_k\right)$. If $\nabla^2 f(\cdot)$ is sufficiently smooth, this difference introduces a perturbation of only $O\left(\lVert\mathbf{p}\rVert^3\right)$ into the expansion, so that when $\lVert\mathbf{p}\rVert$ is small, the approximation $f\left(\mathbf{x}\_k+\mathbf{p}\right) \approx m\_k(\mathbf{p})$ is very accurate indeed.
-
-The Newton direction can be used in a line search method when $\nabla^2 f\_k$ is positive definite, for in this case we have
-
-$$
-\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k^{\mathrm{N}}=-\mathbf{p}\_k^{\mathrm{N} \mathrm{T}} \nabla^2 f\_k \mathbf{p}\_k^{\mathrm{N}} \leq-\sigma\_k\lVert\mathbf{p}\_k^{\mathrm{N}}\rVert^2
-$$
-
-for some $\sigma\_k>0$. Unless the gradient $\nabla f\_k$ (and therefore the step $\mathbf{p}\_k^N$) is zero, we have that $\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k^{\mathrm{N}}<0$, so the Newton direction is a descent direction. Unlike the steepest descent direction, there is a "natural" step length of 1 associated with the Newton direction. Most
-line search implementations of Newton's method use the unit step $\alpha=1$ where possible and adjust this step length only when it does not produce a satisfactory reduction in the value of $f$.
-
-When $\nabla^2 f\_k$ is not positive definite, the Newton direction may not even be defined, since $\nabla^2 f\_k^{-1}$ may not exist. Even when it is defined, it may not satisfy the descent property $\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k^{\mathrm{N}}<0$, in which case it is unsuitable as a search direction. In these situations, line search methods modify the definition of $\mathbf{p}\_k$ to make it satisfy the downhill condition while retaining the benefit of the second-order information contained in $\nabla^2 f\_k$. 
-
-Methods that use the Newton direction have a fast rate of local convergence, typically quadratic. When a neighborhood of the solution is reached, convergence to high accuracy often occurs in just a few iterations. The main drawback of the Newton direction is the need for the Hessian $\nabla^2 f(\mathbf{x})$. Explicit computation of this matrix of second derivatives is sometimes, though not always, a cumbersome, error-prone, and expensive process.
-
-Quasi-Newton search directions provide an attractive alternative in that they do not require computation of the Hessian and yet still attain a superlinear rate of convergence. In place of the true Hessian $\nabla^2 f\_k$, they use an approximation $\mathbf{B}\_k$, which is updated after each step to take account of the additional knowledge gained during the step. The updates make use of the fact that changes in the gradient $\mathbf{g}$ provide information about the second derivative of $f$ along the search direction. By using the expression from our statement of Taylor's theorem, we have by adding and subtracting the term $\nabla^2 f(\mathbf{x}) \mathbf{p}$ that
-
-$$
-\nabla f(\mathbf{x}+\mathbf{p})=\nabla f(\mathbf{x})+\nabla^2 f(\mathbf{x}) \mathbf{p}+\int\_0^1\left[\nabla^2 f(\mathbf{x}+t \mathbf{p})-\nabla^2 f(\mathbf{x})\right] \mathbf{p} d t
-$$
-
-Because $\nabla f(\cdot)$ is continuous, the size of the final integral term is $o(\lVert\mathbf{p}\rVert)$. By setting $\mathbf{x}=\mathbf{x}\_k$ and $\mathbf{p}=\mathbf{x}\_{k+1}-\mathbf{x}\_k$, we obtain
-
-$$
-\nabla f\_{k+1}=\nabla f\_k+\nabla^2 f\_{k+1}\left(\mathbf{x}\_{k+1}-\mathbf{x}\_k\right)+o\left(\lVert\mathbf{x}\_{k+1}-\mathbf{x}\_k\rVert\right)
-$$
-
-When $\mathbf{x}\_k$ and $\mathbf{x}\_{k+1}$ lie in a region near the solution $\mathbf{x}^*$, within which $\nabla f$ is positive definite, the final term in this expansion is eventually dominated by the $\nabla^2 f\_k\left(\mathbf{x}\_{k+1}-\mathbf{x}\_k\right)$ term, and we can write
-
-$$
-\nabla^2 f\_{k+1}\left(\mathbf{x}\_{k+1}-\mathbf{x}\_k\right) \approx \nabla f\_{k+1}-\nabla f\_k
-$$
-
-We choose the new Hessian approximation $\mathbf{B}\_{k+1}$ so that it mimics this property of the true Hessian, that is, we require it to satisfy the following condition, known as the secant equation:
-
-\begin{equation}
-\mathbf{B}\_{k+1} \mathbf{s}\_k=\mathbf{y}\_k
-\label{eq:secant_equation}
-\end{equation}
-
-where
-
-$$
-\mathbf{s}\_k=\mathbf{x}\_{k+1}-\mathbf{x}\_k, \quad \mathbf{y}\_k=\nabla f\_{k+1}-\nabla f\_k
-$$
-
-Typically, we impose additional requirements on $\mathbf{B}\_{k+1}$, such as symmetry (motivated by symmetry of the exact Hessian), and a restriction that the difference between successive approximation $\mathbf{B}\_k$ to $\mathbf{B}\_{k+1}$ have low rank. The initial approximation $\mathbf{B}\_0$ must be chosen by the user.
-
-Two of the most popular formulae for updating the Hessian approximation $\mathbf{B}\_k$ are the symmetric-rank-one (SR1) formula, defined by
-
-\begin{equation}
-\mathbf{B}\_{k+1}=\mathbf{B}\_k+\frac{\left(\mathbf{y}\_k-\mathbf{B}\_k \mathbf{s}\_k\right)\left(\mathbf{y}\_k-\mathbf{B}\_k \mathbf{s}\_k\right)^{\mathrm{T}}}{\left(\mathbf{y}\_k-\mathbf{B}\_k \mathbf{s}\_k\right)^{\mathrm{T}} \mathbf{s}\_k}
-\label{eq:sr1_formula}
-\end{equation}
-
-and the BFGS formula, named after its inventors, Broyden, Fletcher, Goldfarb, and Shanno, which is defined by
-
-\begin{equation}
-\mathbf{B}\_{k+1}=\mathbf{B}\_k-\frac{\mathbf{B}\_k \mathbf{s}\_k \mathbf{s}\_k^{\mathrm{T}} \mathbf{B}\_k}{\mathbf{s}\_k^{\mathrm{T}} \mathbf{B}\_k \mathbf{s}\_k}+\frac{\mathbf{y}\_k \mathbf{y}\_k^{\mathrm{T}}}{\mathbf{y}\_k^{\mathrm{T}} \mathbf{s}\_k}
-\label{eq:bfgs_formula}
-\end{equation}
-
-Note that the difference between the matrices $\mathbf{B}\_k$ and $\mathbf{B}\_{k+1}$ is a rank-one matrix in the case of \eqref{eq:sr1_formula}, and a rank-two matrix in the case of \eqref{eq:bfgs_formula}. Both updates satisfy the secant equation and both maintain symmetry. One can show that BFGS update \eqref{eq:bfgs_formula} generates positive definite approximations whenever the initial approximation $\mathbf{B}\_0$ is positive definite and $\mathbf{s}\_k^{\mathrm{T}} \mathbf{y}\_k>0$. 
-
-The quasi-Newton search direction is given by using $\mathbf{B}\_k$ in place of the exact Hessian in the formula \eqref{eq:newton_direction}, that is,
-
-\begin{equation}
-\mathbf{p}\_k=-\mathbf{B}\_k^{-1} \nabla f\_k
-\label{eq:quasi_newton_direction}
-\end{equation}
-
-Some practical implementations of quasi-Newton methods avoid the need to factorize $\mathbf{B}\_k$ at each iteration by updating the inverse of $\mathbf{B}\_k$, instead of $\mathbf{B}\_k$ itself. In fact, the equivalent formula for \eqref{eq:sr1_formula} and \eqref{eq:bfgs_formula}, applied to the inverse approximation $\mathbf{H}\_k \stackrel{\text { def }}{=} \mathbf{B}\_k^{-1}$, is
-
-\begin{equation}
-\mathbf{H}\_{k+1}=\left(\mathbf{I}-\rho\_k \mathbf{s}\_k \mathbf{y}\_k^{\mathrm{T}}\right) \mathbf{H}\_k\left(\mathbf{I}-\rho\_k \mathbf{y}\_k \mathbf{s}\_k^{\mathrm{T}}\right)+\rho\_k \mathbf{s}\_k \mathbf{s}\_k^{\mathrm{T}}, \quad \rho\_k=\frac{1}{\mathbf{y}\_k^{\mathrm{T}} \mathbf{s}\_k}
-\label{eq:inverse_bfgs}
-\end{equation}
-
-Calculation of $\mathbf{p}\_k$ can then be performed by using the formula $\mathbf{p}\_k=-\mathbf{H}\_k \nabla f\_k$. This can be implemented as a matrix-vector multiplication, which is typically simpler than the factorization/back-substitution procedure that is needed to implement the formula \eqref{eq:quasi_newton_direction}.
-
-All of the search directions discussed so far can be used directly in a line search framework. They give rise to the steepest descent, Newton, quasi-Newton, and conjugate gradient line search methods. All except conjugate gradients have an analogue in the trustregion framework, as we now discuss.
-
+All of the search directions discussed so far can be used directly in a line search framework. They give rise to the steepest descent, Newton, quasi-Newton, and conjugate gradient line search methods. For Newton and quasi-Newton methods, see the next chapter.
 
 ## Step-length conditions
-### Wolfe conditions
+
+In computing the step length $\alpha\_{k}$, we face a tradeoff. We would like to choose $\alpha\_{k}$ to give a substantial reduction of $f$, but at the same time, we do not want to spend too much time making the choice. The ideal choice would be the global minimizer of the univariate function $\phi(\cdot)$ defined by
+
+\begin{equation}
+\phi(\alpha)=f\left(\mathbf{x}\_{k}+\alpha \mathbf{p}\_{k}\right), \quad \alpha>0
+\label{eq:phi\_def}
+\end{equation}
+
+but in general, it is too expensive to identify this value. To find even a local minimizer of $\phi$ to moderate precision generally requires too many evaluations of the objective function $f$ and possibly the gradient $\nabla f$. More practical strategies perform an inexact line search to identify a step length that achieves adequate reductions in $f$ at minimal cost.
+
+Typical line search algorithms try out a sequence of candidate values for $\alpha$, stopping to accept one of these values when certain conditions are satisfied. The line search is done in two stages: A bracketing phase finds an interval containing desirable step lengths, and a bisection or interpolation phase computes a good step length within this interval. Sophisticated line search algorithms can be quite complicated, so we defer a full description until the end of this chapter. We now discuss various termination conditions for the line search algorithm and show that effective step lengths need not lie near minimizers of the univariate function $\phi(\alpha)$ defined in \eqref{eq:phi\_def}.
+
+A simple condition we could impose on $\alpha\_{k}$ is that it provide a reduction in $f$, i.e., $f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right)<f\left(\mathbf{x}\_{k}\right)$. The difficulty is that we do not have sufficient reduction in $f$, a concept we discuss next.
+
+## The Wolfe conditions
+
+A popular inexact line search condition stipulates that $\alpha\_{k}$ should first of all give sufficient decrease in the objective function $f$, as measured by the following inequality:
+
+\begin{equation}
+f\left(\mathbf{x}\_{k}+\alpha \mathbf{p}\_{k}\right) \leq f\left(\mathbf{x}\_{k}\right)+c\_{1} \alpha \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k},
+\label{eq:armijo}
+\end{equation}
+
+for some constant $c\_{1} \in(0,1)$. In other words, the reduction in $f$ should be proportional to both the step length $\alpha\_{k}$ and the directional derivative $\nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}$. Inequality \eqref{eq:armijo} is sometimes called the Armijo condition.
+
+
+The right-hand-side of \eqref{eq:armijo}, which is a linear function, can be denoted by $l(\alpha)$. The function $l(\cdot)$ has negative slope $c\_{1} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}$, but because $c\_{1} \in(0,1)$, it lies above the graph of $\phi$ for small positive values of $\alpha$. The sufficient decrease condition states that $\alpha$ is acceptable only if $\phi(\alpha) \leq l(\alpha)$. In practice, $c\_{1}$ is chosen to be quite small, say $c\_{1}=10^{-4}$.
+
+The sufficient decrease condition is not enough by itself to ensure that the algorithm makes reasonable progress, because it is satisfied for all sufficiently small values of $\alpha$. To rule out unacceptably short steps we introduce a second requirement, called the curvature condition, which requires $\alpha\_{k}$ to satisfy
+
+\begin{equation}
+\nabla f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right)^{\mathrm{T}} \mathbf{p}\_{k} \geq c\_{2} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}
+\label{eq:curvature}
+\end{equation}
+
+for some constant $c\_{2} \in\left(c\_{1}, 1\right)$, where $c\_{1}$ is the constant from \eqref{eq:armijo}. Note that the left-handside is simply the derivative $\phi^{\prime}\left(\alpha\_{k}\right)$, so the curvature condition ensures that the slope of $\phi\left(\alpha\_{k}\right)$ is greater than $c\_{2}$ times the gradient $\phi^{\prime}(0)$. This makes sense because if the slope $\phi^{\prime}(\alpha)$ is strongly negative, we have an indication that we can reduce $f$ significantly by moving further along the chosen direction. On the other hand, if the slope is only slightly negative or even positive, it is a sign that we cannot expect much more decrease in $f$ in this direction, so it might make sense to terminate the line search. Typical values of $c\_{2}$ are 0.9 when the search direction $\mathbf{p}\_{k}$ is chosen by a Newton or quasi-Newton method, and 0.1 when $\mathbf{p}\_{k}$ is obtained from a nonlinear conjugate gradient method.
+
+The sufficient decrease and curvature conditions are known collectively as the Wolfe conditions. We restate them here for future reference:
+
+\begin{equation}
+\begin{aligned}
+f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right) & \leq f\left(\mathbf{x}\_{k}\right)+c\_{1} \alpha\_{k} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}, \\\\
+\nabla f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right)^{\mathrm{T}} \mathbf{p}\_{k} & \geq c\_{2} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k},
+\end{aligned}
+\label{eq:wolfe}
+\end{equation}
+
+with $0<c\_{1}<c\_{2}<1$.
+
+A step length may satisfy the Wolfe conditions without being particularly close to a minimizer of $\phi$. We can, however, modify the curvature condition to force $\alpha\_{k}$ to lie in at least a broad neighborhood of a local minimizer or stationary point of $\phi$. The strong Wolfe conditions require $\alpha\_{k}$ to satisfy
+
+\begin{equation}
+\begin{aligned}
+f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right) & \leq f\left(\mathbf{x}\_{k}\right)+c\_{1} \alpha\_{k} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}, \\\\
+\left|\nabla f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right)^{\mathrm{T}} \mathbf{p}\_{k}\right| & \leq c\_{2}\left|\nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}\right|,
+\end{aligned}
+\label{eq:strong\_wolfe}
+\end{equation}
+
+with $0<c\_{1}<c\_{2}<1$. The only difference with the Wolfe conditions is that we no longer allow the derivative $\phi^{\prime}\left(\alpha\_{k}\right)$ to be too positive. Hence, we exclude points that are far from stationary points of $\phi$.
+
+It is not difficult to prove that there exist step lengths that satisfy the Wolfe conditions for every function $f$ that is smooth and bounded below.
+
+{{<lemma "Existence of step lengths" wolfe\_existence>}}
+Suppose that $f: \mathbb{R}^{n} \rightarrow \mathbb{R}$ is continuously differentiable. Let $\mathbf{p}\_{k}$ be a descent direction at $\mathbf{x}\_{k}$, and assume that $f$ is bounded below along the ray $\left\\{\mathbf{x}\_{k}+\alpha \mathbf{p}\_{k} \mid \alpha>0\right\\}$. Then if $0<c\_{1}<c\_{2}<1$, there exist intervals of step lengths satisfying the Wolfe conditions \eqref{eq:wolfe} and the strong Wolfe conditions \eqref{eq:strong\_wolfe}.
+{{</lemma>}}
+
+{{<proof>}}
+Since $\phi(\alpha)=f\left(\mathbf{x}\_{k}+\alpha \mathbf{p}\_{k}\right)$ is bounded below for all $\alpha>0$ and since $0<c\_{1}<1$, the line $l(\alpha)=f\left(\mathbf{x}\_{k}\right)+\alpha c\_{1} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}$ must intersect the graph of $\phi$ at least once. Let $\alpha^{\prime}>0$ be the smallest intersecting value of $\alpha$, that is,
+
+\begin{equation}
+f\left(\mathbf{x}\_{k}+\alpha^{\prime} \mathbf{p}\_{k}\right)=f\left(\mathbf{x}\_{k}\right)+\alpha^{\prime} c\_{1} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}
+\label{eq:intersection}
+\end{equation}
+
+The sufficient decrease condition \eqref{eq:armijo} clearly holds for all step lengths less than $\alpha^{\prime}$.
+
+By the mean value theorem, there exists $\alpha^{\prime \prime} \in\left(0, \alpha^{\prime}\right)$ such that
+
+\begin{equation}
+f\left(\mathbf{x}\_{k}+\alpha^{\prime} \mathbf{p}\_{k}\right)-f\left(\mathbf{x}\_{k}\right)=\alpha^{\prime} \nabla f\left(\mathbf{x}\_{k}+\alpha^{\prime \prime} \mathbf{p}\_{k}\right)^{\mathrm{T}} \mathbf{p}\_{k}
+\label{eq:mean\_value}
+\end{equation}
+
+By combining \eqref{eq:intersection} and \eqref{eq:mean\_value}, we obtain
+
+\begin{equation}
+\nabla f\left(\mathbf{x}\_{k}+\alpha^{\prime \prime} \mathbf{p}\_{k}\right)^{\mathrm{T}} \mathbf{p}\_{k}=c\_{1} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}>c\_{2} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k},
+\label{eq:inequality\_proof}
+\end{equation}
+
+since $c\_{1}<c\_{2}$ and $\nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}<0$. Therefore, $\alpha^{\prime \prime}$ satisfies the Wolfe conditions \eqref{eq:wolfe}, and the inequalities hold strictly in both conditions. Hence, by our smoothness assumption on $f$, there is an interval around $\alpha^{\prime \prime}$ for which the Wolfe conditions hold. Moreover, since the term in the left-hand side of \eqref{eq:inequality\_proof} is negative, the strong Wolfe conditions \eqref{eq:strong\_wolfe} hold in the same interval.
+{{</proof>}}
+
+The Wolfe conditions are scale-invariant in a broad sense: Multiplying the objective function by a constant or making an affine change of variables does not alter them. They can be used in most line search methods, and are particularly important in the implementation of quasi-Newton methods.
+
+To summarize, see the following interactive visualisation of the Wolfe conditions, which illustrates the sufficient decrease and curvature conditions in action:
 
 <iframe style="border:none;" scrolling="no" src="../../../../interactive/line-search-conditions.html" width="700px" height="500px" title="Wolfe conditions visualisation"></iframe>
 
 
-### Goldenstein conditions
+## The Goldstein conditions
+
+Like the Wolfe conditions, the Goldstein conditions also ensure that the step length $\alpha$ achieves sufficient decrease while preventing $\alpha$ from being too small. The Goldstein conditions can also be stated as a pair of inequalities, in the following way:
+
+\begin{equation}
+f\left(\mathbf{x}\_{k}\right)+(1-c) \alpha\_{k} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k} \leq f\left(\mathbf{x}\_{k}+\alpha\_{k} \mathbf{p}\_{k}\right) \leq f\left(\mathbf{x}\_{k}\right)+c \alpha\_{k} \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k},
+\label{eq:goldstein}
+\end{equation}
+
+with $0<c<\frac{1}{2}$. The second inequality is the sufficient decrease condition \eqref{eq:armijo}, whereas the first inequality is introduced to control the step length from below.
+
+A disadvantage of the Goldstein conditions vis-à-vis the Wolfe conditions is that the first inequality in \eqref{eq:goldstein} may exclude all minimizers of $\phi$. However, the Goldstein and Wolfe conditions have much in common, and their convergence theories are quite similar. The Goldstein conditions are often used in Newton-type methods but are not well suited for quasi-Newton methods that maintain a positive definite Hessian approximation.
+
+An illustration of the Goldstein conditions is shown in the following interactive visualisation:
 
 <iframe style="border:none;" scrolling="no" src="../../../../interactive/goldstein-conditions-visualization.html" width="700px" height="700px" title="Wolfe conditions visualisation"></iframe>
 
-## Search directions
 
+## Sufficient decrease and backtracking
+
+We have mentioned that the sufficient decrease condition \eqref{eq:armijo} alone is not sufficient to ensure that the algorithm makes reasonable progress along the given search direction. However, if the line search algorithm chooses its candidate step lengths appropriately, by using a so-called backtracking approach, we can dispense with the extra condition \eqref{eq:curvature} and use just the sufficient decrease condition to terminate the line search procedure. In its most basic form, backtracking proceeds as follows.
+
+**Procedure (Backtracking Line Search).**
+
+Choose $\bar{\alpha}>0, \rho, c \in(0,1)$;
+
+set $\alpha \leftarrow \bar{\alpha}$;
+
+repeat until $f\left(\mathbf{x}\_{k}+\alpha \mathbf{p}\_{k}\right) \leq f\left(\mathbf{x}\_{k}\right)+c \alpha \nabla f\_{k}^{\mathrm{T}} \mathbf{p}\_{k}$
+
+$\alpha \leftarrow\rho\alpha$;
+
+end (repeat)
+
+terminate with $\alpha\_{k}=\alpha$.
+
+In this procedure, the initial step length $\bar{\alpha}$ is chosen to be 1 in Newton and quasi-Newton methods, but can have different values in other algorithms such as steepest descent or conjugate gradient. An acceptable step length will be found after a finite number of trials because $\alpha\_{k}$ will eventually become small enough that the sufficient decrease condition holds. In practice, the contraction factor $\rho$ is often allowed to vary at each iteration of the line search. For example, it can be chosen by safeguarded interpolation, as we describe later. We need ensure only that at each iteration we have $\rho \in\left[\rho\_{\mathrm{lo}}, \rho\_{\mathrm{hi}}\right]$, for some fixed constants $0<\rho\_{\text {lo }}<\rho\_{\text {hi }}<1$.
+
+The backtracking approach ensures either that the selected step length $\alpha\_{k}$ is some fixed value (the initial choice $\bar{\alpha}$ ), or else that it is short enough to satisfy the sufficient decrease condition but not too short. The latter claim holds because the accepted value $\alpha\_{k}$ is within striking distance of the previous trial value, $\alpha\_{k} / \rho$, which was rejected for violating the sufficient decrease condition, that is, for being too long.
+
+
+## Convergence of line search methods
+
+To obtain global convergence, we must not only have well-chosen step lengths but also well-chosen search directions $\mathbf{p}\_k$. We discuss requirements on the search direction in this section, focusing on one key property: the angle $\theta\_k$ between $\mathbf{p}\_k$ and the steepest descent direction $-\nabla f\_k$, defined by
+
+$$
+\cos \theta\_k=\frac{-\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k}{\\|\nabla f\_k\\|\\|\mathbf{p}\_k\\|}
+$$
+
+The following theorem, due to Zoutendijk, has far-reaching consequences. It shows, for example, that the steepest descent method is globally convergent. For other algorithms it describes how far $\mathbf{p}\_k$ can deviate from the steepest descent direction and still give rise to a globally convergent iteration. Various line search termination conditions can be used to establish this result, but for concreteness we will consider only the Wolfe conditions. Though Zoutendijk's result appears, at first, to be technical and obscure, its power will soon become evident.
+
+{{<theorem "Zoutendijk's theorem" zoutendijk_theorem>}}
+Consider any iteration of the form $\mathbf{x}\_{k+1} = \mathbf{x}\_k + \alpha\_k \mathbf{p}\_k$, where $\mathbf{p}\_k$ is a descent direction and $\alpha\_k$ satisfies the Wolfe conditions. Suppose that $f$ is bounded below in $\mathbb{R}^n$ and that $f$ is continuously differentiable in an open set $\mathcal{N}$ containing the level set $\mathcal{L} = \\{\mathbf{x}: f(\mathbf{x}) \leq f(\mathbf{x}\_0)\\}$, where $\mathbf{x}\_0$ is the starting point of the iteration. Assume also that the gradient $\nabla f$ is Lipschitz continuous on $\mathcal{N}$, that is, there exists a constant $L>0$ such that
+
+\begin{equation}
+\\|\nabla f(\mathbf{x})-\nabla f(\tilde{\mathbf{x}})\\| \leq L\\|\mathbf{x}-\tilde{\mathbf{x}}\\|, \quad \text { for all } \mathbf{x}, \tilde{\mathbf{x}} \in \mathcal{N} .
+\label{eq:lipschitz}
+\end{equation}
+
+Then
+
+\begin{equation}
+\sum\_{k \geq 0} \cos ^{2} \theta\_k\\|\nabla f\_k\\|^{2}<\infty
+\label{eq:zoutendijk_condition}
+\end{equation}
+{{</theorem>}}
+
+{{<proof>}}
+From the second Wolfe condition and the iteration formula we have that
+
+$$
+(\nabla f\_{k+1}-\nabla f\_k)^{\mathrm{T}} \mathbf{p}\_k \geq(c\_2-1) \nabla f\_k^{\mathrm{T}} \mathbf{p}\_k
+$$
+
+while the Lipschitz condition \eqref{eq:lipschitz} implies that
+
+$$
+(\nabla f\_{k+1}-\nabla f\_k)^{\mathrm{T}} \mathbf{p}\_k \leq \alpha\_k L\\|\mathbf{p}\_k\\|^{2}
+$$
+
+By combining these two relations, we obtain
+
+$$
+\alpha\_k \geq \frac{c\_2-1}{L} \frac{\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k}{\\|\mathbf{p}\_k\\|^{2}}
+$$
+
+By substituting this inequality into the first Wolfe condition, we obtain
+
+$$
+f\_{k+1} \leq f\_k-c\_1 \frac{1-c\_2}{L} \frac{(\nabla f\_k^{\mathrm{T}} \mathbf{p}\_k)^{2}}{\\|\mathbf{p}\_k\\|^{2}}
+$$
+
+From the definition of $\cos \theta\_k$, we can write this relation as
+
+$$
+f\_{k+1} \leq f\_k-c \cos ^{2} \theta\_k\\|\nabla f\_k\\|^{2}
+$$
+
+where $c=c\_1(1-c\_2) / L$. By summing this expression over all indices less than or equal to $k$, we obtain
+
+$$
+f\_{k+1} \leq f\_0-c \sum\_{j=0}^{k} \cos ^{2} \theta\_j\\|\nabla f\_j\\|^{2}
+$$
+
+Since $f$ is bounded below, we have that $f\_0-f\_{k+1}$ is less than some positive constant, for all $k$. Hence by taking limits, we obtain
+
+$$
+\sum\_{k=0}^{\infty} \cos ^{2} \theta\_k\\|\nabla f\_k\\|^{2}<\infty
+$$
+
+which concludes the proof.
+{{</proof>}}
+
+Similar results to this theorem hold when the Goldstein conditions or strong Wolfe conditions are used in place of the Wolfe conditions.
+
+Note that the assumptions of {{<theoremref zoutendijk_theorem>}} are not too restrictive. If the function $f$ were not bounded below, the optimization problem would not be well-defined. The smoothness assumption—Lipschitz continuity of the gradient—is implied by many of the smoothness conditions that are used in local convergence theorems and are often satisfied in practice.
+
+Inequality \eqref{eq:zoutendijk_condition}, which we call the Zoutendijk condition, implies that
+
+$$
+\cos ^{2} \theta\_k\\|\nabla f\_k\\|^{2} \rightarrow 0
+$$
+
+This limit can be used in turn to derive global convergence results for line search algorithms.
+If our method for choosing the search direction $\mathbf{p}\_k$ in the iteration ensures that the angle $\theta\_k$ is bounded away from $90^{\circ}$, there is a positive constant $\delta$ such that
+
+\begin{equation}
+\cos \theta\_k \geq \delta>0, \quad \text { for all } k
+\label{eq:angle_bound}
+\end{equation}
+
+It follows immediately from \eqref{eq:zoutendijk_condition} that
+
+\begin{equation}
+\lim \_{k \rightarrow \infty}\\|\nabla f\_k\\|=0
+\label{eq:global_convergence}
+\end{equation}
+
+In other words, we can be sure that the gradient norms $\\|\nabla f\_k\\|$ converge to zero, provided that the search directions are never too close to orthogonality with the gradient. In particular, the method of steepest descent (for which the search direction $\mathbf{p}\_k$ makes an angle of zero degrees with the negative gradient) produces a gradient sequence that converges to zero, provided that it uses a line search satisfying the Wolfe or Goldstein conditions.
+
+We use the term globally convergent to refer to algorithms for which the property \eqref{eq:global_convergence} is satisfied, but note that this term is sometimes used in other contexts to mean different things. For line search methods of the general form $\mathbf{x}\_{k+1} = \mathbf{x}\_k + \alpha\_k \mathbf{p}\_k$, the limit \eqref{eq:global_convergence} is the strongest global convergence result that can be obtained: We cannot guarantee that the method converges to a minimizer, but only that it is attracted by stationary points. Only by making additional requirements on the search direction $\mathbf{p}\_k$—by introducing negative curvature information from the Hessian $\nabla^{2} f(\mathbf{x}\_k)$, for example—can we strengthen these results to include convergence to a local minimum.
+
+Note that throughout this section we have used only the fact that Zoutendijk's condition implies the limit \eqref{eq:zoutendijk_condition}. 
 
 ## Rate of convergence
 
+We refer the reader to the textbook
+> "Numerical Optimization" by Nocedal and Wright, 2nd edition, Springer, 2006, pages 47-51,
 
+for a detailed discussion of the rate of convergence of line search methods.
+
+Peculiarly, see pages 47-51. In general, the rate of convergence depends on the choice of search direction and the step length conditions used.
