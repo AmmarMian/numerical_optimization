@@ -146,7 +146,7 @@ The optimal range for $\\alpha$ is typically small enough to ensure convergence 
 
 5. Let's try a first experiment with a decreasing step size. Implement a linear decay strategy:
 $$
-\\alpha_k =  alpha_0 - k \\cdot \\gamma,
+\\alpha_k =  \\alpha_0 - k \\cdot \\gamma,
 $$
 where $\\gamma$ is a small constant (e.g., $0.0001$). Experiment with different values of $\\\\alpha_0$ and $\\gamma$. 
 
