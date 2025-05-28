@@ -1,6 +1,8 @@
 \documentclass[aspectratio=1610]{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage[default,oldstyle,scale=0.95]{opensans}
+% \usepackage[default,oldstyle,scale=0.95]{opensans}
+% \usepackage[T1]{fontenc}
+\usepackage{sansmathfonts}
 \usepackage[T1]{fontenc}
 
 \usepackage[natbib=true,style=numeric,sorting=none]{biblatex}
@@ -19,6 +21,12 @@
 \usetikzlibrary{math}
 \usetikzlibrary{backgrounds,calc,positioning}
 \usepackage{qrcode}
+\usepackage{siunitx}
+\usetikzlibrary{patterns,positioning,arrows.meta,decorations.pathreplacing}
+
+\usepackage{pgfplots}
+
+
 
 \usetheme{main}
 
@@ -163,6 +171,10 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 \end{frame}
 
 \begin{frame}{Practical examples (1/3)}
+  
+  \begin{figure}
+    \includegraphics[height=2cm]{figures/cables.pdf}
+  \end{figure}
 
   \begin{block}{Cable factory}
     \small
@@ -214,40 +226,428 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 
 \subsection{Vectors and matrices}
 
-\begin{frame}{Title}
-Content
+\begin{frame}{Notations}
+  \begin{block}{Matrix vectors, and scalars}
+    \begin{itemize}
+      \item Scalars $\in\mathbb{R}$ are lowercase letters: $x,y,z$ or greek letters: $\alpha, \beta, \gamma$
+      \item Vectors $\in\mathbb{R}^d$ are lowercase bold letters: $\mathbf{x}, \mathbf{y}, \mathbf{z}$ or greek letters: $\boldsymbol{\theta}$
+      \item Matrices $\in\mathbb{R}^{m,n}$ are uppercase bold letters: $\mathbf{X}, \mathbf{Y}, \mathbf{Z}$ 
+    \end{itemize}
+    > We don't consider data in $\mathbb{C}^d$ but it could be treated with equivalence $\mathbb{C}^d \equiv \mathbb{R}^{2d}$.
+  \end{block}
+  
+  We also consider functions:
+  {\footnotesize
+  \begin{itemize}
+    \item $f:\mathbb{R}^d\to\mathbb{R}$ is a function from $\mathbb{R}^d$ to $\mathbb{R}$, e.g. $f(\mathbf{x}) = \mathbf{x}^\mathrm{T}\mathbf{A}\mathbf{x} + \mathbf{b}^\mathrm{T}\mathbf{x} + c$
+    \item $g:\mathbb{R}^{m,n}\to\mathbb{R}$ is a function from $\mathbb{R}^{m,n}$ to $\mathbb{R}$, e.g. $g(\mathbf{X}) = \|\mathbf{X}\|_F^2$
+    \item $h:\mathbb{R}^d\to\mathbb{R}^p$ is a function from $\mathbb{R}^d$ to $\mathbb{R}^p$, e.g. $h(\mathbf{x}) = [x_1^2, x_2^2, \ldots, x_d^2]^\mathrm{T}$
+    \item $l:\mathbb{R}^{m,n}\to\mathbb{R}^q$ is a function from $\mathbb{R}^{m,n}$ to $\mathbb{R}^q$, e.g. $l(\mathbf{X}) = \begin{pmatrix} X_{11}^2 \\ X_{12}^2 \\ \vdots \\ X_{mn}^2 \end{pmatrix}$
+  \end{itemize}
+  }
 \end{frame}
+
+\begin{frame}{Vectors}
+  \begin{block}{Usual operations}
+    \begin{itemize}
+      \item Sum: $\mathbf{x} + \mathbf{y} = \begin{pmatrix} x_1 + y_1 \\ x_2 + y_2 \\ \vdots \\ x_d + y_d \end{pmatrix}$
+      \item Scalar product: $\mathbf{x}^\mathrm{T}\mathbf{y} = x_1 y_1 + x_2 y_2 + \dots + x_d y_d$
+      \item $p$-norm: $\|\mathbf{x}\|_p = \left(\sum_{i=1}^d |x_i|^p\right)^{1/p}$, with $\|\mathbf{x}\|_2 = \sqrt{\mathbf{x}^\mathrm{T}\mathbf{x}}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Vector spaces}
+
+  \begin{block}{Span and Subspace}
+    For a set of vectors $\{\mathbf{v}_1, \ldots, \mathbf{v}_k\}$:
+    $
+      \mathrm{span}(\{\mathbf{v}_1, \ldots, \mathbf{v}_k\}) = \left\{ c_1\mathbf{v}_1 + c_2\mathbf{v}_2 + \ldots + c_k\mathbf{v}_k : c_i \in \mathbb{R} \right\}
+    $.
+
+    A subspace is a subset of a vector space that is closed under addition and scalar multiplication.
+  \end{block}
+
+  \begin{block}{Linear independence}
+    A set of vectors $\{\mathbf{v}_1, \ldots, \mathbf{v}_k\}$ is said to be \textbf{linearly independent} if the only solution to the equation $c_1\mathbf{v}_1 + c_2\mathbf{v}_2 + \ldots + c_k\mathbf{v}_k = \mathbf{0}$ is $c_1 = c_2 = \ldots = c_k = 0$.
+  \end{block}
+
+  \textbf{Basis}: A set of vectors $\{\mathbf{b}_1, \ldots, \mathbf{b}_k\}$ is a \textbf{basis} of a vector space if they are linearly independent and span the space. 
+\end{frame}
+
+\begin{frame}{Matrices}
+  \begin{block}{Usual operations}
+    \begin{itemize}
+      \item Sum for $\mathbf{X},\mathbf{Y}\in\mathbb{R}^{m,n}$: $\mathbf{X} + \mathbf{Y} = \mathbf{Z}\in\mathbb{R}^{m,n}$ with $Z_{ij} = X_{ij} + Y_{ij}$ for $i=1,\dots,m$ and $j=1,\dots,n$
+      \item Hadamard product for $\mathbf{X},\mathbf{Y}\in\mathbb{R}^{m,n}$: $\mathbf{X}\circ\mathbf{Y} = \mathbf{Z}\in\mathbb{R}^{m,n}$ with $Z_{ij} = X_{ij}Y_{ij}$ for $i=1,\dots,m$ and $j=1,\dots,n$
+      \item Matrix multiplication for $\mathbf{A}\in\mathbb{R}^{m,n}$, $\mathbf{B}\in\mathbb{R}^{n,p}$: $\mathbf{A}\mathbf{B}=\mathbf{C}\in\mathbb{R}^{m,p}$ with $C_{ij} = \sum_{k=1}^n A_{ik}B_{kj}$, for $i=1,\dots,m$ and $j=1,\dots,p$
+      \item Frobenius norm: $\|\mathbf{X}\|_F = \sqrt{\sum\limits_i\sum\limits_j |X_{ij}|^2}$, with $\|\mathbf{X}\|_F^2 = \mathrm{Tr}\left(\mathbf{X}\circ\mathbf{X}\right)$
+    \end{itemize}
+  \end{block}
+
+  Matrix/vector multiplication: for $\mathbf{A}\in\mathbb{R}^{m,n}$ and $\mathbf{x}\in\mathbb{R}^n$, we have $\mathbf{A}\mathbf{x} = \mathbf{y}\in\mathbb{R}^m$ with $y_i = \sum_{j=1}^n A_{ij}x_j$, for $i=1,\dots,m$.
+\end{frame}
+
+\begin{frame}{Matrices as linear applications}
+
+  Given a basis in a vector space $\mathcal{V}$, a matrix $\mathbf{A}\in\mathbb{R}^{m,n}$ can be seen as a linear application $\mathcal{A}:\mathcal{V}\to\mathbb{R}^m$ such that for any vector $\mathbf{x}\in\mathcal{V}$, we have:
+    % Matrix vecotr product with basis e_i and showing that each element of V = \sum_{i=1}^n x_i e_i and thus Ax = A(\sum_{i=1}^n x_i e_i) = \sum_{i=1}^n x_i A e_i
+    
+    $\mathbf{x} = \sum_{i=1}^n x_i \mathbf{e}_i \Rightarrow$
+
+    $$\mathcal{A}(\mathbf{x}) = \mathbf{A}\mathbf{x} = \sum_{i=1}^n x_i \mathcal{A}(\mathbf{e}_i) = \sum_{i=1}^n x_i \mathbf{a}_i, $$
+    where $\mathbf{a}_i$ is the $i$-th column of $\mathbf{A}$.
+\end{frame}
+
+\begin{frame}{Matrix properties (1/2)}
+
+  \begin{block}{Transpose}
+    The transpose of a matrix $\mathbf{A}\in\mathbb{R}^{m,n}$ is denoted $\mathbf{A}^\mathrm{T}\in\mathbb{R}^{n,m}$ and is defined as $(\mathbf{A}^\mathrm{T})_{ij} = A_{ji}$.
+  \end{block}
+
+  \begin{block}{Symmetric matrices}
+    A matrix $\mathbf{A}\in\mathbb{R}^{n,n}$ is symmetric if $\mathbf{A} = \mathbf{A}^\mathrm{T}$.
+  \end{block}
+
+  \begin{block}{Positive definite matrices}
+    A symmetric matrix $\mathbf{A}\in\mathbb{R}^{n,n}$ is positive definite if for all non-zero vectors $\mathbf{x}\in\mathbb{R}^n$, we have $\mathbf{x}^\mathrm{T}\mathbf{A}\mathbf{x} > 0$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Matrix properties (2/2)}
+
+  \begin{block}{Inverse}
+    The inverse of a square matrix $\mathbf{A}\in\mathbb{R}^{n,n}$ is denoted $\mathbf{A}^{-1}$ and is defined such that $\mathbf{A}\mathbf{A}^{-1} = \mathbf{I}_n$, where $\mathbf{I}_n$ is the identity matrix of size $n$.
+  \end{block}
+
+  \begin{block}{Determinant}
+    The determinant of a square matrix $\mathbf{A}\in\mathbb{R}^{n,n}$ is denoted $\mathrm{det}(\mathbf{A})$ or $|\mathbf{A}|$ and is a scalar value that provides information about the matrix, such as whether it is invertible.
+  \end{block}
+
+  \begin{block}{Trace}
+    The trace of a square matrix $\mathbf{A}\in\mathbb{R}^{n,n}$ is denoted $\mathrm{Tr}(\mathbf{A})$ and is defined as the sum of the diagonal elements: $\mathrm{Tr}(\mathbf{A}) = \sum_{i=1}^n A_{ii}$.
+  \end{block}
+
+\end{frame}
+
+
+\begin{frame}{Exercices}
+  TODO
+\end{frame}
+
+
 
 \subsection{Matrix decompositions}
 
-\begin{frame}{Title}
-Content
+\begin{frame}{Eigenvalues and eigenvectors}
+
+  \begin{block}{Eigenvalues and eigenvectors}
+    For a square matrix $\mathbf{A}\in\mathbb{R}^{n,n}$, a scalar $\lambda$ is an \textbf{eigenvalue} and a non-zero vector $\mathbf{v}\in\mathbb{R}^n$ is an \textbf{eigenvector} if they satisfy the equation:
+    $$\mathbf{A}\mathbf{v} = \lambda \mathbf{v}.$$
+  \end{block}
+
+  \textbf{Computing eigenvalues and eigenvectors:} The eigenvalues of a matrix $\mathbf{A}$ are the roots of the characteristic polynomial $\mathrm{det}(\mathbf{A} - \lambda \mathbf{I}_n) = 0$, where $\mathbf{I}_n$ is the identity matrix of size $n$.
+
+
+  \begin{block}{Spectral theorem}
+    If $\mathbf{A}$ is symmetric, then it has $n$ real eigenvalues and $n$ orthogonal eigenvectors (i.e if $\mathbf{u}_i$ and $\mathbf{u}_j$ are eigenvectors of $\mathbf{A}$, then $\mathbf{u}_i^\mathrm{T}\mathbf{u}_j = 0$ for $i\neq j$).
+  \end{block}
 \end{frame}
 
-\subsection{Useful results}
 
-\begin{frame}{Title}
-Content
+\begin{frame}{Eigenvalue decomposition}
+
+  \begin{block}{Eigenvalue decomposition}
+    If $\mathbf{A}$ is a symmetric matrix, it can be decomposed as:
+    $$\mathbf{A} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^\mathrm{T},$$
+    where $\mathbf{U}$ is an orthogonal matrix whose columns are the eigenvectors of $\mathbf{A}$, and $\boldsymbol{\Lambda}$ is a diagonal matrix whose diagonal elements are the eigenvalues of $\mathbf{A}$.
+  \end{block}
+
+  \begin{block}{Properties}
+    \begin{itemize}
+      \item The eigenvalues of $\mathbf{A}$ are the diagonal elements of $\boldsymbol{\Lambda}$.
+      \item The columns of $\mathbf{U}$ form an orthonormal basis for $\mathbb{R}^n$.
+      \item The eigenvalue decomposition is unique up to the order of the eigenvalues and eigenvectors.
+    \end{itemize}
+  \end{block}
 \end{frame}
+
+\begin{frame}{Singular Value Decomposition (SVD)}
+
+  \begin{block}{Singular Value Decomposition}
+    Any matrix $\mathbf{X}\in\mathbb{R}^{m,n}$ can be decomposed as $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\mathrm{T},$
+    \begin{itemize}
+      \item $\mathbf{U}\in\mathbb{R}^{m,m}$ is an orthogonal matrix whose columns are the left singular vectors of $\mathbf{X}$.
+      \item $\boldsymbol{\Sigma}\in\mathbb{R}^{m,n}$ is a diagonal matrix with non-negative entries (the singular values).
+      \item $\mathbf{V}\in\mathbb{R}^{n,n}$ is an orthogonal matrix whose columns are the right singular vectors of $\mathbf{X}$.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Properties}
+    \footnotesize
+    \begin{itemize}
+      \item The singular values are the square roots of the eigenvalues of $\mathbf{X}^\mathrm{T}\mathbf{X}$ or $\mathbf{X}\mathbf{X}^\mathrm{T}$.
+      \item The SVD is unique up to the order of the singular values and the signs of the singular vectors.
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+
+
+\begin{frame}{Exercices}
+  TODO
+\end{frame}
+
 
 \section{Differentiation}
 
 \subsection{Monovariate reminders}
 
-\begin{frame}{Title}
-Content
+\begin{frame}{Derivative of a function}
+
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          axis lines=middle,
+          xlabel={$x$},
+          ylabel={$f(x)$},
+          xtick={},
+          ytick={},
+          grid=none,
+          width=\textwidth,
+          height=5cm,
+          domain=-2:2,
+          samples=100
+        ]
+          \addplot[blue, thick] {x^2 - 1};
+          % Tangent at point 1
+          \addplot[red, thick, domain=-2:2] {2*x - 2};
+          % Add point x_0
+          \node at (axis cs:1,-0) [circle, fill=black, inner sep=1pt] {};
+          \node at (axis cs:1,1) [above] {$x_0$};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Definition}
+        The derivative of a function $f:\mathbb{R}\to\mathbb{R}$ at a point $x_0$ is defined as:
+        $$f'(x_0) = \lim_{h\to 0} \frac{f(x_0 + h) - f(x_0)}{h}$$
+      \end{block}
+      $\rightarrow$ The derivative represents the slope of the tangent line to the curve at the point $(x_0, f(x_0))$.
+    \end{column}
+  \end{columns}
+
+  Usually computed thanks to product and chain rules:
+  \begin{itemize}
+    \item Product rule: $(uv)' = u'v + uv'$
+    \item Chain rule: $(f(g(x)))' = f'(g(x))g'(x)$
+  \end{itemize}
 \end{frame}
 
-\subsection{Extension to Multivariate setup}
+\subsection{Extension to Multivariate setup: $f:\mathbb{R}^d \to \mathbb{R}$}
 
-\begin{frame}{Title}
-Content
+\begin{frame}{Limits and Continuity}
+  \begin{block}{Open disk}
+    An open disk of radius $\epsilon > 0$ centered at a point $\mathbf{x}_0 \in \mathbb{R}^d$ is defined as:
+    $$\mathcal{B}(\mathbf{x}_0, \epsilon) = \{\mathbf{x} \in \mathbb{R}^d : \|\mathbf{x} - \mathbf{x}_0\|_2 < \epsilon\}$$
+  \end{block}
+
+  \begin{block}{Limit}
+    The limit of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ is defined as:
+    $$\lim_{\mathbf{x} \to \mathbf{x}_0} f(\mathbf{x}) = L$$
+    if $\forall \epsilon > 0, \exists \delta > 0$ such that if $\|\mathbf{x} - \mathbf{x}_0\|_2 < \delta$, then $|f(\mathbf{x}) - L| < \epsilon$.
+  \end{block}
+
+  A function is continuous at a point $\mathbf{x}_0$ if $\lim_{\mathbf{x} \to \mathbf{x}_0} f(\mathbf{x}) = f(\mathbf{x}_0)$.
 \end{frame}
 
-\subsection{Matrix functions}
+\begin{frame}{Directional derivative}
 
-\begin{frame}{Title}
-Content
+  \begin{block}{Directional derivative}
+    The directional derivative of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ in the direction of a vector $\mathbf{v} \in \mathbb{R}^d$ is defined as:
+    $$D_{\mathbf{v}}f(\mathbf{x}_0) = \lim_{h \to 0} \frac{f(\mathbf{x}_0 + h\mathbf{v}) - f(\mathbf{x}_0)}{h}$$
+  \end{block}
+
+  If $\|\mathbf{v}\|_2 = 1$, then $D_{\mathbf{v}}f(\mathbf{x}_0)$ represents the rate of change of $f$ in the direction of $\mathbf{v}$ at the point $\mathbf{x}_0$.
+ 
+  \textbf{Note :} We use alternatively the notation $\nabla_{\mathbf{v}}f(\mathbf{x}_0)$ for the directional derivative.
+
+\end{frame}
+
+\begin{frame}{Illustration of directional derivative}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[height=\textheight]{figures/directional_derivative.pdf}
+  \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Gradient}
+
+  \begin{block}{Gradient}
+    The gradient of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ is defined as the vector of all directional derivatives in the standard basis directions:
+    $$\nabla f(\mathbf{x}_0) = \left( D_{\mathbf{e}_1}f(\mathbf{x}_0), D_{\mathbf{e}_2}f(\mathbf{x}_0), \ldots, D_{\mathbf{e}_d}f(\mathbf{x}_0) \right)^\mathrm{T}$$
+    where $\{\mathbf{e}_1, \ldots, \mathbf{e}_d\}$ is the standard basis of $\mathbb{R}^d$.
+  \end{block}
+
+  $\rightarrow$ the direction of the steepest ascent of the function $f$ at the point $\mathbf{x}_0$.
+
+  \begin{block}{Relationship with directional derivative}
+    For any vector $\mathbf{v} \in \mathbb{R}^d$, the directional derivative can be expressed as:
+    $$D_{\mathbf{v}}f(\mathbf{x}_0) = \nabla f(\mathbf{x}_0)^\mathrm{T} \mathbf{v}$$
+  \end{block}
+
+\end{frame}
+    
+
+\begin{frame}{Graident and partial derivatives}
+
+  \begin{block}{Partial derivatives}
+    The partial derivative of a function $f:\mathbb{R}^d \to \mathbb{R}$ with respect to the $i$-th variable is defined as:
+    $$\frac{\partial f}{\partial x_i}(\mathbf{x}_0) = \lim_{h \to 0} \frac{f(\mathbf{x}_0 + h\mathbf{e}_i) - f(\mathbf{x}_0)}{h}$$
+    where $\mathbf{e}_i$ is the $i$-th standard basis vector.
+  \end{block}
+
+  The gradient can be expressed in terms of partial derivatives as:
+  $$\nabla f(\mathbf{x}_0) = \left( \frac{\partial f}{\partial x_1}(\mathbf{x}_0), \frac{\partial f}{\partial x_2}(\mathbf{x}_0), \ldots, \frac{\partial f}{\partial x_d}(\mathbf{x}_0) \right)^\mathrm{T}$$
+
+  $\rightarrow$ The gradient is a vector containing all the partial derivatives of the function at the point $\mathbf{x}_0$.
+\end{frame}
+
+
+\begin{frame}{Graident properties and practical computation}
+
+  \begin{block}{Derivative of a prodct}
+    Let $g:\mathbb{R}^d \to \mathbb{R}$ and $h:\mathbb{R}^d \to \mathbb{R}$ be two functions. Then the gradient of their product $f(\mathbf{x}) = g(\mathbf{x})h(\mathbf{x})$ can be computed using the product rule:
+    $$\nabla f(\mathbf{x}) = g(\mathbf{x})\nabla h(\mathbf{x}) + h(\mathbf{x})\nabla g(\mathbf{x})$$
+  \end{block}
+
+  \begin{block}{Derivative of a composition}
+    TODO
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Hessian matrix}
+
+  \begin{block}{Hessian matrix}
+    The Hessian matrix of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ is defined as the square matrix of second-order partial derivatives:
+    $$\mathbf{H}(\mathbf{x}_0) = \begin{pmatrix}
+      \frac{\partial^2 f}{\partial x_1^2}(\mathbf{x}_0) & \frac{\partial^2 f}{\partial x_1 \partial x_2}(\mathbf{x}_0) & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_d}(\mathbf{x}_0) \\
+      \frac{\partial^2 f}{\partial x_2 \partial x_1}(\mathbf{x}_0) & \frac{\partial^2 f}{\partial x_2^2}(\mathbf{x}_0) & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_d}(\mathbf{x}_0) \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \frac{\partial^2 f}{\partial x_d \partial x_1}(\mathbf{x}_0) & \frac{\partial^2 f}{\partial x_d \partial x_2}(\mathbf{x}_0) & \cdots & \frac{\partial^2 f}{\partial x_d^2}(\mathbf{x}_0)
+    \end{pmatrix}$$
+  \end{block}
+
+  $\rightarrow$ The Hessian matrix provides information about the curvature of the function $f$ at the point $\mathbf{x}_0$.
+\end{frame}
+
+
+\begin{frame}{Hessian matrix properties}
+
+  \begin{block}{Properties of the Hessian matrix}
+    \begin{itemize}
+      \item The Hessian is symmetric: $\mathbf{H}(\mathbf{x}_0) = \mathbf{H}(\mathbf{x}_0)^\mathrm{T}$.
+      \item If $f$ is twice continuously differentiable, then the mixed partial derivatives are equal: $\frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i}$.
+      \item The eigenvalues of the Hessian provide information about the local curvature of the function:
+        \begin{itemize}
+          \item If all eigenvalues are positive, $f$ is locally convex at $\mathbf{x}_0$.
+          \item If all eigenvalues are negative, $f$ is locally concave at $\mathbf{x}_0$.
+          \item If some eigenvalues are positive and others are negative, $f$ has a saddle point at $\mathbf{x}_0$.
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+  
+
+\subsection{Multivariate case: $f:\mathbb{R}^d \to \mathbb{R}^p$}
+
+\begin{frame}{Multivariate functions}
+
+  \begin{block}{Multivariate function}
+    A function $f:\mathbb{R}^d \to \mathbb{R}^p$ maps a vector $\mathbf{x} \in \mathbb{R}^d$ to a vector $\mathbf{y} \in \mathbb{R}^p$. We can write:
+    $$f(\mathbf{x}) = \begin{pmatrix}
+      f_1(\mathbf{x}) \\
+      f_2(\mathbf{x}) \\
+      \vdots \\
+      f_p(\mathbf{x})
+    \end{pmatrix}$$
+  \end{block}
+
+  The function $f$ is said to be vector-valued, and each component $f_i:\mathbb{R}^d \to \mathbb{R}$ is a scalar function.
+\end{frame}
+
+
+\begin{frame}{Gradient and Jacobian}
+
+  \begin{block}{Gradient}
+    The gradient of a function $f:\mathbb{R}^d \to \mathbb{R}$ is defined as:
+    $$\nabla f(\mathbf{x}) = \left( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_d} \right)^\mathrm{T}$$
+  \end{block}
+
+  \begin{block}{Jacobian matrix}
+    The Jacobian matrix of a function $f:\mathbb{R}^d \to \mathbb{R}^p$ is defined as:
+    $$\mathbf{J}(\mathbf{x}) = \begin{pmatrix}
+      \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_d} \\
+      \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_d} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \frac{\partial f_p}{\partial x_1} & \frac{\partial f_p}{\partial x_2} & \cdots & \frac{\partial f_p}{\partial x_d}
+    \end{pmatrix}$$
+  \end{block}
+
+  $\rightarrow$ The Jacobian matrix generalizes the concept of gradient to vector-valued functions.
+
+\end{frame}
+
+\begin{frame}{Jacobian and directional derivative}
+
+  \begin{block}{Directional derivative}
+    The directional derivative of a function $f:\mathbb{R}^d \to \mathbb{R}^p$ in the direction of a vector $\mathbf{v} \in \mathbb{R}^d$ is defined as:
+    $$D_{\mathbf{v}}f(\mathbf{x}) = \mathbf{J}(\mathbf{x})\mathbf{v} = [\nabla f_1(\mathbf{x}) \cdot \mathbf{v}, \nabla f_2(\mathbf{x}) \cdot \mathbf{v}, \ldots, \nabla f_p(\mathbf{x}) \cdot \mathbf{v}]^\mathrm{T}$$
+  \end{block}
+
+  The directional derivative gives the rate of change of the function $f$ for all variables in the direction of $\mathbf{v}$ at the point $\mathbf{x}$.
+
+\end{frame}
+
+\subsection{Matrix functions: $f:\mathbb{R}^{m,n} \to \mathbb{R}$}
+
+\begin{frame}{What it means to derive a matrix function?}
+
+  \begin{block}{Matrix function}
+    A matrix function $f:\mathbb{R}^{m,n} \to \mathbb{R}$ maps a matrix $\mathbf{X} \in \mathbb{R}^{m,n}$ to a scalar value. For example, $f(\mathbf{X}) = \|\mathbf{X}\|_F^2$.
+  \end{block}
+
+  The derivative of a matrix function is defined in terms of the directional derivative:
+  $$D_{\mathbf{V}}f(\mathbf{X}) = \lim_{h \to 0} \frac{f(\mathbf{X} + h\mathbf{V}) - f(\mathbf{X})}{h}$$
+  where $\mathbf{V} \in \mathbb{R}^{m,n}$ is a perturbation matrix.
+\end{frame}
+
+
+  
+\begin{frame}{Gradient in the matrix to scalar case}
+  We can define the gradient of a matrix function $f:\mathbb{R}^{m,n} \to \mathbb{R}$ as a matrix $\nabla f(\mathbf{X}) \in \mathbb{R}^{m,n}$ such that:
+  $$
+  D_{\mathbf{V}}f(\mathbf{X}) = \mathrm{Tr}(\nabla f(\mathbf{X})^\mathrm{T} \mathbf{V}),
+  $$
+  where $\mathrm{Tr}(\cdot)$ denotes the trace of a matrix.
+
+  \begin{block}{Link to partial derivatives}
+    The gradient of a matrix function can be computed using partial derivatives with respect to each element of the matrix $\mathbf{X}$:
+    $$
+    \nabla f(\mathbf{X}) = \begin{pmatrix}
+      \frac{\partial f}{\partial X_{11}} & \frac{\partial f}{\partial X_{12}} & \cdots & \frac{\partial f}{\partial X_{1n}} \\
+      \frac{\partial f}{\partial X_{21}} & \frac{\partial f}{\partial X_{22}} & \cdots & \frac{\partial f}{\partial X_{2n}} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \frac{\partial f}{\partial X_{m1}} & \frac{\partial f}{\partial X_{m2}} & \cdots & \frac{\partial f}{\partial X_{mn}}
+      \end{pmatrix}
+      $$
+  \end{block}
 \end{frame}
 
 
