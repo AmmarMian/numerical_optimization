@@ -244,4 +244,4 @@ uv's dependency resolver is much more robust than pip and should handle conflict
 
 ---
 
-🎉 **You're all set!** Your lab environment is ready for numerical optimization adventures. If you encounter any issues during setup, don't hesitate to ask for help during class or on the course forum.
+🎉 **You're all set!** Your lab environment is ready for numerical optimization adventures. If you encounter any issues during setup, don't hesitate to ask for help during class or by mail.
