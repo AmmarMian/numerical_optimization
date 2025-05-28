@@ -148,7 +148,7 @@ The optimal range for $\\alpha$ is typically small enough to ensure convergence 
 $$
 \\alpha_k =  \\alpha_0 - k \\cdot \\gamma,
 $$
-where $\\gamma$ is a small constant (e.g., $0.0001$). Experiment with different values of $\\\\alpha_0$ and $\\gamma$. 
+where $\\gamma$ is a small constant (e.g., $0.0001$). Experiment with different values of $\\alpha_0$ and $\\gamma$. 
 
 Compare the convergence behavior with constant step size. Plot the loss function and parameter trajectories over iterations.
 
