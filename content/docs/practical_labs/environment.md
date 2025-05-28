@@ -5,17 +5,7 @@ weight : 50
 
 # Lab Environment Setup
 
-Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using **uv**, a fast and reliable Python package manager written in Rust.
-
-## Why uv?
-
-For this course, we're using [uv](https://docs.astral.sh/uv/) instead of traditional tools like pip or conda because:
-
-- **⚡ Blazing Fast**: uv is 10-100x faster than traditional package managers like pip, making dependency installation nearly instantaneous
-- **🔧 All-in-One**: A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more
-- **🔒 Reproducible**: Automatic lock files ensure everyone has identical environments
-- **🐍 Python Version Management**: Automatically downloads and manages Python versions when needed
-- **📦 Modern Standards**: Built around `pyproject.toml` and modern Python packaging practices
+Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using **uv**.
 
 ## Prerequisites
 
