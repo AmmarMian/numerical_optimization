@@ -67,9 +67,10 @@ The course will first start with fundamental mathematical concepts of optimizati
 
 Then we will apply those concepts in practice in inverse problem solving with examples in image denoising problems in remote sensing:
 
-* Formulating an unconstrained optimization problem and solving it
-* Formulating a cost function with constraints (sparsity, smoothness, etc)
+* Formulating an unconstrained optimization problem and solving it for a practical example
 * Numerical implementation in python
+
+This lab will be supervised by [Yassine Mhiri](https://y-mhiri.github.io).
 
  Session | Duration | Content | Date | Room |
 ---------|----------|---------|------|------|
@@ -79,7 +80,7 @@ Then we will apply those concepts in practice in inverse problem solving with ex
 
 We then move on to more complicated problems:
 
-* Newton and quasi-Newton methods
+* Newton with linesearch and quasi-Newton methods
 * Proximal algorithms
 
 | Session | Duration | Content | Date | Room |
