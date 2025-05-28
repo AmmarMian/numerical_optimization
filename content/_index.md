@@ -112,6 +112,13 @@ Students should have a decent understanding of basic linear algebra and differen
 
 Lectures will alternate between theoretical lectures, mathematical exercises and practical implementation in Python of the algorithms studied. A mini-project in Remote Sensing will also be given to illustrate on a real-world problem.
 
+## Ressources
+
+The course is based on several resources, including:
+* *Numerical Optimization* by J. Nocedal and S. Wright, for linesearch and Newton methods
+* *Proximal Algorithms* monograph by N. Parikh and S. Boyd, for proximal methods
+* *Deep Learning* by I. Goodfellow, Y. Bengio and A. Courville, for backpropagation and stochastic optimization
+
 ## Registration
 
 Register through Adum and/or by email to ammar.mian@univ-smb.fr
