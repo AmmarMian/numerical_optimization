@@ -1,0 +1,94 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+
+
+
+% Pattern Info
+ 
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_dtgjlw1bu}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_dtgjlw1bu}
+{\pgfqpoint{0pt}{0pt}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{\mcSize}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{-\mcThickness}}
+\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{\mcSize+\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+
+% Pattern Info
+ 
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_st6n3znd4}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_st6n3znd4}
+{\pgfqpoint{0pt}{0pt}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{\mcSize}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{-\mcThickness}}
+\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{\mcSize+\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+
+%Shape: Circle [id:dp6752947623420912] 
+\draw  [pattern=_dtgjlw1bu,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 0; green, 0; blue, 0}] (2,53.83) .. controls (2,25.76) and (24.76,3) .. (52.83,3) .. controls (80.91,3) and (103.67,25.76) .. (103.67,53.83) .. controls (103.67,81.91) and (80.91,104.67) .. (52.83,104.67) .. controls (24.76,104.67) and (2,81.91) .. (2,53.83) -- cycle ;
+%Shape: Circle [id:dp9163047663018459] 
+\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (8.55,53.83) .. controls (8.55,29.38) and (28.38,9.55) .. (52.83,9.55) .. controls (77.29,9.55) and (97.11,29.38) .. (97.11,53.83) .. controls (97.11,78.29) and (77.29,98.11) .. (52.83,98.11) .. controls (28.38,98.11) and (8.55,78.29) .. (8.55,53.83) -- cycle ;
+%Straight Lines [id:da6315704120587868] 
+\draw    (3,110) -- (97,110) ;
+\draw [shift={(100,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+\draw [shift={(0,110)}, rotate = 0] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Shape: Ellipse [id:dp29382645517955563] 
+\draw  [pattern=_st6n3znd4,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 0; green, 0; blue, 0}] (178,57) .. controls (178,43.19) and (189.57,32) .. (203.83,32) .. controls (218.1,32) and (229.67,43.19) .. (229.67,57) .. controls (229.67,70.81) and (218.1,82) .. (203.83,82) .. controls (189.57,82) and (178,70.81) .. (178,57) -- cycle ;
+%Shape: Ellipse [id:dp09035707035861029] 
+\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (181.33,57) .. controls (181.33,44.97) and (191.4,35.22) .. (203.83,35.22) .. controls (216.26,35.22) and (226.34,44.97) .. (226.34,57) .. controls (226.34,69.03) and (216.26,78.78) .. (203.83,78.78) .. controls (191.4,78.78) and (181.33,69.03) .. (181.33,57) -- cycle ;
+%Straight Lines [id:da4932967201314161] 
+\draw    (183,110) -- (227,110) ;
+\draw [shift={(230,110)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+\draw [shift={(180,110)}, rotate = 0] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+% Text Node
+\draw (31,114) node [anchor=north west][inner sep=0.75pt]   [align=left] {10 mm};
+% Text Node
+\draw (182,114) node [anchor=north west][inner sep=0.75pt]   [align=left] {5 mm};
+
+
+\end{tikzpicture}
+
+
+\end{document}
