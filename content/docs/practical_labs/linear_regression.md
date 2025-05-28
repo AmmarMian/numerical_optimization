@@ -146,8 +146,9 @@ The optimal range for $\\alpha$ is typically small enough to ensure convergence 
 
 5. Let's try a first experiment with a decreasing step size. Implement a linear decay strategy:
 $$
-\\alpha_k = \\alpha_0 \\cdot \\frac{T - k}{T}$$
-where $T$ is the total number of iterations.
+\\alpha_k =  alpha_0 - k \\cdot \\gamma,
+$$
+where $\\gamma$ is a small constant (e.g., $0.0001$). Experiment with different values of $\\\\alpha_0$ and $\\gamma$. 
 
 Compare the convergence behavior with constant step size. Plot the loss function and parameter trajectories over iterations.
 
