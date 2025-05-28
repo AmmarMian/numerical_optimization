@@ -19,24 +19,21 @@
  Lab Environment Setup
  &lt;a class="anchor" href="#lab-environment-setup">#&lt;/a>
 &lt;/h1>
-&lt;p>Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using &lt;strong>uv&lt;/strong>, a fast and reliable Python package manager written in Rust.&lt;/p>
-&lt;h2 id="why-uv">
- Why uv?
- &lt;a class="anchor" href="#why-uv">#&lt;/a>
-&lt;/h2>
-&lt;p>For this course, we&amp;rsquo;re using &lt;a href="https://docs.astral.sh/uv/">uv&lt;/a> instead of traditional tools like pip or conda because:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>⚡ Blazing Fast&lt;/strong>: uv is 10-100x faster than traditional package managers like pip, making dependency installation nearly instantaneous&lt;/li>
-&lt;li>&lt;strong>🔧 All-in-One&lt;/strong>: A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more&lt;/li>
-&lt;li>&lt;strong>🔒 Reproducible&lt;/strong>: Automatic lock files ensure everyone has identical environments&lt;/li>
-&lt;li>&lt;strong>🐍 Python Version Management&lt;/strong>: Automatically downloads and manages Python versions when needed&lt;/li>
-&lt;li>&lt;strong>📦 Modern Standards&lt;/strong>: Built around &lt;code>pyproject.toml&lt;/code> and modern Python packaging practices&lt;/li>
-&lt;/ul>
+&lt;p>Welcome to the numerical optimization course! This page will guide you through setting up a modern, efficient Python environment using &lt;strong>uv&lt;/strong>.&lt;/p>
 &lt;h2 id="prerequisites">
  Prerequisites
  &lt;a class="anchor" href="#prerequisites">#&lt;/a>
 &lt;/h2>
-&lt;p>&lt;strong>Good news!&lt;/strong> uv doesn&amp;rsquo;t require Python to be pre-installed - it can manage Python installations for you. However, having Python already installed won&amp;rsquo;t hurt.&lt;/p></description></item><item><title>Backtracking memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</guid><description>&lt;h1 id="backtracking-procedure-for-step-size-selection">
+&lt;p>&lt;strong>Good news!&lt;/strong> uv doesn&amp;rsquo;t require Python to be pre-installed - it can manage Python installations for you. However, having Python already installed won&amp;rsquo;t hurt.&lt;/p>
+&lt;h2 id="installing-uv">
+ Installing uv
+ &lt;a class="anchor" href="#installing-uv">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="-linux---macos">
+ 🐧 Linux &amp;amp; 🍎 macOS
+ &lt;a class="anchor" href="#-linux---macos">#&lt;/a>
+&lt;/h3>
+&lt;p>The fastest way to install uv is using the official installer:&lt;/p></description></item><item><title>Backtracking memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/backtracking/</guid><description>&lt;h1 id="backtracking-procedure-for-step-size-selection">
  Backtracking procedure for step size selection
  &lt;a class="anchor" href="#backtracking-procedure-for-step-size-selection">#&lt;/a>
 &lt;/h1>
