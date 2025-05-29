@@ -12,4 +12,4 @@ hugo server
 ## Author
 
 Ammar Mian, Associate Professor at the University Savoie Mont Blanc, France.
-Web: [https://ammar-mian.github.io](https://ammar-mian.github.io)
+Web: [https://ammarmian.github.io](https://ammar-mian.github.io)
