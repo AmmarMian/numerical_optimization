@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Gradient Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        svg {
+            background: white;
+        }
+        .constraint-circle {
+            fill: none;
+            stroke: #e74c3c;
+            stroke-width: 3;
+        }
+        .level-curve {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+            opacity: 0.7;
+        }
+        .grid-line {
+            stroke: #ecf0f1;
+            stroke-width: 0.5;
+        }
+        .axis {
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+        .tick-label {
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .point {
+            fill: #2c3e50;
+            stroke: white;
+            stroke-width: 2;
+            cursor: grab;
+        }
+        .point:hover {
+            fill: #34495e;
+        }
+        .point:active {
+            cursor: grabbing;
+        }
+        .gradient-vector {
+            stroke-width: 3;
+            marker-end: url(#arrowhead);
+        }
+        .grad-f {
+            stroke: #3498db;
+        }
+        .grad-c {
+            stroke: #27ae60;
+        }
+        .vector-label {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .info-panel {
+            background: white;
+            padding: 15px;
+            font-size: 14px;
+            max-width: 600px;
+        }
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="visualization"></svg>
+    </div>
+
+    <script>
+        const width = 600;
+        const height = 600;
+        const margin = 50;
+        const radius = Math.sqrt(2);
+        
+        // Scale functions
+        const xScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([margin, width - margin]);
+        
+        const yScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([height - margin, margin]);
+        
+        // Create SVG
+        const svg = d3.select("#visualization")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Define arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#333");
+        
+        // Draw grid
+        const gridGroup = svg.append("g").attr("class", "grid");
+        
+        for (let x = -3; x <= 3; x++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(x))
+                .attr("y1", yScale(-3))
+                .attr("x2", xScale(x))
+                .attr("y2", yScale(3));
+        }
+        
+        for (let y = -3; y <= 3; y++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(-3))
+                .attr("y1", yScale(y))
+                .attr("x2", xScale(3))
+                .attr("y2", yScale(y));
+        }
+        
+        // Draw axes
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(-3))
+            .attr("y1", yScale(0))
+            .attr("x2", xScale(3))
+            .attr("y2", yScale(0));
+        
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(-3))
+            .attr("x2", xScale(0))
+            .attr("y2", yScale(3));
+        
+        // Axis labels
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(3))
+            .attr("y", yScale(0) - 10)
+            .text("x₁");
+        
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(0) + 10)
+            .attr("y", yScale(3))
+            .text("x₂");
+        
+        // Tick marks and labels
+        [-2, -1, 1, 2].forEach(tick => {
+            svg.append("line")
+                .attr("x1", xScale(tick))
+                .attr("y1", yScale(0) - 5)
+                .attr("x2", xScale(tick))
+                .attr("y2", yScale(0) + 5)
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(tick))
+                .attr("y", yScale(0) + 20)
+                .attr("text-anchor", "middle")
+                .text(tick);
+            
+            svg.append("line")
+                .attr("x1", xScale(0) - 5)
+                .attr("y1", yScale(tick))
+                .attr("x2", xScale(0) + 5)
+                .attr("y2", yScale(tick))
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(0) - 15)
+                .attr("y", yScale(tick) + 4)
+                .attr("text-anchor", "middle")
+                .text(tick);
+        });
+        
+        // Level curves group
+        const levelCurves = svg.append("g").attr("class", "level-curves");
+        
+        // Constraint circle
+        svg.append("circle")
+            .attr("class", "constraint-circle")
+            .attr("cx", xScale(0))
+            .attr("cy", yScale(0))
+            .attr("r", xScale(radius) - xScale(0));
+        
+        // Gradient vectors group
+        const vectors = svg.append("g").attr("class", "vectors");
+        
+        // Points
+        let unconstrainedPoint = {x: 0.8, y: 0.6};
+        let constrainedPoint = {x: -radius/Math.sqrt(2), y: radius/Math.sqrt(2)};
+        
+        const uncons = svg.append("circle")
+            .attr("class", "point")
+            .attr("r", 6)
+            .attr("fill", "#3498db")
+            .call(d3.drag()
+                .on("drag", function(event) {
+                    unconstrainedPoint.x = xScale.invert(event.x);
+                    unconstrainedPoint.y = yScale.invert(event.y);
+                    updateVisualization();
+                }));
+        
+        const cons = svg.append("circle")
+            .attr("class", "point")
+            .attr("r", 6)
+            .attr("fill", "#e74c3c")
+            .call(d3.drag()
+                .on("drag", function(event) {
+                    const x = xScale.invert(event.x);
+                    const y = yScale.invert(event.y);
+                    const norm = Math.sqrt(x*x + y*y);
+                    constrainedPoint.x = (x / norm) * radius;
+                    constrainedPoint.y = (y / norm) * radius;
+                    updateVisualization();
+                }));
+        
+        function drawStaticLevelCurves() {
+            // Draw fixed level curves for f(x) = x₁ + x₂ = constant
+            const levels = [-3, -2, -1, 0, 1, 2, 3];
+            
+            levels.forEach(level => {
+                levelCurves.append("line")
+                    .attr("class", "level-curve")
+                    .attr("x1", xScale(-3))
+                    .attr("y1", yScale(level + 3))
+                    .attr("x2", xScale(3))
+                    .attr("y2", yScale(level - 3))
+                    .style("opacity", level === 0 ? 0.9 : 0.6);
+            });
+        }
+        
+        function updateVisualization() {
+            // Update point positions
+            uncons
+                .attr("cx", xScale(unconstrainedPoint.x))
+                .attr("cy", yScale(unconstrainedPoint.y));
+            
+            cons
+                .attr("cx", xScale(constrainedPoint.x))
+                .attr("cy", yScale(constrainedPoint.y));
+            
+            // Clear existing vectors
+            vectors.selectAll("*").remove();
+            
+            // Gradient vectors (∇f = [1, 1])
+            const gradScale = 50;
+            
+            // ∇f at unconstrained point
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-f")
+                .attr("x1", xScale(unconstrainedPoint.x))
+                .attr("y1", yScale(unconstrainedPoint.y))
+                .attr("x2", xScale(unconstrainedPoint.x) + gradScale)
+                .attr("y2", yScale(unconstrainedPoint.y) - gradScale);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(unconstrainedPoint.x) + gradScale + 10)
+                .attr("y", yScale(unconstrainedPoint.y) - gradScale)
+                .attr("fill", "#3498db")
+                .text("∇f");
+            
+            // ∇f at constrained point
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-f")
+                .attr("x1", xScale(constrainedPoint.x))
+                .attr("y1", yScale(constrainedPoint.y))
+                .attr("x2", xScale(constrainedPoint.x) + gradScale)
+                .attr("y2", yScale(constrainedPoint.y) - gradScale);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(constrainedPoint.x) + gradScale + 10)
+                .attr("y", yScale(constrainedPoint.y) - gradScale)
+                .attr("fill", "#3498db")
+                .text("∇f");
+            
+            // ∇c at constrained point (∇c = [2x₁, 2x₂])
+            const gradCx = 2 * constrainedPoint.x;
+            const gradCy = 2 * constrainedPoint.y;
+            const gradCNorm = Math.sqrt(gradCx * gradCx + gradCy * gradCy);
+            const gradCScale = gradScale * 0.8;
+            
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-c")
+                .attr("x1", xScale(constrainedPoint.x))
+                .attr("y1", yScale(constrainedPoint.y))
+                .attr("x2", xScale(constrainedPoint.x) + (gradCx / gradCNorm) * gradCScale)
+                .attr("y2", yScale(constrainedPoint.y) - (gradCy / gradCNorm) * gradCScale);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(constrainedPoint.x) + (gradCx / gradCNorm) * gradCScale + 10)
+                .attr("y", yScale(constrainedPoint.y) - (gradCy / gradCNorm) * gradCScale)
+                .attr("fill", "#27ae60")
+                .text("∇c");
+            
+            // Don't update level curves - they're now static
+        }
+        
+        // Draw static level curves once
+        drawStaticLevelCurves();
+        
+        // Initial visualization
+        updateVisualization();
+    </script>
+</body>
+</html>
