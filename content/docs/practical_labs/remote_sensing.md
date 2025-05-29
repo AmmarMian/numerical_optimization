@@ -7,14 +7,14 @@ weight: 20
 
 ## Introduction
 
-### What is a Hyperspectral Image?
+### What is a hyperspectral image?
 
 A **hyperspectral image** captures information across a wide range of the electromagnetic spectrum. Unlike traditional images that capture data in three bands (red, green, and blue), hyperspectral images can capture data in hundreds of contiguous spectral bands. This allows for detailed spectral analysis and identification of materials in **remote sensing** based on their spectral signatures.
 
 {{< center >}}
 {{< NumberedFigure
   src="../../../../tikZ/himmelblau/main_2D.svg"
-  caption="An example of a Hyperspectral image"
+  caption="An example of a hyperspectral image"
   alt="HSI image"
   width="500px"
   label="fig:hsi"
