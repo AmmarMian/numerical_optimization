@@ -173,9 +173,22 @@
 %% Navigation Symbol
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\setbeamertemplate{subsection in toc}[sections numbered]
+% \setbeamertemplate{subsection in toc}[sections numbered]
 % No navigation symbol
 \setbeamertemplate{navigation symbols}{}
+
+
+%%%%%%%%%
+% Headline
+%%%%%%%%%
+% Navigation circles
+\setbeamertemplate{headline}{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{palette quaternary}%
+    \insertsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll}
+  \end{beamercolorbox}%
+}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Itemize environment
