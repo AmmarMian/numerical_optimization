@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lagrange Multipliers Visualization</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2d3748;
+      margin-bottom: 16px;
+    }
+    .description {
+      background-color: #f7fafc;
+      padding: 12px;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 42rem;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .description div {
+      margin-bottom: 4px;
+    }
+    .description span.bold {
+      font-weight: 600;
+    }
+    svg {
+      width: 100%;
+      height: 400px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      background-color: white;
+      margin-bottom: 16px;
+    }
+    .slider-container {
+      width: 100%;
+      max-width: 42rem;
+      margin-bottom: 16px;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .slider {
+      width: 100%;
+      height: 8px;
+      background-color: #e2e8f0;
+      border-radius: 8px;
+      appearance: none;
+      outline: none;
+      cursor: pointer;
+    }
+    .instructions {
+      font-size: 14px;
+      background-color: #ebf8ff;
+      padding: 12px;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 42rem;
+    }
+    .instructions p {
+      margin: 4px 0;
+    }
+    .text-blue {
+      color: #3182ce;
+    }
+    .text-orange {
+      color: #dd6b20;
+    }
+    .bold {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Lagrange Multipliers Visualization</div>
+    <div class="description">
+      <div><span class="bold">Objective function:</span> f(x,y) = xy + 1</div>
+      <div><span class="bold">Constraint:</span> x² + y² = 1 (unit circle)</div>
+      <div><span class="bold">Lagrangian:</span> L(x,y,λ) = xy + 1 - λ(x² + y² - 1)</div>
+    </div>
+    
+    <svg id="visualization"></svg>
+    
+    <div class="slider-container">
+      <div class="slider-labels">
+        <span id="lambda-value">λ = 0.5</span>
+        <span>Optimal λ = ±0.5</span>
+      </div>
+      <input 
+        type="range" 
+        id="lambda-slider" 
+        min="-1" 
+        max="1" 
+        step="0.01" 
+        value="0.5" 
+        class="slider"
+      >
+    </div>
+    
+    <div class="instructions">
+      <p><span class="bold">Instructions:</span> Drag the <span class="text-blue">blue point</span> around the circle to see how the gradients change. Drag the <span class="text-orange">orange point</span> anywhere to see the unconstrained gradient.</p>
+      <p>At optimal points, ∇f (green) becomes parallel to ∇g (red). With the correct λ value (±0.5), λ∇g (purple dashed) aligns perfectly with ∇f.</p>
+      <p><span class="bold">Note:</span> Red dots are maxima (f = 1.5), blue dots are minima (f = 0.5). Notice that the free point's gradient shows the direction of steepest increase of the objective function.</p>
+    </div>
+  </div>
+
+  <script>
+    // State variables
+    let lambda = 0.5;
+    let point = { x: 1/Math.sqrt(2), y: 1/Math.sqrt(2) };
+    let freePoint = { x: 0.5, y: 0.3 };
+    
+    // DOM elements
+    const svg = d3.select('#visualization');
+    const lambdaSlider = document.getElementById('lambda-slider');
+    const lambdaValue = document.getElementById('lambda-value');
+    
+    // Objective function, constraint, and Lagrangian
+    const objective = (x, y) => x * y + 1;
+    const constraint = (x, y) => x*x + y*y - 1;
+    const lagrangian = (x, y, lambda) => objective(x, y) - lambda * constraint(x, y);
+    const gradObjective = (x, y) => [y, x];
+    const gradConstraint = (x, y) => [2*x, 2*y];
+    
+    // Event handlers
+    lambdaSlider.addEventListener('input', function() {
+      lambda = parseFloat(this.value);
+      lambdaValue.textContent = `λ = ${lambda.toFixed(3)}`;
+      renderVisualization();
+    });
+    
+    // Helper function to normalize vectors
+    const normalizeVector = (v) => {
+      const mag = Math.sqrt(v[0]**2 + v[1]**2);
+      return mag === 0 ? [0, 0] : [v[0]/mag, v[1]/mag];
+    };
+    
+    // Helper function to draw arrows
+    const drawArrow = (svg, fromX, fromY, toX, toY, color) => {
+      // Draw the line
+      svg.append("line")
+        .attr("x1", fromX)
+        .attr("y1", fromY)
+        .attr("x2", toX)
+        .attr("y2", toY)
+        .attr("stroke", color)
+        .attr("stroke-width", 2);
+      
+      // Draw arrowhead
+      const arrowheadSize = 10;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      
+      svg.append("polygon")
+        .attr("points", `0,0 -${arrowheadSize},-${arrowheadSize/2} -${arrowheadSize},${arrowheadSize/2}`)
+        .attr("transform", `translate(${toX}, ${toY}) rotate(${angle * 180 / Math.PI})`)
+        .attr("fill", color);
+    };
+    
+    // Update point position on the circle when dragging
+    const updatePoint = (event) => {
+      // Get mouse position relative to SVG
+      const svgElement = document.getElementById('visualization');
+      const width = svgElement.clientWidth || 600;
+      const height = svgElement.clientHeight || 400;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const scale = Math.min(width, height) / 2 - 50;
+      
+      // D3 v7 provides event.x and event.y directly
+      const mouseX = event.x;
+      const mouseY = event.y;
+      
+      const x = (mouseX - centerX) / scale;
+      const y = (centerY - mouseY) / scale;
+      
+      // Project onto circle
+      const r = Math.sqrt(x*x + y*y);
+      if (r === 0) return; // Avoid division by zero
+      
+      point.x = x / r;
+      point.y = y / r;
+      
+      renderVisualization();
+    };
+    
+    // Update free point position
+    const updateFreePoint = (event) => {
+      // Get mouse position relative to SVG
+      const svgElement = document.getElementById('visualization');
+      const width = svgElement.clientWidth || 600;
+      const height = svgElement.clientHeight || 400;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const scale = Math.min(width, height) / 2 - 50;
+      
+      // D3 v7 provides event.x and event.y directly
+      const mouseX = event.x;
+      const mouseY = event.y;
+      
+      const x = (mouseX - centerX) / scale;
+      const y = (centerY - mouseY) / scale;
+      
+      // Limit to visible area 
+      freePoint.x = Math.max(-2, Math.min(2, x));
+      freePoint.y = Math.max(-2, Math.min(2, y));
+      
+      renderVisualization();
+    };
+    
+    // Main rendering function
+    function renderVisualization() {
+      svg.selectAll("*").remove();
+      
+      const svgElement = document.getElementById('visualization');
+      const width = svgElement.clientWidth || 600;
+      const height = svgElement.clientHeight || 400;
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const scale = Math.min(width, height) / 2 - 50;
+      
+      // Calculate values for constrained point
+      const fValue = objective(point.x, point.y);
+      const gradObj = gradObjective(point.x, point.y);
+      const gradCon = gradConstraint(point.x, point.y);
+      const lambdaGradCon = [lambda * gradCon[0], lambda * gradCon[1]];
+      
+      // Calculate values for free point
+      const freeFValue = objective(freePoint.x, freePoint.y);
+      const freeLagrangianValue = lagrangian(freePoint.x, freePoint.y, lambda);
+      const freeGradObj = gradObjective(freePoint.x, freePoint.y);
+      const freeConstraintValue = constraint(freePoint.x, freePoint.y);
+      
+      // Calculate angle between gradients for constrained point
+      const dotProduct = gradObj[0] * gradCon[0] + gradObj[1] * gradCon[1];
+      const gradObjMag = Math.sqrt(gradObj[0]**2 + gradObj[1]**2);
+      const gradConMag = Math.sqrt(gradCon[0]**2 + gradCon[1]**2);
+      const angle = Math.acos(dotProduct / (gradObjMag * gradConMag)) * 180 / Math.PI;
+      
+      // Create normalized vectors
+      const normGradObj = normalizeVector(gradObj);
+      const normGradCon = normalizeVector(gradCon);
+      const normLambdaGradCon = normalizeVector(lambdaGradCon);
+      const normFreeGradObj = normalizeVector(freeGradObj);
+      
+      // Draw axes
+      svg.append("line")
+        .attr("x1", centerX - scale - 20)
+        .attr("y1", centerY)
+        .attr("x2", centerX + scale + 20)
+        .attr("y2", centerY)
+        .attr("stroke", "#888")
+        .attr("stroke-width", 1);
+      
+      svg.append("line")
+        .attr("x1", centerX)
+        .attr("y1", centerY - scale - 20)
+        .attr("x2", centerX)
+        .attr("y2", centerY + scale + 20)
+        .attr("stroke", "#888")
+        .attr("stroke-width", 1);
+      
+      // Add labels
+      svg.append("text")
+        .attr("x", centerX + scale + 25)
+        .attr("y", centerY + 5)
+        .attr("fill", "#333")
+        .text("x")
+        .attr("font-size", "14px");
+      
+      svg.append("text")
+        .attr("x", centerX + 5)
+        .attr("y", centerY - scale - 10)
+        .attr("fill", "#333")
+        .text("y")
+        .attr("font-size", "14px");
+      
+      // Draw the circle (constraint)
+      svg.append("circle")
+        .attr("cx", centerX)
+        .attr("cy", centerY)
+        .attr("r", scale)
+        .attr("fill", "none")
+        .attr("stroke", "#888")
+        .attr("stroke-width", 1.5);
+      
+      // Draw level curves of the objective function
+      const levelValues = [-0.5, 0, 0.5, 1, 1.5, 2];
+      
+      levelValues.forEach(val => {
+        // For level curve xy = val-1, we have y = (val-1)/x
+        const numPoints = 100;
+        const points = [];
+        
+        for (let i = 0; i < numPoints; i++) {
+          const t = -2 + i * (4 / (numPoints - 1)); // Range from -2 to 2
+          
+          if (Math.abs(t) > 0.1) { // Avoid division by zero
+            const x = t;
+            const y = (val - 1) / x;
+            
+            if (Math.abs(y) <= 2) { // Keep within visible range
+              points.push([x, y]);
+            }
+          }
+        }
+        
+        // Convert to screen coordinates
+        const screenPoints = points.map(p => [
+          centerX + p[0] * scale,
+          centerY - p[1] * scale
+        ]);
+        
+        // Create line generator
+        const lineGenerator = d3.line();
+        
+        // Draw the level curve
+        svg.append("path")
+          .attr("d", lineGenerator(screenPoints))
+          .attr("fill", "none")
+          .attr("stroke", "#cbd5e0")
+          .attr("stroke-width", 1)
+          .attr("stroke-dasharray", "3,3");
+      });
+      
+      // Convert points to screen coordinates
+      const screenX = centerX + point.x * scale;
+      const screenY = centerY - point.y * scale;
+      
+      const freeScreenX = centerX + freePoint.x * scale;
+      const freeScreenY = centerY - freePoint.y * scale;
+      
+      const arrowLength = scale * 0.3;
+      
+      // Draw the current free point (orange)
+      const freePointElement = svg.append("circle")
+        .attr("cx", freeScreenX)
+        .attr("cy", freeScreenY)
+        .attr("r", 8)
+        .attr("fill", "#f6ad55")
+        .attr("stroke", "#ed8936")
+        .attr("stroke-width", 1.5)
+        .attr("cursor", "pointer");
+        
+      // Draw gradient of objective function for free point
+      drawArrow(
+        svg,
+        freeScreenX, 
+        freeScreenY, 
+        freeScreenX + normFreeGradObj[0] * arrowLength, 
+        freeScreenY - normFreeGradObj[1] * arrowLength, 
+        "#38a169"
+      );
+      
+      // Draw the current constrained point (blue)
+      const constrainedPointElement = svg.append("circle")
+        .attr("cx", screenX)
+        .attr("cy", screenY)
+        .attr("r", 8)
+        .attr("fill", "#4299e1")
+        .attr("cursor", "pointer");
+      
+      // Apply drag behavior to points
+      freePointElement.call(
+        d3.drag()
+          .on("drag", updateFreePoint)
+      );
+      
+      constrainedPointElement.call(
+        d3.drag()
+          .on("drag", updatePoint)
+      );
+      
+      // Draw gradient of objective function for constrained point
+      drawArrow(
+        svg,
+        screenX, 
+        screenY, 
+        screenX + normGradObj[0] * arrowLength, 
+        screenY - normGradObj[1] * arrowLength, 
+        "#38a169"
+      );
+      
+      // Draw gradient of constraint for constrained point
+      drawArrow(
+        svg,
+        screenX, 
+        screenY, 
+        screenX + normGradCon[0] * arrowLength, 
+        screenY - normGradCon[1] * arrowLength, 
+        "#e53e3e"
+      );
+      
+      // Draw lambda times constraint gradient for constrained point
+      svg.append("line")
+        .attr("x1", screenX)
+        .attr("y1", screenY)
+        .attr("x2", screenX + normLambdaGradCon[0] * arrowLength)
+        .attr("y2", screenY - normLambdaGradCon[1] * arrowLength)
+        .attr("stroke", "#9f7aea")
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", "4");
+      
+      // Draw optimal points markers
+      const optPoints = [
+        { x: 1/Math.sqrt(2), y: 1/Math.sqrt(2) },
+        { x: -1/Math.sqrt(2), y: -1/Math.sqrt(2) },
+        { x: 1/Math.sqrt(2), y: -1/Math.sqrt(2) },
+        { x: -1/Math.sqrt(2), y: 1/Math.sqrt(2) }
+      ];
+      
+      optPoints.forEach((opt, i) => {
+        const optX = centerX + opt.x * scale;
+        const optY = centerY - opt.y * scale;
+        
+        // Maximum or minimum indicator
+        const isMax = (i < 2);
+        
+        svg.append("circle")
+          .attr("cx", optX)
+          .attr("cy", optY)
+          .attr("r", 5)
+          .attr("fill", isMax ? "#f56565" : "#4299e1")
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 1);
+      });
+      
+      // Add legend
+      const legend = svg.append("g")
+        .attr("transform", `translate(${width - 150}, 20)`);
+      
+      legend.append("rect")
+        .attr("width", 130)
+        .attr("height", 100)
+        .attr("fill", "#f7fafc")
+        .attr("stroke", "#e2e8f0")
+        .attr("rx", 4);
+      
+      legend.append("line")
+        .attr("x1", 10)
+        .attr("y1", 20)
+        .attr("x2", 30)
+        .attr("y2", 20)
+        .attr("stroke", "#38a169")
+        .attr("stroke-width", 2);
+      
+      legend.append("text")
+        .attr("x", 35)
+        .attr("y", 24)
+        .attr("fill", "#333")
+        .text("∇f(x,y)")
+        .attr("font-size", "12px");
+      
+      legend.append("line")
+        .attr("x1", 10)
+        .attr("y1", 40)
+        .attr("x2", 30)
+        .attr("y2", 40)
+        .attr("stroke", "#e53e3e")
+        .attr("stroke-width", 2);
+      
+      legend.append("text")
+        .attr("x", 35)
+        .attr("y", 44)
+        .attr("fill", "#333")
+        .text("∇g(x,y)")
+        .attr("font-size", "12px");
+      
+      legend.append("line")
+        .attr("x1", 10)
+        .attr("y1", 60)
+        .attr("x2", 30)
+        .attr("y2", 60)
+        .attr("stroke", "#9f7aea")
+        .attr("stroke-width", 2)
+        .attr("stroke-dasharray", "4");
+      
+      legend.append("text")
+        .attr("x", 35)
+        .attr("y", 64)
+        .attr("fill", "#333")
+        .text("λ∇g(x,y)")
+        .attr("font-size", "12px");
+        
+      legend.append("circle")
+        .attr("cx", 20)
+        .attr("cy", 80)
+        .attr("r", 5)
+        .attr("fill", "#4299e1");
+        
+      legend.append("text")
+        .attr("x", 35)
+        .attr("y", 84)
+        .attr("fill", "#333")
+        .text("Constrained pt")
+        .attr("font-size", "12px");
+        
+      legend.append("circle")
+        .attr("cx", 20)
+        .attr("cy", 100)
+        .attr("r", 5)
+        .attr("fill", "#f6ad55");
+        
+      legend.append("text")
+        .attr("x", 35)
+        .attr("y", 104)
+        .attr("fill", "#333")
+        .text("Free point")
+        .attr("font-size", "12px");
+      
+      // Add info panel for constrained point
+      const infoPanel = svg.append("g");
+      
+      infoPanel.append("rect")
+        .attr("x", 20)
+        .attr("y", 20)
+        .attr("width", 220)
+        .attr("height", 130)
+        .attr("fill", "#f7fafc")
+        .attr("stroke", "#e2e8f0")
+        .attr("rx", 4);
+      
+      infoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", 45)
+        .attr("fill", "#333")
+        .text(`f(x,y) = ${fValue.toFixed(3)}`)
+        .attr("font-size", "14px");
+      
+      infoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", 70)
+        .attr("fill", "#333")
+        .text(`(x,y) = (${point.x.toFixed(3)}, ${point.y.toFixed(3)})`)
+        .attr("font-size", "14px");
+      
+      infoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", 95)
+        .attr("fill", "#333")
+        .text(`λ = ${lambda.toFixed(3)}`)
+        .attr("font-size", "14px");
+      
+      infoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", 120)
+        .attr("fill", "#333")
+        .text(`Angle between gradients: ${angle.toFixed(1)}°`)
+        .attr("font-size", "14px");
+      
+      // Add info panel for free point
+      const freeInfoPanel = svg.append("g");
+      
+      freeInfoPanel.append("rect")
+        .attr("x", 20)
+        .attr("y", height - 120)
+        .attr("width", 220)
+        .attr("height", 100)
+        .attr("fill", "#fffaf0")
+        .attr("stroke", "#ed8936")
+        .attr("stroke-width", 1)
+        .attr("rx", 4);
+      
+      freeInfoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", height - 95)
+        .attr("fill", "#333")
+        .text(`Free point: (${freePoint.x.toFixed(3)}, ${freePoint.y.toFixed(3)})`)
+        .attr("font-size", "14px");
+      
+      freeInfoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", height - 70)
+        .attr("fill", "#333")
+        .text(`f(x,y) = ${freeFValue.toFixed(3)}`)
+        .attr("font-size", "14px");
+      
+      freeInfoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", height - 45)
+        .attr("fill", "#333")
+        .text(`L(x,y,λ) = ${freeLagrangianValue.toFixed(3)}`)
+        .attr("font-size", "14px");
+        
+      freeInfoPanel.append("text")
+        .attr("x", 30)
+        .attr("y", height - 20)
+        .attr("fill", "#333")
+        .text(`Constraint value: ${freeConstraintValue.toFixed(3)}`)
+        .attr("font-size", "14px");
+    }
+    
+    // Initial render
+    renderVisualization();
+    
+    // Handle window resize
+    window.addEventListener('resize', renderVisualization);
+  </script>
+</body>
+</html>

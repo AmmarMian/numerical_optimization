@@ -32,7 +32,7 @@ y_i = \alpha x_i + \beta + \epsilon
 where $\\epsilon$ is a random noise term that we assume to be normally distributed with mean 0 and variance $\\sigma^2$.
 
 
-Our goal is then to find the parameters $\\alpha$ and $\\beta$ that "best match" the data points. Such a program can is illustrated with following [interactive plot]("../../../interactive/linear_regression_1d.html").
+Our goal is then to find the parameters $\\alpha$ and $\\beta$ that "best match" the data points. Such a program can is illustrated with following [interactive plot](../../../interactive/linear_regression_1d.html).
 
 ### 1. Modeling and solving the problem
 
