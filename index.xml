@@ -33,29 +33,10 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
  Unconstrained optimization - Second-order methods
  &lt;a class="anchor" href="#unconstrained-optimization----second-order-methods">#&lt;/a>
 &lt;/h1>
-&lt;p>We have seen in the previous chapter that first-order methods, such as steepest descent, are often used to find a local minimum of a function $f(\mathbf{x})$. However, these methods can be slow to converge, especially when the function has ill-conditioned Hessian or when the initial guess is far from the solution. Second-order methods, which use information about the curvature of the function, can provide faster convergence rates.&lt;/p></description></item><item><title>Differentiation</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</guid><description>&lt;h1 id="fundamentals-of-multivariate-differentiation">
- Fundamentals of Multivariate Differentiation
- &lt;a class="anchor" href="#fundamentals-of-multivariate-differentiation">#&lt;/a>
-&lt;/h1>
-&lt;p>Soon to be added.&lt;/p>
-&lt;!-- Multivariate calculus extends the fundamental concepts of single-variable calculus to functions of several variables. This powerful mathematical framework allows us to analyze and describe phenomena in multiple dimensions, making it essential for physics, engineering, economics, statistics, and many other disciplines. This document provides a comprehensive introduction to multivariate differentiation, building from basic principles to advanced applications. -->
-&lt;!---->
-&lt;!-- ## 1. Functions of Several Variables -->
-&lt;!---->
-&lt;!-- We begin by defining functions that map points from higher-dimensional spaces to either real numbers or other multi-dimensional spaces. -->
-&lt;!---->
-&lt;!-- 
-
-
-
-
-
-
-
-
-
-&lt;div id="multivariate-function" class="theorem-box">
- &lt;p class="theorem-title">&lt;strong>Definition A.1 (Function of Several Variables)&lt;/strong>&lt;/p></description></item><item><title>Linear Algebra</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</guid><description>&lt;h1 id="fundamentals-of-linear-algebra">
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong> : This is in part the content of the book &amp;ldquo;Numerical Optimization&amp;rdquo; by Nocedal and Wright, with some modifications to the notations used in this lecture.&lt;/p>
+&lt;/blockquote>
+&lt;p>We have seen in the previous chapter that first-order methods, such as steepest descent, are often used to find a local minimum of a function $f(\mathbf{x})$. However, these methods can be slow to converge, especially when the function has ill-conditioned Hessian or when the initial guess is far from the solution. Second-order methods, which use information about the curvature of the function, can provide faster convergence rates.&lt;/p></description></item><item><title>Linear Algebra</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/linear_algebra/</guid><description>&lt;h1 id="fundamentals-of-linear-algebra">
  Fundamentals of Linear Algebra
  &lt;a class="anchor" href="#fundamentals-of-linear-algebra">#&lt;/a>
 &lt;/h1>
@@ -104,7 +85,37 @@ $$&lt;/p>
 &lt;/figure>
 
 &lt;p>Generally, we would be happiest if we found a global minimizer of $f$ , a point where the
-function attains its least value. A formal definition is :&lt;/p></description></item><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
+function attains its least value. A formal definition is :&lt;/p></description></item><item><title>Differentiation</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/reminders/differentiation/</guid><description>&lt;h1 id="differentiation-in-multiple-dimensions">
+ Differentiation in Multiple Dimensions
+ &lt;a class="anchor" href="#differentiation-in-multiple-dimensions">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="1---introduction">
+ 1 - Introduction
+ &lt;a class="anchor" href="#1---introduction">#&lt;/a>
+&lt;/h2>
+&lt;blockquote>
+&lt;p>Differentiation provides the mathematical framework for understanding how functions change locally. While single-variable calculus introduces derivatives, most applications require working with functions of multiple variables. This chapter extends differentiation concepts to multivariate and matrix-valued functions, building the tools needed for optimization and analysis in higher dimensions.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="2---monovariate-reminders">
+ 2 - Monovariate Reminders
+ &lt;a class="anchor" href="#2---monovariate-reminders">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="derivative-of-a-function">
+ Derivative of a Function
+ &lt;a class="anchor" href="#derivative-of-a-function">#&lt;/a>
+&lt;/h3>
+
+
+
+
+
+
+
+
+
+
+&lt;div id="derivative_definition" class="theorem-box">
+ &lt;p class="theorem-title">&lt;strong>Definition 0.1 (Derivative)&lt;/strong>&lt;/p></description></item><item><title>Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/1_introduction/</guid><description>&lt;h1 id="introduction">
  Introduction
  &lt;a class="anchor" href="#introduction">#&lt;/a>
 &lt;/h1>
@@ -176,16 +187,20 @@ function attains its least value. A formal definition is :&lt;/p></description><
  Unconstrained optimization - Linesearch methods
  &lt;a class="anchor" href="#unconstrained-optimization---linesearch-methods">#&lt;/a>
 &lt;/h1>
-&lt;p>All algorithms for unconstrained minimization require the user to supply a starting point, which we usually denote by $\mathbf{x}_0$. The user with knowledge about the application and the data set may be in a good position to choose $\mathbf{x}_0$ to be a reasonable estimate of the solution. Otherwise, the starting point must be chosen in some arbitrary manner.&lt;/p>
-&lt;p>Beginning at $\mathbf{x}_0$, optimization algorithms generate a sequence of iterates $\left\{\mathbf{x}_k\right\}_{k=0}^{\infty}$ that terminate when either no more progress can be made or when it seems that a solution point has been approximated with sufficient accuracy. In deciding how to move from one iterate $\mathbf{x}_k$ to the next, the algorithms use information about the function $f$ at $\mathbf{x}_k$, and possibly also information from earlier iterates $\mathbf{x}_0, \mathbf{x}_1, \ldots, \mathbf{x}_{k-1}$. They use this information to find a new iterate $\mathbf{x}_{k+1}$ with a lower function value than $\mathbf{x}_k$. (There exist nonmonotone algorithms that do not insist on a decrease in $f$ at every step, but even these algorithms require $f$ to be decreased after some prescribed number $m$ of iterations. That is, they enforce $f\left(\mathbf{x}_k\right)&amp;lt;f\left(\mathbf{x}_{k-m}\right)$.)&lt;/p></description></item><item><title>6. Constrained optimization - introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong> : This is in part the content of the book &amp;ldquo;Numerical Optimization&amp;rdquo; by Nocedal and Wright, with some modifications to the notations used in this lecture.&lt;/p>
+&lt;/blockquote>
+&lt;p>All algorithms for unconstrained minimization require the user to supply a starting point, which we usually denote by $\mathbf{x}_0$. The user with knowledge about the application and the data set may be in a good position to choose $\mathbf{x}_0$ to be a reasonable estimate of the solution. Otherwise, the starting point must be chosen in some arbitrary manner.&lt;/p></description></item><item><title>5. Constrained optimization - Introduction</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimisation/</guid><description>&lt;h1 id="constrained-optimization-methods">
  Constrained optimization methods
  &lt;a class="anchor" href="#constrained-optimization-methods">#&lt;/a>
 &lt;/h1>
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong> : This is in part the content of the book &amp;ldquo;Numerical Optimization&amp;rdquo; by Nocedal and Wright, with some modifications to the notations used in this lecture.&lt;/p>
+&lt;/blockquote>
 &lt;p>The second part of this lecture is about minimizing functions subject to constraints on the variables. A general formulation for these problems is&lt;/p>
 &lt;p>$$
 \min_{\mathbf{x} \in \mathrm{R}^{n}} f(\mathbf{x}) \quad \text { subject to } \quad \begin{cases}c_{i}(\mathbf{x})=0, &amp;amp; i \in \mathcal{E}, \\ c_{i}(\mathbf{x}) \geq 0, &amp;amp; i \in \mathcal{I},\end{cases}
-$$&lt;/p>
-&lt;p>where $f$ and the functions $c_{i}$ are all smooth, real-valued functions on a subset of $\mathbb{R}^{n}$, and $\mathcal{I}$ and $\mathcal{E}$ are two finite sets of indices. As before, we call $f$ the objective function, while $c_{i}$, $i \in \mathcal{E}$ are the equality constraints and $c_{i}, i \in \mathcal{I}$ are the inequality constraints. We define the feasible set $\Omega$ to be the set of points $\mathbf{x}$ that satisfy the constraints; that is,&lt;/p></description></item><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
+$$&lt;/p></description></item><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
  Linear Regression models
  &lt;a class="anchor" href="#linear-regression-models">#&lt;/a>
 &lt;/h1>

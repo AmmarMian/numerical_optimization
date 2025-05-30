@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Inequality Constraint Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        svg {
+            background: white;
+        }
+        .constraint-circle {
+            fill: rgba(231, 76, 60, 0.1);
+            stroke: #e74c3c;
+            stroke-width: 3;
+        }
+        .level-curve {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+            opacity: 0.7;
+        }
+        .grid-line {
+            stroke: #ecf0f1;
+            stroke-width: 0.5;
+        }
+        .axis {
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+        .tick-label {
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .point {
+            fill: #2c3e50;
+            stroke: white;
+            stroke-width: 2;
+            cursor: grab;
+        }
+        .point:hover {
+            fill: #34495e;
+        }
+        .point:active {
+            cursor: grabbing;
+        }
+        .gradient-vector {
+            stroke-width: 3;
+            marker-end: url(#arrowhead);
+        }
+        .grad-f {
+            stroke: #3498db;
+        }
+        .grad-c {
+            stroke: #27ae60;
+        }
+        .vector-label {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .half-space {
+            opacity: 0.3;
+        }
+        .descent-space {
+            fill: #3498db;
+        }
+        .feasible-space {
+            fill: #27ae60;
+        }
+        .intersection-space {
+            fill: #9b59b6;
+            opacity: 0.5;
+        }
+        .equation {
+            font-size: 14px;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            fill: #2c3e50;
+        }
+        .case-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="visualization"></svg>
+    </div>
+
+    <script>
+        const width = 700;
+        const height = 700;
+        const margin = 50;
+        const radius = Math.sqrt(2);
+        
+        // Scale functions
+        const xScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([margin, width - margin]);
+        
+        const yScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([height - margin, margin]);
+        
+        // Create SVG
+        const svg = d3.select("#visualization")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Define arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#333");
+        
+        // Draw grid
+        const gridGroup = svg.append("g").attr("class", "grid");
+        
+        for (let x = -3; x <= 3; x++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(x))
+                .attr("y1", yScale(-3))
+                .attr("x2", xScale(x))
+                .attr("y2", yScale(3));
+        }
+        
+        for (let y = -3; y <= 3; y++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(-3))
+                .attr("y1", yScale(y))
+                .attr("x2", xScale(3))
+                .attr("y2", yScale(y));
+        }
+        
+        // Draw axes
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(-3))
+            .attr("y1", yScale(0))
+            .attr("x2", xScale(3))
+            .attr("y2", yScale(0));
+        
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(-3))
+            .attr("x2", xScale(0))
+            .attr("y2", yScale(3));
+        
+        // Axis labels
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(3))
+            .attr("y", yScale(0) - 10)
+            .text("x₁");
+        
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(0) + 10)
+            .attr("y", yScale(3))
+            .text("x₂");
+        
+        // Tick marks and labels
+        [-2, -1, 1, 2].forEach(tick => {
+            svg.append("line")
+                .attr("x1", xScale(tick))
+                .attr("y1", yScale(0) - 5)
+                .attr("x2", xScale(tick))
+                .attr("y2", yScale(0) + 5)
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(tick))
+                .attr("y", yScale(0) + 20)
+                .attr("text-anchor", "middle")
+                .text(tick);
+            
+            svg.append("line")
+                .attr("x1", xScale(0) - 5)
+                .attr("y1", yScale(tick))
+                .attr("x2", xScale(0) + 5)
+                .attr("y2", yScale(tick))
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(0) - 15)
+                .attr("y", yScale(tick) + 4)
+                .attr("text-anchor", "middle")
+                .text(tick);
+        });
+        
+        // Level curves group
+        const levelCurves = svg.append("g").attr("class", "level-curves");
+        
+        // Half-spaces group
+        const halfSpaces = svg.append("g").attr("class", "half-spaces");
+        
+        // Constraint circle (feasible region)
+        svg.append("circle")
+            .attr("class", "constraint-circle")
+            .attr("cx", xScale(0))
+            .attr("cy", yScale(0))
+            .attr("r", xScale(radius) - xScale(0));
+        
+        // Gradient vectors group
+        const vectors = svg.append("g").attr("class", "vectors");
+        
+        // Equations group
+        const equations = svg.append("g").attr("class", "equations");
+        
+        // Points
+        let currentPoint = {x: 0.8, y: 0.6};
+        
+        const point = svg.append("circle")
+            .attr("class", "point")
+            .attr("r", 8)
+            .attr("fill", "#e74c3c")
+            .call(d3.drag()
+                .on("drag", function(event) {
+                    const x = xScale.invert(event.x);
+                    const y = yScale.invert(event.y);
+                    // Keep point strictly inside the circle
+                    const distFromOrigin = Math.sqrt(x*x + y*y);
+                    const maxRadius = radius * 0.95; // Keep slightly inside
+                    if (distFromOrigin > 0 && distFromOrigin <= maxRadius) {
+                        currentPoint.x = x;
+                        currentPoint.y = y;
+                    } else if (distFromOrigin > 0) {
+                        // Project to just inside the boundary
+                        currentPoint.x = (x / distFromOrigin) * maxRadius;
+                        currentPoint.y = (y / distFromOrigin) * maxRadius;
+                    }
+                    updateVisualization();
+                }));
+        
+        function drawStaticLevelCurves() {
+            // Draw fixed level curves for f(x) = x₁ + x₂ = constant
+            const levels = [-3, -2, -1, 0, 1, 2, 3];
+            
+            levels.forEach(level => {
+                levelCurves.append("line")
+                    .attr("class", "level-curve")
+                    .attr("x1", xScale(-3))
+                    .attr("y1", yScale(level + 3))
+                    .attr("x2", xScale(3))
+                    .attr("y2", yScale(level - 3))
+                    .style("opacity", level === 0 ? 0.9 : 0.6);
+            });
+        }
+        
+        function createHalfSpacePath(x0, y0, nx, ny, isPositiveSide) {
+            // Simple half-space implementation
+            // Line: nx*(x-x0) + ny*(y-y0) = 0
+            // Half-space: nx*(x-x0) + ny*(y-y0) >= 0 (if isPositiveSide) or <= 0 (if not)
+            
+            const bound = 3;
+            
+            // Find where the line intersects the viewport boundaries
+            const intersections = [];
+            
+            // Intersection with left edge (x = -bound)
+            if (Math.abs(nx) > 1e-10) {
+                const y = y0 - nx * (-bound - x0) / ny;
+                if (y >= -bound && y <= bound) {
+                    intersections.push([-bound, y]);
+                }
+            }
+            
+            // Intersection with right edge (x = bound)
+            if (Math.abs(nx) > 1e-10) {
+                const y = y0 - nx * (bound - x0) / ny;
+                if (y >= -bound && y <= bound) {
+                    intersections.push([bound, y]);
+                }
+            }
+            
+            // Intersection with bottom edge (y = -bound)
+            if (Math.abs(ny) > 1e-10) {
+                const x = x0 - ny * (-bound - y0) / nx;
+                if (x >= -bound && x <= bound) {
+                    intersections.push([x, -bound]);
+                }
+            }
+            
+            // Intersection with top edge (y = bound)
+            if (Math.abs(ny) > 1e-10) {
+                const x = x0 - ny * (bound - y0) / nx;
+                if (x >= -bound && x <= bound) {
+                    intersections.push([x, bound]);
+                }
+            }
+            
+            // Remove duplicates
+            const uniqueIntersections = [];
+            intersections.forEach(pt => {
+                const exists = uniqueIntersections.some(existing => 
+                    Math.abs(existing[0] - pt[0]) < 1e-6 && Math.abs(existing[1] - pt[1]) < 1e-6
+                );
+                if (!exists) {
+                    uniqueIntersections.push(pt);
+                }
+            });
+            
+            if (uniqueIntersections.length < 2) return "";
+            
+            // Take first two intersection points
+            const [p1, p2] = uniqueIntersections;
+            
+            // Test which corners are on the desired side
+            const corners = [[-bound, -bound], [bound, -bound], [bound, bound], [-bound, bound]];
+            const validCorners = corners.filter(corner => {
+                const value = nx * (corner[0] - x0) + ny * (corner[1] - y0);
+                return isPositiveSide ? value >= -1e-10 : value <= 1e-10;
+            });
+            
+            // Combine intersection points with valid corners
+            const allPoints = [...uniqueIntersections, ...validCorners];
+            
+            if (allPoints.length < 3) return "";
+            
+            // Sort points clockwise around their centroid
+            const cx = allPoints.reduce((sum, p) => sum + p[0], 0) / allPoints.length;
+            const cy = allPoints.reduce((sum, p) => sum + p[1], 0) / allPoints.length;
+            
+            allPoints.sort((a, b) => {
+                const angleA = Math.atan2(a[1] - cy, a[0] - cx);
+                const angleB = Math.atan2(b[1] - cy, b[0] - cx);
+                return angleA - angleB;
+            });
+            
+            // Create path
+            if (allPoints.length === 0) return "";
+            
+            let path = `M${xScale(allPoints[0][0])},${yScale(allPoints[0][1])}`;
+            for (let i = 1; i < allPoints.length; i++) {
+                path += `L${xScale(allPoints[i][0])},${yScale(allPoints[i][1])}`;
+            }
+            path += 'Z';
+            
+            return path;
+        }
+        
+        function updateVisualization() {
+            // Update point position
+            point
+                .attr("cx", xScale(currentPoint.x))
+                .attr("cy", yScale(currentPoint.y));
+            
+            // Clear existing elements
+            vectors.selectAll("*").remove();
+            halfSpaces.selectAll("*").remove();
+            equations.selectAll("*").remove();
+            
+            // Case I: Interior point
+            equations.append("text")
+                .attr("class", "case-label")
+                .attr("x", 20)
+                .attr("y", 30)
+                .text("Case I: Interior");
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 55)
+                .text("d = -c₁(x) ∇f(x)/||∇f(x)||");
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 75)
+                .text("where c₁(x) = 2 - x₁² - x₂²");
+            
+            // Calculate constraint value c₁(x) = 2 - x₁² - x₂²
+            const x1 = currentPoint.x;
+            const x2 = currentPoint.y;
+            const c1_value = 2 - x1*x1 - x2*x2;
+            
+            // Calculate distance from origin and maximum possible direction radius
+            const distFromOrigin = Math.sqrt(x1*x1 + x2*x2);
+            const maxDirectionRadius = radius - distFromOrigin;
+            
+            // Display constraint value
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 95)
+                .text(`c₁(x) = ${c1_value.toFixed(3)}`);
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 115)
+                .text(`Max direction radius: ${maxDirectionRadius.toFixed(3)}`);
+            
+            // Draw circle of possible directions
+            // This circle shows all directions d such that (x₀ + d₁, y₀ + d₂) stays within constraint
+            halfSpaces.append("circle")
+                .attr("cx", xScale(currentPoint.x))
+                .attr("cy", yScale(currentPoint.y))
+                .attr("r", xScale(maxDirectionRadius) - xScale(0))
+                .attr("fill", "rgba(46, 204, 113, 0.15)")
+                .attr("stroke", "#2ecc71")
+                .attr("stroke-width", 2)
+                .attr("stroke-dasharray", "3,3");
+            
+            halfSpaces.append("text")
+                .attr("x", xScale(currentPoint.x) + (xScale(maxDirectionRadius) - xScale(0)) + 10)
+                .attr("y", yScale(currentPoint.y))
+                .attr("fill", "#27ae60")
+                .attr("font-size", "11px")
+                .attr("font-style", "italic")
+                .text("Possible directions");
+            
+            // ∇f(x) = [1, 1], ||∇f(x)|| = √2
+            const gradF = [1, 1];
+            const gradF_norm = Math.sqrt(2);
+            const gradF_normalized = [gradF[0]/gradF_norm, gradF[1]/gradF_norm];
+            
+            // Direction d = -c₁(x) * ∇f(x)/||∇f(x)||
+            const d = [-c1_value * gradF_normalized[0], -c1_value * gradF_normalized[1]];
+            
+            const baseScale = 60; // Base scaling for visualization
+            
+            // Draw ∇f vector (for reference)
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-f")
+                .attr("x1", xScale(currentPoint.x))
+                .attr("y1", yScale(currentPoint.y))
+                .attr("x2", xScale(currentPoint.x) + baseScale * gradF_normalized[0])
+                .attr("y2", yScale(currentPoint.y) - baseScale * gradF_normalized[1]);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(currentPoint.x) + baseScale * gradF_normalized[0] + 10)
+                .attr("y", yScale(currentPoint.y) - baseScale * gradF_normalized[1] + 5)
+                .attr("fill", "#3498db")
+                .text("∇f/||∇f||");
+            
+            // Draw direction d = -c₁(x) * ∇f(x)/||∇f(x)||
+            const d_scale = baseScale; // Scale the direction vector for visibility
+            
+            vectors.append("line")
+                .attr("class", "gradient-vector")
+                .attr("stroke", "#e74c3c")
+                .attr("stroke-width", 4)
+                .attr("marker-end", "url(#arrowhead)")
+                .attr("x1", xScale(currentPoint.x))
+                .attr("y1", yScale(currentPoint.y))
+                .attr("x2", xScale(currentPoint.x) + d_scale * d[0])
+                .attr("y2", yScale(currentPoint.y) - d_scale * d[1]);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(currentPoint.x) + d_scale * d[0] + 15)
+                .attr("y", yScale(currentPoint.y) - d_scale * d[1] + 15)
+                .attr("fill", "#e74c3c")
+                .attr("font-weight", "bold")
+                .text("d");
+            
+            // Show magnitude information
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 135)
+                .text(`||d|| = ${Math.abs(c1_value / gradF_norm).toFixed(3)}`);
+            
+            // Add explanation of magnitude behavior
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 155)
+                .attr("font-size", "12px")
+                .attr("fill", "#666")
+                .text("Green circle: space of feasible directions");
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 170)
+                .attr("font-size", "12px")
+                .attr("fill", "#666")
+                .text("Circle shrinks near boundary");
+        }
+        
+        // Draw static level curves once
+        drawStaticLevelCurves();
+        
+        // Initial visualization
+        updateVisualization();
+    </script>
+</body>
+</html>
