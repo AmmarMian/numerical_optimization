@@ -343,13 +343,3 @@ The derivatives of matrix functions follow familiar rules:
 - **Chain rule**: For $f(\mathbf{X}) = g(h(\mathbf{X}))$:
   $$Df(\mathbf{X})[\mathbf{V}] = Dg(h(\mathbf{X}))[Dh(\mathbf{X})[\mathbf{V}]]$$
 
-## 7 - Summary
-
-Matrix calculus extends the familiar concepts of differentiation to functions involving matrices. The key concepts are:
-
-- **Fréchet derivative**: Captures linear approximation of matrix functions
-- **Matrix-to-scalar functions**: Use gradient $\nabla f(\mathbf{X})$ with $Df(\mathbf{X})[\mathbf{V}] = \mathrm{Tr}(\nabla f(\mathbf{X})^\mathrm{T} \mathbf{V})$
-- **Matrix-to-matrix functions**: Use linear operator $Df(\mathbf{X})$ with vectorization representation
-- **Vectorization**: Converts matrix operations to linear algebra on vectors
-
-These tools are essential for optimization on matrix manifolds, machine learning algorithms with matrix parameters, sensitivity analysis, and perturbation theory. The framework provides a systematic way to compute derivatives for complex matrix expressions, enabling efficient implementation of gradient-based algorithms.
