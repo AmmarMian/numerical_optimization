@@ -173,7 +173,7 @@ The Jacobian matrix generalizes the gradient to vector-valued functions. Each ro
 ### Jacobian and Directional Derivative
 
 The directional derivative of a vector-valued function $f:\mathbb{R}^d \to \mathbb{R}^p$ in the direction of a vector $\mathbf{v} \in \mathbb{R}^d$ is:
-$$Df(\mathbf{x})[\mathbf{v}] = \mathbf{J}_f(\mathbf{x})\mathbf{v} = \begin{pmatrix} \nabla f_1(\mathbf{x})^T \mathbf{v} \\\\ \nabla f_2(\mathbf{x})^T \mathbf{v} \\ \vdots \\ \nabla f_p(\mathbf{x})^T \mathbf{v} \end{pmatrix} \in \mathbb{R}^p$$
+$$Df(\mathbf{x})[\mathbf{v}] = \mathbf{J}_f(\mathbf{x})\mathbf{v} = \begin{pmatrix} \nabla f_1(\mathbf{x})^T \mathbf{v} \\\\ \nabla f_2(\mathbf{x})^T \mathbf{v} \\\\ \vdots \\\\ \nabla f_p(\mathbf{x})^T \mathbf{v} \end{pmatrix} \in \mathbb{R}^p$$
 
 This shows how the Jacobian matrix encodes all directional derivative information.
 
