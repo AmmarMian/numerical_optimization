@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 3: Two Inequality Constraints</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        svg {
+            background: white;
+        }
+        .feasible-region {
+            fill: rgba(52, 152, 219, 0.2);
+            stroke: #3498db;
+            stroke-width: 2;
+        }
+        .grid-line {
+            stroke: #ecf0f1;
+            stroke-width: 0.5;
+        }
+        .axis {
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+        .tick-label {
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .point {
+            fill: #e74c3c;
+            stroke: white;
+            stroke-width: 2;
+            cursor: grab;
+        }
+        .point:hover {
+            fill: #c0392b;
+        }
+        .point:active {
+            cursor: grabbing;
+        }
+        .gradient-vector {
+            stroke-width: 3;
+            marker-end: url(#arrowhead);
+        }
+        .grad-f {
+            stroke: #3498db;
+        }
+        .grad-c1 {
+            stroke: #27ae60;
+        }
+        .grad-c2 {
+            stroke: #9b59b6;
+        }
+        .vector-label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .equation {
+            font-size: 14px;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            fill: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="visualization"></svg>
+    </div>
+
+    <script>
+        const width = 600;
+        const height = 600;
+        const margin = 50;
+        const radius = Math.sqrt(2);
+        
+        // Equal scaling for both axes (flip y to match mathematical convention)
+        const xScale = d3.scaleLinear()
+            .domain([-2.5, 2.5])
+            .range([margin, width - margin]);
+            
+        const yScale = d3.scaleLinear()
+            .domain([-2.5, 2.5])
+            .range([height - margin, margin]); // Flipped for mathematical y-axis
+        
+        // Create SVG
+        const svg = d3.select("#visualization")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Define arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#333");
+        
+        // Draw grid
+        for (let i = -2; i <= 2; i++) {
+            // Vertical lines
+            svg.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(i))
+                .attr("y1", yScale(-2.5))
+                .attr("x2", xScale(i))
+                .attr("y2", yScale(2.5));
+            
+            // Horizontal lines
+            svg.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(-2.5))
+                .attr("y1", yScale(i))
+                .attr("x2", xScale(2.5))
+                .attr("y2", yScale(i));
+        }
+        
+        // Draw axes
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(-2.5))
+            .attr("y1", yScale(0))
+            .attr("x2", xScale(2.5))
+            .attr("y2", yScale(0));
+        
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(-2.5))
+            .attr("x2", xScale(0))
+            .attr("y2", yScale(2.5));
+        
+        // Axis labels
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(2.5) - 10)
+            .attr("y", yScale(0) - 10)
+            .text("x₁");
+        
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(0) + 15)
+            .attr("y", yScale(2.5) + 5)
+            .text("x₂");
+        
+        // Tick marks and labels
+        [-2, -1, 1, 2].forEach(tick => {
+            // x₁ axis ticks
+            svg.append("line")
+                .attr("x1", xScale(tick))
+                .attr("y1", yScale(0) - 5)
+                .attr("x2", xScale(tick))
+                .attr("y2", yScale(0) + 5)
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(tick))
+                .attr("y", yScale(0) + 20)
+                .attr("text-anchor", "middle")
+                .text(tick);
+            
+            // x₂ axis ticks
+            svg.append("line")
+                .attr("x1", xScale(0) - 5)
+                .attr("y1", yScale(tick))
+                .attr("x2", xScale(0) + 5)
+                .attr("y2", yScale(tick))
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(0) - 20)
+                .attr("y", yScale(tick) + 4)
+                .attr("text-anchor", "middle")
+                .text(tick);
+        });
+        
+        // Draw feasible region (upper half-disk)
+        const pathData = [];
+        
+        // Start at right endpoint of diameter
+        pathData.push(`M${xScale(radius)},${yScale(0)}`);
+        
+        // Draw upper semicircle
+        pathData.push(`A${xScale(radius) - xScale(0)},${yScale(radius) - yScale(0)} 0 0,0 ${xScale(-radius)},${yScale(0)}`);
+        
+        // Close path along x₁ axis
+        pathData.push(`Z`);
+        
+        svg.append("path")
+            .attr("d", pathData.join(' '))
+            .attr("class", "feasible-region");
+        
+        // Equations
+        svg.append("text")
+            .attr("class", "equation")
+            .attr("x", 20)
+            .attr("y", 30)
+            .text("min x₁ + x₂");
+        
+        svg.append("text")
+            .attr("class", "equation")
+            .attr("x", 20)
+            .attr("y", 50)
+            .text("s.t. 2 - x₁² - x₂² ≥ 0");
+        
+        svg.append("text")
+            .attr("class", "equation")
+            .attr("x", 45)
+            .attr("y", 70)
+            .text("x₂ ≥ 0");
+        
+        // Point starts at optimal solution
+        let currentPoint = {x: -radius, y: 0};
+        
+        // Gradient vectors group
+        const vectors = svg.append("g").attr("class", "vectors");
+        
+        // Draggable point
+        const point = svg.append("circle")
+            .attr("class", "point")
+            .attr("r", 8)
+            .call(d3.drag()
+                .on("drag", function(event) {
+                    const mouseX = xScale.invert(event.x);
+                    const mouseY = yScale.invert(event.y);
+                    
+                    // Distance from origin
+                    const distFromOrigin = Math.sqrt(mouseX*mouseX + mouseY*mouseY);
+                    
+                    // If close to x-axis, snap to x-axis segment
+                    if (Math.abs(mouseY) < 0.15) {
+                        currentPoint.x = Math.max(-radius, Math.min(radius, mouseX));
+                        currentPoint.y = 0;
+                    } 
+                    // If in upper half-plane, project to circle
+                    else if (mouseY > 0) {
+                        if (distFromOrigin > 0) {
+                            currentPoint.x = (mouseX / distFromOrigin) * radius;
+                            currentPoint.y = (mouseY / distFromOrigin) * radius;
+                        }
+                    }
+                    // If in lower half-plane, project to x-axis
+                    else {
+                        currentPoint.x = Math.max(-radius, Math.min(radius, mouseX));
+                        currentPoint.y = 0;
+                    }
+                    
+                    updateVisualization();
+                }));
+        
+        function updateVisualization() {
+            // Update point position
+            point
+                .attr("cx", xScale(currentPoint.x))
+                .attr("cy", yScale(currentPoint.y));
+            
+            // Clear existing vectors
+            vectors.selectAll("*").remove();
+            
+            const vectorScale = 0.7;
+            
+            // ∇f = [1, 1]
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-f")
+                .attr("x1", xScale(currentPoint.x))
+                .attr("y1", yScale(currentPoint.y))
+                .attr("x2", xScale(currentPoint.x + vectorScale))
+                .attr("y2", yScale(currentPoint.y + vectorScale));
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(currentPoint.x + vectorScale) + 10)
+                .attr("y", yScale(currentPoint.y + vectorScale) + 5)
+                .attr("fill", "#3498db")
+                .text("∇f");
+            
+            // ∇c₁ = [-2x₁, -2x₂]
+            const gradC1X = -2 * currentPoint.x * vectorScale/2;
+            const gradC1Y = -2 * currentPoint.y * vectorScale/2;
+            
+            if (Math.abs(gradC1X) > 0.01 || Math.abs(gradC1Y) > 0.01) {
+                vectors.append("line")
+                    .attr("class", "gradient-vector grad-c1")
+                    .attr("x1", xScale(currentPoint.x))
+                    .attr("y1", yScale(currentPoint.y))
+                    .attr("x2", xScale(currentPoint.x + gradC1X))
+                    .attr("y2", yScale(currentPoint.y + gradC1Y));
+                
+                vectors.append("text")
+                    .attr("class", "vector-label")
+                    .attr("x", xScale(currentPoint.x + gradC1X) + 10)
+                    .attr("y", yScale(currentPoint.y + gradC1Y) + 5)
+                    .attr("fill", "#27ae60")
+                    .text("∇c₁");
+            }
+            
+            // ∇c₂ = [0, 1]
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-c2")
+                .attr("x1", xScale(currentPoint.x))
+                .attr("y1", yScale(currentPoint.y))
+                .attr("x2", xScale(currentPoint.x))
+                .attr("y2", yScale(currentPoint.y + vectorScale));
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(currentPoint.x) + 10)
+                .attr("y", yScale(currentPoint.y + vectorScale) + 5)
+                .attr("fill", "#9b59b6")
+                .text("∇c₂");
+        }
+        
+        // Initial render
+        updateVisualization();
+    </script>
+</body>
+</html>

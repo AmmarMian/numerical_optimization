@@ -6,6 +6,8 @@ chapter: 4
 
 # Unconstrained optimization - Linesearch methods
 
+> **Note** : This is in part the content of the book "Numerical Optimization" by Nocedal and Wright, with some modifications to the notations used in this lecture.
+
 All algorithms for unconstrained minimization require the user to supply a starting point, which we usually denote by $\mathbf{x}\_0$. The user with knowledge about the application and the data set may be in a good position to choose $\mathbf{x}\_0$ to be a reasonable estimate of the solution. Otherwise, the starting point must be chosen in some arbitrary manner.
 
 Beginning at $\mathbf{x}\_0$, optimization algorithms generate a sequence of iterates $\left\\{\mathbf{x}\_k\right\\}\_{k=0}^{\infty}$ that terminate when either no more progress can be made or when it seems that a solution point has been approximated with sufficient accuracy. In deciding how to move from one iterate $\mathbf{x}\_k$ to the next, the algorithms use information about the function $f$ at $\mathbf{x}\_k$, and possibly also information from earlier iterates $\mathbf{x}\_0, \mathbf{x}\_1, \ldots, \mathbf{x}\_{k-1}$. They use this information to find a new iterate $\mathbf{x}\_{k+1}$ with a lower function value than $\mathbf{x}\_k$. (There exist nonmonotone algorithms that do not insist on a decrease in $f$ at every step, but even these algorithms require $f$ to be decreased after some prescribed number $m$ of iterations. That is, they enforce $f\left(\mathbf{x}\_k\right)<f\left(\mathbf{x}\_{k-m}\right)$.)

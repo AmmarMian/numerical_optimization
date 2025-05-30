@@ -467,10 +467,10 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 
   \begin{block}{Directional derivative}
     The directional derivative of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ in the direction of a vector $\mathbf{v} \in \mathbb{R}^d$ is defined as:
-    $$D_{\mathbf{v}}f(\mathbf{x}_0) = \lim_{h \to 0} \frac{f(\mathbf{x}_0 + h\mathbf{v}) - f(\mathbf{x}_0)}{h}$$
+    $$Df(\mathbf{x}_0)[\mathbf{v}] = \lim_{h \to 0} \frac{f(\mathbf{x}_0 + h\mathbf{v}) - f(\mathbf{x}_0)}{h}$$
   \end{block}
 
-  If $\|\mathbf{v}\|_2 = 1$, then $D_{\mathbf{v}}f(\mathbf{x}_0)$ represents the rate of change of $f$ in the direction of $\mathbf{v}$ at the point $\mathbf{x}_0$.
+  If $\|\mathbf{v}\|_2 = 1$, then $Df(\mathbf{x}_0)[\mathbf{v}]$ represents the rate of change of $f$ in the direction of $\mathbf{v}$ at the point $\mathbf{x}_0$.
  
   \textbf{Note :} We use alternatively the notation $\nabla_{\mathbf{v}}f(\mathbf{x}_0)$ for the directional derivative.
 
@@ -490,7 +490,7 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 
   \begin{block}{Gradient}
     The gradient of a function $f:\mathbb{R}^d \to \mathbb{R}$ at a point $\mathbf{x}_0$ is defined as the vector of all directional derivatives in the standard basis directions:
-    $$\nabla f(\mathbf{x}_0) = \left( D_{\mathbf{e}_1}f(\mathbf{x}_0), D_{\mathbf{e}_2}f(\mathbf{x}_0), \ldots, D_{\mathbf{e}_d}f(\mathbf{x}_0) \right)^\mathrm{T}$$
+    $$\nabla f(\mathbf{x}_0) = \left( Df(\mathbf{x}_0)[\mathbf{e}_1], Df(\mathbf{x}_0)\mathbf{e}_1, \ldots, Df(\mathbf{x}_0)\mathbf{e}_1 \right)^\mathrm{T}$$
     where $\{\mathbf{e}_1, \ldots, \mathbf{e}_d\}$ is the standard basis of $\mathbb{R}^d$.
   \end{block}
 
@@ -498,7 +498,7 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 
   \begin{block}{Relationship with directional derivative}
     For any vector $\mathbf{v} \in \mathbb{R}^d$, the directional derivative can be expressed as:
-    $$D_{\mathbf{v}}f(\mathbf{x}_0) = \nabla f(\mathbf{x}_0)^\mathrm{T} \mathbf{v}$$
+    $$Df(\mathbf{x}_0)[\mathbf{v}] = \nabla f(\mathbf{x}_0)^\mathrm{T} \mathbf{v}$$
   \end{block}
 
 \end{frame}
@@ -519,7 +519,7 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 \end{frame}
 
 
-\begin{frame}{Graident properties and practical computation}
+\begin{frame}{Gradient properties and practical computation}
 
   \begin{block}{Derivative of a prodct}
     Let $g:\mathbb{R}^d \to \mathbb{R}$ and $h:\mathbb{R}^d \to \mathbb{R}$ be two functions. Then the gradient of their product $f(\mathbf{x}) = g(\mathbf{x})h(\mathbf{x})$ can be computed using the product rule:
@@ -527,9 +527,15 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
   \end{block}
 
   \begin{block}{Derivative of a composition}
-    TODO
+    Two cases:
+    \begin{itemize}
+      \item $f=h\circ g$ with: $h:\mathbb{R}\mapsto\mathbb{R}$ and $g:\mathbb{R}^d\mapsto\mathbb{R}$. The gradient of $f$ can be computed using the chain rule:
+        $\nabla f(\mathbf{x}) = h'(g(\mathbf{x}))\nabla g(\mathbf{x})$, where $h'$ is the derivative of $h$.
+      \item $f=h\circ g$ with: $h:\mathbb{R}^d\mapsto\mathbb{R}$ and $g:\mathbb{R}^{d'}\mapsto\mathbb{R}^d$. (We look at that later)
+    \end{itemize}
   \end{block}
 \end{frame}
+
 
 
 \begin{frame}{Hessian matrix}
@@ -548,6 +554,16 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
 \end{frame}
 
 
+\begin{frame}{Exercices}
+  \begin{block}{Exercices}
+    \begin{itemize}
+      \item Compute the gradient and Hessian matrix of the function $f(x,y) = x^2 + 3xy + y^2$ at the point $(1,2)$.
+      \item Using chain-rule compute gradient of $f(\mathbf{x}) = (\sum_i^{d}x_i^2)^(1/2)$.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+
 \begin{frame}{Hessian matrix properties}
 
   \begin{block}{Properties of the Hessian matrix}
@@ -563,12 +579,27 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
     \end{itemize}
   \end{block}
 \end{frame}
+
+
+\begin{frame}{Exercice}
+
+  \begin{block}{Rosenbrock function}
+    The Rosenbrock function is defined as:
+    $$f(x,y) = (a - x)^2 + b(y - x^2)^2$$
+    where $a$ and $b$ are constants (commonly $a=1$ and $b=100$).
+
+    \begin{itemize}
+      \item Compute the gradient $\nabla f(x,y)$. And find stationary point(s).
+      \item Compute the Hessian matrix $\mathbf{H}(x,y)$. Analyse local curvature at the stationary point(s).
+    \end{itemize}
+  \end{block}
+  
+\end{frame}
   
 
 \subsection{Multivariate case: $f:\mathbb{R}^d \to \mathbb{R}^p$}
 
 \begin{frame}{Multivariate functions}
-
   \begin{block}{Multivariate function}
     A function $f:\mathbb{R}^d \to \mathbb{R}^p$ maps a vector $\mathbf{x} \in \mathbb{R}^d$ to a vector $\mathbf{y} \in \mathbb{R}^p$. We can write:
     $$f(\mathbf{x}) = \begin{pmatrix}
@@ -578,84 +609,365 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
       f_p(\mathbf{x})
     \end{pmatrix}$$
   \end{block}
-
   The function $f$ is said to be vector-valued, and each component $f_i:\mathbb{R}^d \to \mathbb{R}$ is a scalar function.
 \end{frame}
 
-
 \begin{frame}{Gradient and Jacobian}
-
   \begin{block}{Gradient}
     The gradient of a function $f:\mathbb{R}^d \to \mathbb{R}$ is defined as:
-    $$\nabla f(\mathbf{x}) = \left( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_d} \right)^\mathrm{T}$$
+    $$\nabla f(\mathbf{x}) = \left( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_d} \right)^\mathrm{T} \in \mathbb{R}^d$$
   \end{block}
-
   \begin{block}{Jacobian matrix}
     The Jacobian matrix of a function $f:\mathbb{R}^d \to \mathbb{R}^p$ is defined as:
-    $$\mathbf{J}(\mathbf{x}) = \begin{pmatrix}
+    $$\mathbf{J}_f(\mathbf{x}) = \begin{pmatrix}
       \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_d} \\
       \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_d} \\
       \vdots & \vdots & \ddots & \vdots \\
       \frac{\partial f_p}{\partial x_1} & \frac{\partial f_p}{\partial x_2} & \cdots & \frac{\partial f_p}{\partial x_d}
-    \end{pmatrix}$$
+    \end{pmatrix} \in \mathbb{R}^{p \times d}$$
   \end{block}
-
   $\rightarrow$ The Jacobian matrix generalizes the concept of gradient to vector-valued functions.
-
 \end{frame}
 
 \begin{frame}{Jacobian and directional derivative}
-
   \begin{block}{Directional derivative}
     The directional derivative of a function $f:\mathbb{R}^d \to \mathbb{R}^p$ in the direction of a vector $\mathbf{v} \in \mathbb{R}^d$ is defined as:
-    $$D_{\mathbf{v}}f(\mathbf{x}) = \mathbf{J}(\mathbf{x})\mathbf{v} = [\nabla f_1(\mathbf{x}) \cdot \mathbf{v}, \nabla f_2(\mathbf{x}) \cdot \mathbf{v}, \ldots, \nabla f_p(\mathbf{x}) \cdot \mathbf{v}]^\mathrm{T}$$
+    $$Df(\mathbf{x})[\mathbf{v}] = \mathbf{J}_f(\mathbf{x})\mathbf{v} = \begin{pmatrix} \nabla f_1(\mathbf{x})^T \mathbf{v} \\ \nabla f_2(\mathbf{x})^T \mathbf{v} \\ \vdots \\ \nabla f_p(\mathbf{x})^T \mathbf{v} \end{pmatrix} \in \mathbb{R}^p$$
   \end{block}
+  The directional derivative gives the rate of change of the function $f$ for all components in the direction of $\mathbf{v}$ at the point $\mathbf{x}$.
+\end{frame}
 
-  The directional derivative gives the rate of change of the function $f$ for all variables in the direction of $\mathbf{v}$ at the point $\mathbf{x}$.
+\begin{frame}{Chain rule for composition of functions}
+  \begin{block}{General chain rule}
+    If $f:\mathbb{R}^d \to \mathbb{R}^p$ and $g:\mathbb{R}^m \to \mathbb{R}^d$, then the composition $h = f \circ g : \mathbb{R}^m \to \mathbb{R}^p$ is defined as:
+    $$h(\mathbf{y}) = f(g(\mathbf{y}))$$
+    The Jacobian of $h$ can be computed using the chain rule:
+    $$\mathbf{J}_h(\mathbf{y}) = \mathbf{J}_f(g(\mathbf{y})) \mathbf{J}_g(\mathbf{y})$$
+    where $\mathbf{J}_h(\mathbf{y}) \in \mathbb{R}^{p \times m}$, $\mathbf{J}_f(g(\mathbf{y})) \in \mathbb{R}^{p \times d}$, and $\mathbf{J}_g(\mathbf{y}) \in \mathbb{R}^{d \times m}$.
+  \end{block}
+\end{frame}
 
+\begin{frame}{Chain rule: Special cases}
+  \begin{block}{Case 1: $f:\mathbb{R}^d \to \mathbb{R}$ and $g:\mathbb{R}^m \to \mathbb{R}^d$}
+    For $h = f \circ g : \mathbb{R}^m \to \mathbb{R}$, we have:
+    $$\nabla h(\mathbf{y}) = \mathbf{J}_g(\mathbf{y})^T \nabla f(g(\mathbf{y}))$$
+    where $\mathbf{J}_g(\mathbf{y}) \in \mathbb{R}^{d \times m}$ and $\nabla f(g(\mathbf{y})) \in \mathbb{R}^d$.
+  \end{block}
+  
+  \begin{block}{Case 2: $f:\mathbb{R} \to \mathbb{R}$ and $g:\mathbb{R}^m \to \mathbb{R}$}
+    For $h = f \circ g : \mathbb{R}^m \to \mathbb{R}$, we have:
+    $$\nabla h(\mathbf{y}) = f'(g(\mathbf{y})) \nabla g(\mathbf{y})$$
+    where $f'(g(\mathbf{y})) \in \mathbb{R}$ is a scalar and $\nabla g(\mathbf{y}) \in \mathbb{R}^m$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Exercise 1: Basic Chain Rule}
+  \begin{block}{Problem}
+    Given:
+    \begin{itemize}
+      \item $f(\mathbf{x}) = \mathbf{x}^T\mathbf{x}$ where $f: \mathbb{R}^2 \to \mathbb{R}$
+      \item $g(\mathbf{y}) = \begin{pmatrix} y_1 + y_2 \\ y_1 - y_2 \end{pmatrix}$ where $g: \mathbb{R}^2 \to \mathbb{R}^2$
+      \item $h = f \circ g$
+    \end{itemize}
+    \vspace{0.3cm}
+    \textbf{Task:} Find $\nabla h(\mathbf{y})$ using the chain rule.
+  \end{block}
+  
+  \begin{block}{Chain Rule Formula (Case 1)}
+    For $h = f \circ g$ where $f: \mathbb{R}^n \to \mathbb{R}$ and $g: \mathbb{R}^m \to \mathbb{R}^n$:
+    $$\nabla h(\mathbf{y}) = \mathbf{J}_g(\mathbf{y})^T \nabla f(g(\mathbf{y}))$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Exercise 1: Solution}
+  \begin{block}{Step 1: Compute $\nabla f(\mathbf{x})$}
+    Using matrix calculus: $f(\mathbf{x}) = \mathbf{x}^T\mathbf{x}$
+    $$\nabla f(\mathbf{x}) = 2\mathbf{x}$$
+  \end{block}
+  
+  \begin{block}{Step 2: Compute Jacobian $\mathbf{J}_g(\mathbf{y})$}
+    $$g(\mathbf{y}) = \begin{pmatrix} y_1 + y_2 \\ y_1 - y_2 \end{pmatrix} \Rightarrow \mathbf{J}_g(\mathbf{y}) = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$$
+  \end{block}
+  
+  \begin{block}{Step 3: Apply chain rule}
+    $$\nabla h(\mathbf{y}) = \mathbf{J}_g(\mathbf{y})^T \nabla f(g(\mathbf{y})) = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} \cdot 2g(\mathbf{y})$$
+    $$= 2\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} y_1 + y_2 \\ y_1 - y_2 \end{pmatrix} = 2\begin{pmatrix} 2y_1 \\ 2y_2 \end{pmatrix} = \begin{pmatrix} 4y_1 \\ 4y_2 \end{pmatrix}$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Exercise 1: Verification}
+  \begin{block}{Direct computation}
+    $$h(\mathbf{y}) = f(g(\mathbf{y})) = (y_1 + y_2)^2 + (y_1 - y_2)^2$$
+    $$= y_1^2 + 2y_1y_2 + y_2^2 + y_1^2 - 2y_1y_2 + y_2^2 = 2y_1^2 + 2y_2^2$$
+    
+    Therefore:
+    $$\nabla h(\mathbf{y}) = \begin{pmatrix} 4y_1 \\ 4y_2 \end{pmatrix} \quad \checkmark$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Exercise 2: General Quadratic Forms}
+  \begin{block}{Problem (General Case)}
+    Given:
+    \begin{itemize}
+      \item $f(\mathbf{x}) = \mathbf{x}^T\mathbf{A}\mathbf{x} + \mathbf{b}^T\mathbf{x}$ where $f: \mathbb{R}^n \to \mathbb{R}$
+      \item $\mathbf{A} \in \mathbb{R}^{n \times n}$ symmetric, $\mathbf{b} \in \mathbb{R}^n$
+      \item $g(\mathbf{y}) = \mathbf{C}\mathbf{y}$ where $g: \mathbb{R}^m \to \mathbb{R}^n$
+      \item $\mathbf{C} \in \mathbb{R}^{n \times m}$
+      \item $h = f \circ g$
+    \end{itemize}
+    \vspace{0.3cm}
+    \textbf{Task:} Find $\nabla h(\mathbf{y})$ using matrix calculus and the chain rule.
+  \end{block}
+  
+  \begin{block}{Matrix Calculus Rules}
+    \begin{itemize}
+      \item $\nabla(\mathbf{x}^T\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$ (when $\mathbf{A}$ symmetric)
+      \item $\nabla(\mathbf{b}^T\mathbf{x}) = \mathbf{b}$
+      \item For linear $g(\mathbf{y}) = \mathbf{C}\mathbf{y}$: $\mathbf{J}_g(\mathbf{y}) = \mathbf{C}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Exercise 2: General Solution}
+  \begin{block}{Step 1: Compute $\nabla f(\mathbf{x})$}
+    Using matrix calculus rules:
+    $$\nabla f(\mathbf{x}) = 2\mathbf{A}\mathbf{x} + \mathbf{b}$$
+  \end{block}
+  
+  \begin{block}{Step 2: Compute Jacobian $\mathbf{J}_g(\mathbf{y})$}
+    Since $g(\mathbf{y}) = \mathbf{C}\mathbf{y}$ (linear transformation):
+    $$\mathbf{J}_g(\mathbf{y}) = \mathbf{C} \in \mathbb{R}^{n \times m}$$
+  \end{block}
+  
+  \begin{block}{Step 3: Apply chain rule}
+    $$\nabla h(\mathbf{y}) = \mathbf{J}_g(\mathbf{y})^T \nabla f(g(\mathbf{y}))$$
+    $$= \mathbf{C}^T [2\mathbf{A}(\mathbf{C}\mathbf{y}) + \mathbf{b}]$$
+    $$= 2\mathbf{C}^T\mathbf{A}\mathbf{C}\mathbf{y} + \mathbf{C}^T\mathbf{b}$$
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Exercise 2: Numerical Example}
+  \begin{block}{Specific case: $n=3, m=2$}
+    \begin{itemize}
+      \item $\mathbf{A} = \begin{pmatrix} 2 & 0 & 1 \\ 0 & 1 & 0 \\ 1 & 0 & 3 \end{pmatrix}$, $\mathbf{b} = \begin{pmatrix} 1 \\ -1 \\ 2 \end{pmatrix}$
+      \item $\mathbf{C} = \begin{pmatrix} 1 & 2 \\ 0 & 1 \\ 1 & 0 \end{pmatrix}$
+    \end{itemize}
+    
+    Computing the required matrices:
+    $$\mathbf{C}^T\mathbf{A}\mathbf{C} = \begin{pmatrix} 1 & 0 & 1 \\ 2 & 1 & 0 \end{pmatrix}\begin{pmatrix} 2 & 0 & 1 \\ 0 & 1 & 0 \\ 1 & 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 0 & 1 \\ 1 & 0 \end{pmatrix} = \begin{pmatrix} 7 & 6 \\ 6 & 9 \end{pmatrix}$$
+    
+    $$\mathbf{C}^T\mathbf{b} = \begin{pmatrix} 1 & 0 & 1 \\ 2 & 1 & 0 \end{pmatrix}\begin{pmatrix} 1 \\ -1 \\ 2 \end{pmatrix} = \begin{pmatrix} 3 \\ 1 \end{pmatrix}$$
+    
+    Therefore:
+    $$\nabla h(\mathbf{y}) = 2\begin{pmatrix} 7 & 6 \\ 6 & 9 \end{pmatrix}\mathbf{y} + \begin{pmatrix} 3 \\ 1 \end{pmatrix} = \begin{pmatrix} 14y_1 + 12y_2 + 3 \\ 12y_1 + 18y_2 + 1 \end{pmatrix}$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Key Takeaways}
+  \begin{block}{Advantages of Matrix Calculus Approach}
+    \begin{itemize}
+      \item \textbf{Scalability:} Works for arbitrary dimensions without modification
+      \item \textbf{Efficiency:} No component-wise partial derivatives needed
+      \item \textbf{Clarity:} Clean matrix operations instead of summations
+      \item \textbf{Generality:} Same formulas apply regardless of problem size
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{General Chain Rule Pattern}
+    For compositions $h = f \circ g$:
+    \begin{enumerate}
+      \item Identify the structure of $f$ and $g$
+      \item Use appropriate matrix calculus rules for $\nabla f$ and $\mathbf{J}_g$
+      \item Apply: $\nabla h(\mathbf{y}) = \mathbf{J}_g(\mathbf{y})^T \nabla f(g(\mathbf{y}))$
+      \item Verify using direct computation when possible
+    \end{enumerate}
+  \end{block}
 \end{frame}
 
 \subsection{Matrix functions: $f:\mathbb{R}^{m,n} \to \mathbb{R}$}
 
-\begin{frame}{What it means to derive a matrix function?}
+\begin{frame}{Fréchet derivative -- Definition}
+  \begin{block}{Fréchet differentiability}
+    A function $f:\mathbb{R}^{m \times n}\to\mathbb{R}^{p \times q}$ is differentiable at $\mathbf{X}$ if there exists a linear mapping $Df(\mathbf{X}):\mathbb{R}^{m \times n}\to\mathbb{R}^{p \times q}$ such that
+    $$\lim_{\|\mathbf{V}\|_F\to 0} \frac{\|f(\mathbf{X}+\mathbf{V}) - f(\mathbf{X}) - Df(\mathbf{X})[\mathbf{V}]\|_F}{\|\mathbf{V}\|_F} = 0$$\\
+    $\mathbf{D} f(\mathbf{X})[\boldsymbol{\xi}] = f(\mathbf{X}+\mathbf{\xi}) - f(\mathbf{X}) + o(\lVert\boldsymbol{\xi}\rVert)$
+  \end{block}
+  
+  \begin{block}{Gateaux derivative (alternative characterization)}
+    If $f$ is Fréchet differentiable at $\mathbf{X}$, then for any $\mathbf{V}$:
+    $$Df(\mathbf{X})[\mathbf{V}] = \left.\frac{d}{dt}\right|_{t=0} f(\mathbf{X}+t\mathbf{V}) = \lim_{t\to 0} \frac{f(\mathbf{X}+t\mathbf{V}) - f(\mathbf{X})}{t}$$
+  \end{block}
+  
+  \textbf{Note:} If $\left.\frac{d}{dt}\right|_{t=0} f(\mathbf{X}+t\mathbf{V})$ is not linear in $\mathbf{V}$, then $f$ is not Fréchet differentiable.
+\end{frame}
 
+\begin{frame}{What it means to derive a matrix function?}
   \begin{block}{Matrix function}
     A matrix function $f:\mathbb{R}^{m,n} \to \mathbb{R}$ maps a matrix $\mathbf{X} \in \mathbb{R}^{m,n}$ to a scalar value. For example, $f(\mathbf{X}) = \|\mathbf{X}\|_F^2$.
   \end{block}
-
-  The derivative of a matrix function is defined in terms of the directional derivative:
-  $$D_{\mathbf{V}}f(\mathbf{X}) = \lim_{h \to 0} \frac{f(\mathbf{X} + h\mathbf{V}) - f(\mathbf{X})}{h}$$
-  where $\mathbf{V} \in \mathbb{R}^{m,n}$ is a perturbation matrix.
+  
+  \begin{block}{Directional derivative}
+    The directional derivative of $f$ at $\mathbf{X}$ in direction $\mathbf{V}$ is:
+    $$Df(\mathbf{X})[\mathbf{V}] = \lim_{h \to 0} \frac{f(\mathbf{X} + h\mathbf{V}) - f(\mathbf{X})}{h}$$
+    where $\mathbf{V} \in \mathbb{R}^{m,n}$ is a perturbation matrix.
+  \end{block}
+  
+  Since $Df(\mathbf{X})$ is linear, it can be represented using the gradient matrix.
 \end{frame}
-
-
   
 \begin{frame}{Gradient in the matrix to scalar case}
-  We can define the gradient of a matrix function $f:\mathbb{R}^{m,n} \to \mathbb{R}$ as a matrix $\nabla f(\mathbf{X}) \in \mathbb{R}^{m,n}$ such that:
-  $$
-  D_{\mathbf{V}}f(\mathbf{X}) = \mathrm{Tr}(\nabla f(\mathbf{X})^\mathrm{T} \mathbf{V}),
-  $$
-  where $\mathrm{Tr}(\cdot)$ denotes the trace of a matrix.
-
+  \begin{block}{Gradient definition}
+    For $f:\mathbb{R}^{m,n} \to \mathbb{R}$, the gradient $\nabla f(\mathbf{X}) \in \mathbb{R}^{m,n}$ satisfies:
+    $$Df(\mathbf{X})[\mathbf{V}] = \mathrm{Tr}(\nabla f(\mathbf{X})^\mathrm{T} \mathbf{V})$$
+    where $\mathrm{Tr}(\cdot)$ denotes the trace of a matrix.
+  \end{block}
+  
   \begin{block}{Link to partial derivatives}
-    The gradient of a matrix function can be computed using partial derivatives with respect to each element of the matrix $\mathbf{X}$:
-    $$
-    \nabla f(\mathbf{X}) = \begin{pmatrix}
+    The gradient can be computed using partial derivatives:
+    $$\nabla f(\mathbf{X}) = \begin{pmatrix}
       \frac{\partial f}{\partial X_{11}} & \frac{\partial f}{\partial X_{12}} & \cdots & \frac{\partial f}{\partial X_{1n}} \\
       \frac{\partial f}{\partial X_{21}} & \frac{\partial f}{\partial X_{22}} & \cdots & \frac{\partial f}{\partial X_{2n}} \\
       \vdots & \vdots & \ddots & \vdots \\
       \frac{\partial f}{\partial X_{m1}} & \frac{\partial f}{\partial X_{m2}} & \cdots & \frac{\partial f}{\partial X_{mn}}
-      \end{pmatrix}
-      $$
+    \end{pmatrix}$$
   \end{block}
 \end{frame}
 
+\begin{frame}{Examples: Matrix to scalar functions}
+  \textbf{Example 1:} $f(\mathbf{X}) = \|\mathbf{X}\|_F^2 = \mathrm{Tr}(\mathbf{X}^\mathrm{T}\mathbf{X})$
+  
+  Using Gateaux derivative:
+  $$Df(\mathbf{X})[\mathbf{V}] = \left.\frac{d}{dt}\right|_{t=0} \mathrm{Tr}((\mathbf{X}+t\mathbf{V})^\mathrm{T}(\mathbf{X}+t\mathbf{V}))$$
+  $$= \left.\frac{d}{dt}\right|_{t=0} [\mathrm{Tr}(\mathbf{X}^\mathrm{T}\mathbf{X}) + 2t\mathrm{Tr}(\mathbf{X}^\mathrm{T}\mathbf{V}) + t^2\mathrm{Tr}(\mathbf{V}^\mathrm{T}\mathbf{V})]$$
+  $$= 2\mathrm{Tr}(\mathbf{X}^\mathrm{T}\mathbf{V})$$
+  
+  Therefore: $\boxed{\nabla f(\mathbf{X}) = 2\mathbf{X}}$
+  
+  \vspace{10pt}
+  
+  \textbf{Example 2:} $f(\mathbf{X}) = \log\det(\mathbf{X})$ (for invertible $\mathbf{X}$)
+  
+  $$Df(\mathbf{X})[\mathbf{V}] = \left.\frac{d}{dt}\right|_{t=0} \log\det(\mathbf{X}+t\mathbf{V}) = \mathrm{Tr}(\mathbf{X}^{-1}\mathbf{V})$$
+  
+  Therefore: $\boxed{\nabla f(\mathbf{X}) = \mathbf{X}^{-\mathrm{T}}}$
+\end{frame}
 
+\subsection{Matrix functions: $f:\mathbb{R}^{m,n} \to \mathbb{R}^{p,q}$}
 
+\begin{frame}{Matrix to matrix functions}
+  \begin{block}{Matrix-valued function}
+    A function $f:\mathbb{R}^{m,n} \to \mathbb{R}^{p,q}$ maps a matrix $\mathbf{X} \in \mathbb{R}^{m,n}$ to a matrix $\mathbf{Y} \in \mathbb{R}^{p,q}$.
+  \end{block}
+  
+  \begin{block}{Directional derivative}
+    The directional derivative $Df(\mathbf{X})[\mathbf{V}]$ is a linear mapping from $\mathbb{R}^{m,n}$ to $\mathbb{R}^{p,q}$:
+    $$Df(\mathbf{X})[\mathbf{V}] = \lim_{t \to 0} \frac{f(\mathbf{X} + t\mathbf{V}) - f(\mathbf{X})}{t}$$
+  \end{block}
+  
+  \begin{block}{Vectorization representation}
+    Since $Df(\mathbf{X})$ is linear, there exists a matrix $\mathbf{M}_{\mathbf{X}} \in \mathbb{R}^{pq \times mn}$ such that:
+    $$\mathrm{vec}(Df(\mathbf{X})[\mathbf{V}]) = \mathbf{M}_{\mathbf{X}} \mathrm{vec}(\mathbf{V})$$
+    where $\mathrm{vec}(\cdot)$ stacks matrix columns into a vector.
+  \end{block}
+\end{frame}
 
+\begin{frame}{Vectorization identities}
+  \begin{block}{Key identities for matrix calculus}
+    \begin{itemize}
+      \item $\mathrm{vec}(\mathbf{A}\mathbf{B}\mathbf{C}) = (\mathbf{C}^\mathrm{T} \otimes \mathbf{A}) \mathrm{vec}(\mathbf{B})$
+      \item $\mathrm{Tr}(\mathbf{A}\mathbf{B}) = \mathrm{vec}(\mathbf{A})^\mathrm{T}\mathrm{vec}(\mathbf{B})$
+      \item $\mathrm{Tr}(\mathbf{A}^\mathrm{T}\mathbf{B}) = \mathrm{vec}(\mathbf{A})^\mathrm{T}\mathrm{vec}(\mathbf{B})$
+    \end{itemize}
+  \end{block}
+  
+  where $\otimes$ denotes the Kronecker product.
+  
+  \vspace{10pt}
+  
+  These identities allow us to:
+  \begin{itemize}
+    \item Convert matrix operations to vector operations
+    \item Find the matrix $\mathbf{M}_{\mathbf{X}}$ in the vectorization representation
+    \item Compute derivatives efficiently
+  \end{itemize}
+\end{frame}
 
+\begin{frame}{Examples: Matrix to matrix functions}
+  \textbf{Example 1:} $f(\mathbf{X}) = \mathbf{X}^2$
+  
+  Using Gateaux derivative:
+  $$Df(\mathbf{X})[\mathbf{V}] = \left.\frac{d}{dt}\right|_{t=0} (\mathbf{X}+t\mathbf{V})^2$$
+  $$= \left.\frac{d}{dt}\right|_{t=0} [\mathbf{X}^2 + t(\mathbf{X}\mathbf{V} + \mathbf{V}\mathbf{X}) + t^2\mathbf{V}^2]$$
+  $$= \mathbf{X}\mathbf{V} + \mathbf{V}\mathbf{X}$$
+  
+  Therefore: $\boxed{Df(\mathbf{X})[\mathbf{V}] = \mathbf{X}\mathbf{V} + \mathbf{V}\mathbf{X}}$
+  
+  \vspace{10pt}
+  
+  \textbf{Example 2:} $f(\mathbf{X}) = \mathbf{X}^{-1}$ (for invertible $\mathbf{X}$)
+  
+  From the identity $\mathbf{X}\mathbf{X}^{-1} = \mathbf{I}$ and product rule:
+  $$\mathbf{V}\mathbf{X}^{-1} + \mathbf{X} \, Df(\mathbf{X})[\mathbf{V}] = \mathbf{0}$$
+  
+  Therefore: $\boxed{Df(\mathbf{X})[\mathbf{V}] = -\mathbf{X}^{-1}\mathbf{V}\mathbf{X}^{-1}}$
+\end{frame}
 
+\begin{frame}{Properties of matrix function derivatives}
+  \begin{block}{Linearity}
+    For $f = \alpha g + \beta h$:
+    $$Df(\mathbf{X})[\mathbf{V}] = \alpha \, Dg(\mathbf{X})[\mathbf{V}] + \beta \, Dh(\mathbf{X})[\mathbf{V}]$$
+  \end{block}
+  
+  \begin{block}{Product rule}
+    For $f(\mathbf{X}) = g(\mathbf{X}) \cdot h(\mathbf{X})$ (matrix multiplication):
+    $$Df(\mathbf{X})[\mathbf{V}] = Dg(\mathbf{X})[\mathbf{V}] \cdot h(\mathbf{X}) + g(\mathbf{X}) \cdot Dh(\mathbf{X})[\mathbf{V}]$$
+  \end{block}
+  
+  \begin{block}{Chain rule}
+    For $f(\mathbf{X}) = g(h(\mathbf{X}))$:
+    $$Df(\mathbf{X})[\mathbf{V}] = Dg(h(\mathbf{X}))[Dh(\mathbf{X})[\mathbf{V}]]$$
+  \end{block}
+\end{frame}
 
+\begin{frame}{Chain rule example}
+  \textbf{Example:} $f(\mathbf{X}) = (\mathbf{X}^{1/2})^2 = \mathbf{X}$
+  
+  Let $g(\mathbf{Y}) = \mathbf{Y}^2$ and $h(\mathbf{X}) = \mathbf{X}^{1/2}$, so $f(\mathbf{X}) = g(h(\mathbf{X}))$.
+  
+  We know:
+  \begin{itemize}
+    \item $Dg(\mathbf{Y})[\mathbf{W}] = \mathbf{Y}\mathbf{W} + \mathbf{W}\mathbf{Y}$
+    \item $Df(\mathbf{X})[\mathbf{V}] = \mathbf{V}$ (since $f(\mathbf{X}) = \mathbf{X}$)
+  \end{itemize}
+  
+  Using the chain rule:
+  $$Df(\mathbf{X})[\mathbf{V}] = Dg(h(\mathbf{X}))[Dh(\mathbf{X})[\mathbf{V}]]$$
+  $$\mathbf{V} = \mathbf{X}^{1/2} \, Dh(\mathbf{X})[\mathbf{V}] + Dh(\mathbf{X})[\mathbf{V}] \, \mathbf{X}^{1/2}$$
+  
+  This gives us a Sylvester equation for $Dh(\mathbf{X})[\mathbf{V}]$:
+  $$\mathbf{X}^{1/2} \, Dh(\mathbf{X})[\mathbf{V}] + Dh(\mathbf{X})[\mathbf{V}] \, \mathbf{X}^{1/2} = \mathbf{V}$$
+\end{frame}
+
+\begin{frame}{Summary: Matrix function differentiation}
+  \begin{block}{Key concepts}
+    \begin{itemize}
+      \item \textbf{Fréchet derivative}: Captures linear approximation of matrix functions
+      \item \textbf{Matrix-to-scalar}: Gradient $\nabla f(\mathbf{X})$ with $Df(\mathbf{X})[\mathbf{V}] = \mathrm{Tr}(\nabla f(\mathbf{X})^\mathrm{T} \mathbf{V})$
+      \item \textbf{Matrix-to-matrix}: Linear operator $Df(\mathbf{X})$ with vectorization representation
+      \item \textbf{Vectorization}: Converts matrix operations to linear algebra on vectors
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Applications}
+    \begin{itemize}
+      \item Optimization on matrix manifolds
+      \item Machine learning (gradient descent for matrix parameters)
+      \item Sensitivity analysis
+      \item Perturbation theory
+    \end{itemize}
+  \end{block}
+\end{frame}
 
 \end{document}
 

@@ -6,6 +6,11 @@ chapter: 1
 
 # Unconstrained optimization -  Second-order methods
 
+
+
+
+> **Note** : This is in part the content of the book "Numerical Optimization" by Nocedal and Wright, with some modifications to the notations used in this lecture.
+
 We have seen in the previous chapter that first-order methods, such as steepest descent, are often used to find a local minimum of a function $f(\mathbf{x})$. However, these methods can be slow to converge, especially when the function has ill-conditioned Hessian or when the initial guess is far from the solution. Second-order methods, which use information about the curvature of the function, can provide faster convergence rates.
 
 ## Search directions
