@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Inequality Constraint Visualization</title>
+    <title>Interactive Inequality Constraint Visualization - Reversed</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <style>
         body {
@@ -274,98 +274,6 @@
             });
         }
         
-        function createHalfSpacePath(x0, y0, nx, ny, isPositiveSide) {
-            // Simple half-space implementation
-            // Line: nx*(x-x0) + ny*(y-y0) = 0
-            // Half-space: nx*(x-x0) + ny*(y-y0) >= 0 (if isPositiveSide) or <= 0 (if not)
-            
-            const bound = 3;
-            
-            // Find where the line intersects the viewport boundaries
-            const intersections = [];
-            
-            // Intersection with left edge (x = -bound)
-            if (Math.abs(nx) > 1e-10) {
-                const y = y0 - nx * (-bound - x0) / ny;
-                if (y >= -bound && y <= bound) {
-                    intersections.push([-bound, y]);
-                }
-            }
-            
-            // Intersection with right edge (x = bound)
-            if (Math.abs(nx) > 1e-10) {
-                const y = y0 - nx * (bound - x0) / ny;
-                if (y >= -bound && y <= bound) {
-                    intersections.push([bound, y]);
-                }
-            }
-            
-            // Intersection with bottom edge (y = -bound)
-            if (Math.abs(ny) > 1e-10) {
-                const x = x0 - ny * (-bound - y0) / nx;
-                if (x >= -bound && x <= bound) {
-                    intersections.push([x, -bound]);
-                }
-            }
-            
-            // Intersection with top edge (y = bound)
-            if (Math.abs(ny) > 1e-10) {
-                const x = x0 - ny * (bound - y0) / nx;
-                if (x >= -bound && x <= bound) {
-                    intersections.push([x, bound]);
-                }
-            }
-            
-            // Remove duplicates
-            const uniqueIntersections = [];
-            intersections.forEach(pt => {
-                const exists = uniqueIntersections.some(existing => 
-                    Math.abs(existing[0] - pt[0]) < 1e-6 && Math.abs(existing[1] - pt[1]) < 1e-6
-                );
-                if (!exists) {
-                    uniqueIntersections.push(pt);
-                }
-            });
-            
-            if (uniqueIntersections.length < 2) return "";
-            
-            // Take first two intersection points
-            const [p1, p2] = uniqueIntersections;
-            
-            // Test which corners are on the desired side
-            const corners = [[-bound, -bound], [bound, -bound], [bound, bound], [-bound, bound]];
-            const validCorners = corners.filter(corner => {
-                const value = nx * (corner[0] - x0) + ny * (corner[1] - y0);
-                return isPositiveSide ? value >= -1e-10 : value <= 1e-10;
-            });
-            
-            // Combine intersection points with valid corners
-            const allPoints = [...uniqueIntersections, ...validCorners];
-            
-            if (allPoints.length < 3) return "";
-            
-            // Sort points clockwise around their centroid
-            const cx = allPoints.reduce((sum, p) => sum + p[0], 0) / allPoints.length;
-            const cy = allPoints.reduce((sum, p) => sum + p[1], 0) / allPoints.length;
-            
-            allPoints.sort((a, b) => {
-                const angleA = Math.atan2(a[1] - cy, a[0] - cx);
-                const angleB = Math.atan2(b[1] - cy, b[0] - cx);
-                return angleA - angleB;
-            });
-            
-            // Create path
-            if (allPoints.length === 0) return "";
-            
-            let path = `M${xScale(allPoints[0][0])},${yScale(allPoints[0][1])}`;
-            for (let i = 1; i < allPoints.length; i++) {
-                path += `L${xScale(allPoints[i][0])},${yScale(allPoints[i][1])}`;
-            }
-            path += 'Z';
-            
-            return path;
-        }
-        
         function updateVisualization() {
             // Update point position
             point
@@ -382,7 +290,7 @@
                 .attr("class", "case-label")
                 .attr("x", 20)
                 .attr("y", 30)
-                .text("Case II: On Boundary");
+                .text("Case II: On Boundary (Reversed Constraint)");
             
             equations.append("text")
                 .attr("class", "equation")
@@ -394,7 +302,7 @@
                 .attr("class", "equation")
                 .attr("x", 20)
                 .attr("y", 75)
-                .text("∇f = λ∇c, λ ≥ 0");
+                .text("∇f = λ∇c, λ ≤ 0");
             
             // Draw gradient vectors
             const gradScale = 60;
@@ -414,9 +322,9 @@
                 .attr("fill", "#3498db")
                 .text("∇f");
             
-            // ∇c = [2x₁, 2x₂]
-            const gradCx = 2 * currentPoint.x;
-            const gradCy = 2 * currentPoint.y;
+            // ∇c = [-2x₁, -2x₂] (reversed direction)
+            const gradCx = -2 * currentPoint.x;
+            const gradCy = -2 * currentPoint.y;
             const gradCNorm = Math.sqrt(gradCx * gradCx + gradCy * gradCy);
             
             vectors.append("line")
@@ -502,14 +410,14 @@
                     .attr("class", "half-space descent-space");
             }
             
-            // 2. Feasible directions: ∇c^T d ≥ 0 where ∇c = [2x₀, 2y₀]  
-            //    Condition: x₀(x-x₀) + y₀(y-y₀) ≥ 0  =>  x₀x + y₀y ≥ x₀² + y₀²
+            // 2. Feasible directions: ∇c^T d ≥ 0 where ∇c = [-2x₀, -2y₀]  
+            //    Condition: -2x₀(x-x₀) - 2y₀(y-y₀) ≥ 0  =>  x₀x + y₀y ≤ x₀² + y₀²
             const feasibleThreshold = x0 * x0 + y0 * y0;
             
             // Test corners of viewport
             const feasibleCorners = corners.filter(corner => {
                 const [x, y] = corner;
-                return x0 * x + y0 * y >= feasibleThreshold - 1e-10;
+                return x0 * x + y0 * y <= feasibleThreshold + 1e-10;
             });
             
             const feasiblePoints = [...feasibleCorners];
