@@ -393,12 +393,201 @@ TD2     & 1.5h     & Implementation of Linesearch methods                       
   
 \end{frame}
 
+\subsection{Conditioning}
 
 
-\begin{frame}{Exercices}
-  TODO
+% Slide 1: Definition
+\begin{frame}{Matrix Conditioning: Definition}
+
+\begin{block}{Definition: Condition Number}
+For a nonsingular matrix $A \in \mathbb{R}^{n \times n}$ and matrix norm $\|\cdot\|$, the \textbf{condition number} is:
+$$\kappa(A) = \|A\| \cdot \|A^{-1}\|$$
+\end{block}
+
+
+\begin{block}{Basic Properties}
+\begin{itemize}
+\item $\kappa(A) \geq 1$ for any nonsingular $A$
+\item $\kappa(\alpha A) = \kappa(A)$ for any $\alpha \neq 0$
+\item $\kappa(A) = \infty$ if $A$ is singular
+\end{itemize}
+\end{block}
+
 \end{frame}
 
+% Slide 2: Well/Ill-conditioned and Linear Systems
+\begin{frame}{Well vs Ill-Conditioned Matrices}
+
+\begin{block}{Classification}
+\begin{itemize}
+\item \textbf{Well-conditioned}: $\kappa(A)$ is small (close to 1)
+\item \textbf{Ill-conditioned}: $\kappa(A)$ is large ($\gg 1$)
+\item \textbf{Singular}: $\kappa(A) = \infty$ (no inverse exists)
+\end{itemize}
+\end{block}
+
+\begin{block}{Relation to Linear Systems}
+For $Ax = b$, if we perturb $b \to b + \Delta b$, then $x \to x + \Delta x$ where:
+$\frac{\|\Delta x\|}{\|x\|} \leq \kappa(A) \frac{\|\Delta b\|}{\|b\|}$
+\textbf{Interpretation}: $\kappa(A)$ amplifies relative errors by factor $\kappa(A)$.
+\end{block}
+
+\begin{block}{Numerical Stability}
+\begin{itemize}
+\item \textbf{Rule of thumb}: Lose $\approx \log_{10}(\kappa(A))$ decimal digits
+\item If $\kappa(A) \approx 10^k$, expect $(d-k)$ correct digits in $d$-digit precision
+\item \textbf{Example}: $\kappa(A) = 10^6$ in double precision $\Rightarrow$ lose 6 digits
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+% Slide 3: Eigenvalues and Geometric Interpretation
+\begin{frame}{Relationship to Eigenvalues}
+
+\begin{block}{Symmetric Matrices}
+For symmetric $A$ with eigenvalues $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_n$:
+$$\kappa_2(A) = \frac{|\lambda_1|}{|\lambda_n|} = \frac{|\lambda_{\max}|}{|\lambda_{\min}|}$$
+\textbf{Geometric meaning}: Ratio of largest to smallest stretching factors.
+\end{block}
+
+\begin{block}{Geometric Interpretation}
+Matrix $A$ transforms unit sphere $\{x : \|x\|_2 = 1\}$ into ellipsoid:
+\begin{itemize}
+\item Semi-axes have lengths $\sigma_1, \sigma_2, \ldots, \sigma_n$ (singular values)
+\item $\kappa_2(A) = \frac{\sigma_{\max}}{\sigma_{\min}}$ = \textbf{aspect ratio} of ellipsoid
+\item High condition number $\Leftrightarrow$ very elongated ellipsoid
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsection{Exercices}
+
+\begin{frame}{Exercices}
+  \begin{block}{Factorization}
+    Let $\mathbf{A}\in\mathbb{R}^{n\times n}$ such that $\mathbf{A}^3 -4\mathbf{A}^2 + 5\mathbf{A} - 2\mathbf{I}_n = \mathbf{0}$, where $\mathbf{I}_n$ is the identity matrix of size $n$.
+    Show that $\mathbf{A}$ is invertible and find its inverse $\mathbf{A}^{-1}$ as a function of $\mathbf{A}$.
+  \end{block}
+\end{frame}
+
+% Slide 1: Exercise 3.1 - Classification of Quadratic Forms
+\begin{frame}{Classification of Quadratic Forms}
+
+\begin{block}{Problem}
+For the quadratic form $q(x) = x^TAx$, consider the following matrices:
+$$A_1 = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}, \quad A_2 = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}, \quad A_3 = \begin{pmatrix} -1 & 0 \\ 0 & -2 \end{pmatrix}$$
+\end{block}
+
+\begin{block}{Tasks}
+\begin{enumerate}
+\item Classify each quadratic form as:
+\begin{itemize}
+\item Positive definite
+\item Negative definite  
+\item Indefinite
+\end{itemize}
+\item Find the minimum/maximum values of $q(x)$ subject to $\|x\|_2 = 1$ (if they exist)
+\item State the geometric interpretation of each quadratic form
+\end{enumerate}
+\end{block}
+
+\begin{block}{Hint}
+Use eigenvalues to classify: $A$ is positive definite iff all eigenvalues $> 0$, negative definite iff all eigenvalues $< 0$, indefinite iff eigenvalues have mixed signs.
+\end{block}
+
+\end{frame}
+
+% Slide 2: Exercise 6.1 - Inversion Formulas
+\begin{frame}{Matrix Inversion Formulas}
+
+\begin{block}{Problem}
+Consider the matrices:
+$$A = \begin{pmatrix} 2 & 1 \\ 3 & 2 \end{pmatrix}, \quad B = \begin{pmatrix} 1 & k \\ k & 1 \end{pmatrix}$$
+\end{block}
+
+\begin{block}{Tasks}
+\begin{enumerate}
+\item Find the inverse of $A$ using the formula:
+$$A^{-1} = \frac{1}{\det(A)} \text{adj}(A)$$
+where $\text{adj}(A)$ is the adjugate matrix.
+
+\item Verify your result by computing $AA^{-1} = I$.
+
+\item For which values of $k$ is matrix $B$ invertible?
+
+\item Find $B^{-1}$ in terms of $k$ (when it exists).
+\end{enumerate}
+\end{block}
+
+\begin{block}{Recall}
+For a $2 \times 2$ matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$, the adjugate is $\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$.
+\end{block}
+
+\end{frame}
+
+% Slide 3: Exercise 7.2 - Orthogonal Projections
+\begin{frame}{Orthogonal Projections}
+
+\begin{block}{Problem}
+Consider the vectors:
+$$v_1 = \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix}, \quad v_2 = \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}$$
+\end{block}
+
+\begin{block}{Tasks}
+\begin{enumerate}
+\item Find the projection matrix $P$ that projects onto the subspace $W = \text{span}\{v_1, v_2\}$.
+
+\item Verify that $P$ satisfies the projection properties:
+\begin{itemize}
+\item $P^2 = P$ (idempotent)
+\item $P^T = P$ (symmetric)
+\end{itemize}
+
+\item What is the matrix $I - P$? What subspace does it project onto?
+
+\item Find the projection of the vector $b = \begin{pmatrix} 2 \\ 1 \\ 3 \end{pmatrix}$ onto $W$.
+\end{enumerate}
+\end{block}
+
+\begin{block}{Formula}
+For subspace spanned by columns of $V$: $P = V(V^TV)^{-1}V^T$
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Exercise: Condition Number Analysis}
+
+\begin{block}{Problem}
+Consider the symmetric matrix: $A_\epsilon = \begin{pmatrix} 4 & 2 \\ 2 & 1 + \epsilon \end{pmatrix},$
+where $\epsilon > 0$ is a small parameter. This matrix arises as the Hessian of a quadratic function.
+\end{block}
+
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{block}{Part A: Eigenvalue Analysis}
+\begin{enumerate}
+\item Find the eigenvalues $\lambda_1$ and $\lambda_2$ of $A_\epsilon$ in terms of $\epsilon$.
+\item Compute the 2-norm condition number $\kappa_2(A_\epsilon) = \frac{\lambda_{\max}}{\lambda_{\min}}$.
+\item What happens to $\kappa_2(A_\epsilon)$ as $\epsilon \to 0^+$?
+\end{enumerate}
+\end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+
+\begin{block}{Part B: Numerical Computation}
+For $\epsilon \in \{1, 0.1, 0.01, 0.001\}$:
+\begin{enumerate}
+\item Compute $A_\epsilon^{-1}$ explicitly.
+\item Calculate $\kappa_2(A_\epsilon)$ using $\kappa_2(A) = \|A\|_2 \|A^{-1}\|_2$.
+\item Verify your results match the eigenvalue computation from Part A.
+\end{enumerate}
+\end{block}
+\end{column}
+  \end{columns}
+
+\end{frame}
 
 \section{Differentiation}
 

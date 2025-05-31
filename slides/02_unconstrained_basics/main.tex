@@ -86,56 +86,357 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Introduction}
+\section{Unconstrained Optimization - Basics}
 
-\subsection{Unconstrained}
+\begin{frame}{Problem Formulation}
+  \begin{block}{Unconstrained Optimization Problem}
+    We aim to solve:
+    $$\underset{\mathbf{x}\in\mathbb{R}^d}{\operatorname{argmin}} f(\mathbf{x})$$
+    
+    where:
+    \begin{itemize}
+      \item $\mathbf{x} \in \mathbb{R}^d$ is the optimization variable
+      \item $f: \mathcal{D}_f \mapsto \mathbb{R}$ is the objective function
+      \item No constraints on the admissible solutions
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \textbf{Goal:} Characterize the nature of solutions under this setup.
+\end{frame}
 
-\begin{frame}{Setup}
+\section{What is a Solution?}
+
+\begin{frame}{Local vs Global Minima}
+  % Empty frame for Figure: Local and global minimum can coexist
+  \begin{figure}[h]
+    \centering
+    \includegraphics[height=0.8\textheight]{figures/local_global_minima.pdf}
+    \caption{Local and global minima can coexist in the same function.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Global Minimizer}
+  \begin{definition}[Global minimizer]
+    A point $\mathbf{x}^\star$ is a \textbf{global minimizer} if 
+    $$f(\mathbf{x}^\star) \leq f(\mathbf{x})$$
+    where $\mathbf{x}$ ranges over all of $\mathbb{R}^d$ (or at least over the domain of interest).
+  \end{definition}
+  
+  \vspace{0.5cm}
+  \begin{itemize}
+    \item Global minimizers can be difficult to find
+    \item Our knowledge of $f$ is usually only local
+    \item Algorithms typically don't visit many points
+    \item Cannot guarantee finding global minimum in general
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Local Minimizer}
+  \begin{definition}[Local minimizer]
+    A point $\mathbf{x}^\star$ is a \textbf{local minimizer} if 
+    $$\exists r > 0, \quad f(\mathbf{x}^\star) \leq f(\mathbf{x}), \quad \forall \mathbf{x} \in \mathcal{B}(\mathbf{x}^\star, r)$$
+  \end{definition}
+  
+  \vspace{0.5cm}
+  \begin{block}{Types of Local Minimizers}
+    \begin{itemize}
+      \item \textbf{Weak local minimizer:} satisfies the definition above
+      \item \textbf{Strict local minimizer:} when $f(\mathbf{x}^\star) < f(\mathbf{x})$ for all $\mathbf{x} \neq \mathbf{x}^\star$ in the neighborhood
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Taylor's Theorem and Optimality Conditions}
+
+\begin{frame}{Taylor's Theorem}
+  \begin{theorem}[Taylor's theorem]
+    Suppose $f:\mathbb{R}^d \mapsto \mathbb{R}$ is continuously differentiable and $\mathbf{p} \in \mathbb{R}^d$. Then:
+    $$f(\mathbf{x}+\mathbf{p}) = f(\mathbf{x}) + \nabla f(\mathbf{x}+t\mathbf{p})^T\mathbf{p}$$
+    for some $t \in [0,1]$.
+    
+    \vspace{0.3cm}
+    Moreover, if $f$ is twice continuously differentiable:
+    $$f(\mathbf{x}+\mathbf{p}) = f(\mathbf{x}) + \nabla f(\mathbf{x})^T\mathbf{p} + \frac{1}{2}\mathbf{p}^T\nabla^2 f(\mathbf{x}+t\mathbf{p})\mathbf{p}$$
+    for some $t \in [0,1]$.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{Taylor's Approximation}
+  \begin{theorem}[Taylor's approximation]
+    \textbf{First order approximation:}
+    $$f(\mathbf{x}+\mathbf{p}) = f(\mathbf{x}) + \nabla f(\mathbf{x})^T\mathbf{p} + o(\|\mathbf{p}\|)$$
+    
+    \vspace{0.3cm}
+    \textbf{Second-order approximation:}
+    $$f(\mathbf{x}+\mathbf{p}) = f(\mathbf{x}) + \nabla f(\mathbf{x})^T\mathbf{p} + \frac{1}{2}\mathbf{p}^T\nabla^2 f(\mathbf{x})\mathbf{p} + o(\|\mathbf{p}\|^2)$$
+    
+    where $o(\|\mathbf{p}\|)$ and $o(\|\mathbf{p}\|^2)$ represent terms that grow slower than $\|\mathbf{p}\|$ and $\|\mathbf{p}\|^2$ respectively as $\|\mathbf{p}\| \to 0$.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{First-Order Necessary Conditions}
+  \begin{theorem}[First-order necessary conditions]
+    If $\mathbf{x}^\star$ is a local minimizer, and $f$ is continuously differentiable in a neighborhood of $\mathbf{x}^\star$, then 
+    $$\nabla f(\mathbf{x}^\star) = \mathbf{0}$$
+  \end{theorem}
+  
+  \vspace{0.5cm}
+  \begin{block}{Stationary Points}
+    We call any point $\mathbf{x}$ such that $\nabla f(\mathbf{x}) = \mathbf{0}$ a \textbf{stationary point}.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Matrix Definiteness}
+  \begin{block}{Definitions}
+    A matrix $\mathbf{B}$ is:
+    \begin{itemize}
+      \item \textbf{Positive definite} if $\mathbf{p}^T \mathbf{B} \mathbf{p} > 0$ for all $\mathbf{p} \neq \mathbf{0}$
+      \item \textbf{Positive semidefinite} if $\mathbf{p}^T \mathbf{B} \mathbf{p} \geq 0$ for all $\mathbf{p}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Second-Order Necessary Conditions}
+  \begin{theorem}[Second-order necessary conditions]
+    If $\mathbf{x}^\star$ is a local minimizer of $f$ and $\nabla^2 f$ is continuous in an open neighborhood of $\mathbf{x}^\star$, then:
+    \begin{itemize}
+      \item $\nabla f(\mathbf{x}^\star) = \mathbf{0}$
+      \item $\nabla^2 f(\mathbf{x}^\star)$ is positive semidefinite
+    \end{itemize}
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{Second-Order Sufficient Conditions}
+  \begin{theorem}[Second-Order Sufficient Conditions]
+    Suppose that $\nabla^2 f$ is continuous in an open neighborhood of $\mathbf{x}^\star$ and that:
+    \begin{itemize}
+      \item $\nabla f(\mathbf{x}^\star) = \mathbf{0}$
+      \item $\nabla^2 f(\mathbf{x}^\star)$ is positive definite
+    \end{itemize}
+    Then $\mathbf{x}^\star$ is a strict local minimizer of $f$.
+  \end{theorem}
+  
+  \vspace{0.3cm}
+  \begin{block}{Note}
+    These sufficient conditions are not necessary. Example: $f(x) = x^4$ at $x^\star = 0$ is a strict local minimizer but the Hessian vanishes.
+  \end{block}
+\end{frame}
+
+\section{Optimization Algorithms}
+
+\begin{frame}{The Need for Algorithms}
+  \begin{block}{Why do we need algorithms?}
+    \begin{itemize}
+      \item We know that $\nabla f(\mathbf{x}^\star) = \mathbf{0}$ characterizes local minima
+      \item But we don't always have the luxury to solve $\nabla f(\mathbf{x}) = \mathbf{0}$ analytically
+      \item Computing and checking Hessian conditions can be expensive
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Algorithmic Approach}
+    Design iterative algorithms that update $\mathbf{x}$ until convergence to a local minimizer:
+    \begin{itemize}
+      \item \textbf{Gradient-based methods:} use only gradient information
+      \item \textbf{Newton methods:} use Hessian to accelerate convergence
+      \item \textbf{Quasi-Newton methods:} approximate Hessian for balance
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Steepest Descent Method}
+
+\begin{frame}{Steepest Descent Algorithm}
+  \begin{block}{Algorithm}
+    Choose initial point $\mathbf{x}_0$ and compute:
+    $$\mathbf{x}_{k+1} = \mathbf{x}_k - \alpha_k \nabla f(\mathbf{x}_k)$$
+    where $\alpha_k$ are scalar values called \textbf{step-size} (or learning rate).
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Intuition}
+    \begin{itemize}
+      \item Like walking down a mountain in fog
+      \item Feel the slope and step in steepest descent direction
+      \item $-\nabla f(\mathbf{x}_k)$ points in direction of steepest decrease
+      \item Most aggressive local progress toward reducing function value
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Steepest Descent - Successful Optimization}
+  % Empty frame for Figure: Optimization with steepest descent
+    \begin{figure}[h]
+    \centering
+      \includegraphics[height=0.8\textheight]{figures/steepest_successful.pdf}
+    \caption{Successful optimization with steepest descent.}
+  \end{figure}
 
 \end{frame}
 
-
-\section{Taylor's theorem}
-
-\subsection{Vectors and matrices}
-
-\begin{frame}{Title}
-Content
+\begin{frame}{Step Size Trade-offs}
+  \begin{block}{Step Size $\alpha_k$ Considerations}
+    The choice of step size involves a fundamental trade-off:
+    \begin{itemize}
+      \item \textbf{Too small:} Painfully slow progress
+      \item \textbf{Too large:} Might overshoot or start climbing uphill
+    \end{itemize}
+  \end{block}
 \end{frame}
 
-\subsection{Matrix decompositions}
+\begin{frame}{Steepest Descent - Zigzag Problem}
+  % Empty frame for Figure: Problem of stepsize
+    \begin{figure}[h]
+    \centering
+      \includegraphics[height=0.8\textheight]{figures/steepest_zigzag.pdf}
+    \caption{Zigzag behavior of steepest descent in narrow valleys.}
+  \end{figure}
 
-\begin{frame}{Title}
-Content
 \end{frame}
 
-\subsection{Useful results}
-
-\begin{frame}{Title}
-Content
+\begin{frame}{Why Steepest Descent Can Struggle}
+  \begin{block}{Zigzag Behavior}
+    \begin{itemize}
+      \item Occurs in narrow valley-like functions (large condition number)
+      \item Algorithm bounces between valley walls instead of walking down
+      \item Steepest direction points toward walls, not down the valley
+      \item Fundamentally myopic: only considers immediate local slope
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Convergence Properties}
+    \begin{itemize}
+      \item Linear convergence under reasonable conditions
+      \item Error decreases by constant factor each iteration
+      \item Can be frustratingly slow for poorly conditioned problems
+    \end{itemize}
+  \end{block}
 \end{frame}
 
-\section{Differentiation}
+\subsection{Newton Method}
 
-\subsection{Monovariate reminders}
-
-\begin{frame}{Title}
-Content
+\begin{frame}{Newton Method - Motivation}
+  \begin{block}{Key Insight}
+    \begin{itemize}
+      \item Steepest descent: navigating with only immediate slope
+      \item Newton method: having detailed topographic map
+      \item Incorporates curvature information (how slope changes)
+      \item Uses second-order Taylor approximation
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Strategy}
+    Instead of minimizing $f$ directly, minimize simpler quadratic approximation:
+    $$f(\mathbf{x}_k + \mathbf{p}) \approx f(\mathbf{x}_k) + \nabla f(\mathbf{x}_k)^T\mathbf{p} + \frac{1}{2}\mathbf{p}^T\nabla^2 f(\mathbf{x}_k)\mathbf{p}$$
+  \end{block}
 \end{frame}
 
-\subsection{Extension to Multivariate setup}
-
-\begin{frame}{Title}
-Content
+\begin{frame}{Newton Method - Algorithm}
+  \begin{block}{Derivation}
+    Setting gradient of quadratic approximation to zero:
+    $$\nabla f(\mathbf{x}_k) + \nabla^2 f(\mathbf{x}_k)\mathbf{p} = \mathbf{0}$$
+    
+    Solving for Newton step:
+    $$\mathbf{p}_k = -[\nabla^2 f(\mathbf{x}_k)]^{-1}\nabla f(\mathbf{x}_k)$$
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Newton Iteration}
+    $$\mathbf{x}_{k+1} = \mathbf{x}_k - [\nabla^2 f(\mathbf{x}_k)]^{-1}\nabla f(\mathbf{x}_k)$$
+  \end{block}
 \end{frame}
 
-\subsection{Matrix functions}
-
-\begin{frame}{Title}
-Content
+\begin{frame}{Newton Method - Optimization Step}
+  % Empty frame for Figure: Newton optimization step
+    \begin{figure}[h]
+    \centering
+      \includegraphics[height=0.8\textheight]{figures/newton_step.pdf}
+    \caption{Newton method optimization step.}
+  \end{figure}
+  %
 \end{frame}
 
+\begin{frame}{Newton Method - Geometric Insight}
+  \begin{block}{Hessian Information}
+    \begin{itemize}
+      \item $\nabla^2 f(\mathbf{x}_k)$ encodes how gradient changes in different directions
+      \item Recognizes elongated valley shapes
+      \item Takes larger steps along valley floor, smaller steps perpendicular
+      \item Eliminates zigzag behavior of steepest descent
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Special Property}
+    For quadratic functions: Newton method finds exact minimum in single step, regardless of conditioning!
+  \end{block}
+\end{frame}
 
+\begin{frame}{Newton Method - Convergence}
+  \begin{block}{Quadratic Convergence}
+    Near solution satisfying second-order sufficient conditions:
+    \begin{itemize}
+      \item Number of correct digits roughly doubles each iteration
+      \item If 1 correct digit → next iteration gives 2 → then 4 → then 8
+      \item Incredibly efficient for high-precision optimization
+      \item Forms backbone of many sophisticated algorithms
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Comparison}
+    \begin{itemize}
+      \item \textbf{Linear convergence:} 1 digit → 3 iterations → 2 digits
+      \item \textbf{Quadratic convergence:} 1 digit → 1 iteration → 2 digits
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Newton Method - Computational Cost}
+  \begin{block}{The Price of Power}
+    \begin{itemize}
+      \item Must compute Hessian matrix: $d(d+1)/2$ second derivatives
+      \item Must solve linear system: $\nabla^2 f(\mathbf{x}_k)\mathbf{p}_k = -\nabla f(\mathbf{x}_k)$
+      \item Requires $\sim d^3/3$ arithmetic operations per iteration
+      \item Becomes prohibitive as dimension $d$ grows
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Newton Method - Potential Failures}
+  \begin{block}{When Newton's Method Can Fail}
+    \begin{itemize}
+      \item Hessian might not be positive definite away from minimum
+      \item Quadratic model might have maximum or saddle point
+      \item Newton step might point in wrong direction
+      \item Poor quadratic approximation far from minimum
+      \item Steps might increase function value
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Looking Ahead}
+
+\begin{frame}{Bridge Between Methods}
+  \begin{block}{Motivating Questions}
+    \begin{itemize}
+      \item Can we capture Newton's geometric insight without full computational burden?
+      \item Can we ensure global reliability while achieving faster convergence?
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Advanced Methods}
+    \begin{itemize}
+      \item \textbf{Quasi-Newton methods (BFGS):} Approximate Hessian using gradients, superlinear convergence
+      \item \textbf{Trust region methods:} Systematic progress guarantees
+      \item \textbf{Line search strategies:} Reliable step size selection
+    \end{itemize}
+  \end{block}
+\end{frame}
 
 
 
