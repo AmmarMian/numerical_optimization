@@ -57,7 +57,7 @@ The course will first start with fundamental mathematical concepts of optimizati
  Session | Duration | Content | Date | Room | Slides |
 ---------|----------|---------|------|----------|---|
  CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 | [Slides](./slides/01_introduction/main.pdf) |
- CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 |
+ CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 | [Slides](./slides/02_unconstrained_basics/main.pdf)
  TD1 | 1.5h | Application to linear regression (1/2) | 2 June 2025 3pm | C-213 |
  CM3 | 1.5h | Linesearch algorithms and their convergence | 3 June 2025 10am | B-120 |
  TD2 | 1.5h | Linesearch in linear regression (2/2)| 3 June 2025 1.15pm | C-213 |
