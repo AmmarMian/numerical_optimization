@@ -290,7 +290,7 @@ This situation is summarized through the following interactive visualization:
 <iframe style="border:none;" scrolling="no" src="../../../../interactive/one_inequality_constraint_case2.html" width="700px" height="500px" title="One single constraint"></iframe>
 
 This situation is also well visualized for quadratic functions:
-<iframe style="border:none;" scrolling="no" src="one_inequality_quadratic" width="700px" height="500px" title="One single constraint quadratic"></iframe>
+<iframe style="border:none;" scrolling="no" src="../../../../interactive/one_inequality_quadratic.html" width="700px" height="500px" title="One single constraint quadratic"></iframe>
 
 
 
