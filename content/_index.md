@@ -4,7 +4,8 @@ type: docs
 bookToc: false
 ---
 
-# Numerical Optimization for Data Science and Machine Learning
+# Numerical Optimization: theory and applications
+
 
 
 {{% columns ratio="1:2" %}} <!-- begin columns block -->
@@ -53,21 +54,23 @@ The course will first start with fundamental mathematical concepts of optimizati
 * Gradient Methods
 * Second-order methods
 
- Session | Duration | Content | Date | Room |
----------|----------|---------|------|----------|
- CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 |
- CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 |
- TD1 | 1.5h | Application to linear regression | 2 June 2025 3pm | C-213 |
- CM3 | 1.5h | Linesearch algorithms and their convergence | 3 June 2025 10am | B-120 |
- CM4 | 1.5h | Constrained optimization : linear programming and lagrangian methods | 3 June 2025 1.15pm | B-120 |
- TD2 | 1.5h | Implementation of Linesearch methods | 3 June 2025 3pm | C-213 |
+ Session | Duration | Content | Date | Room | Slides |
+---------|----------|---------|------|----------|---|
+ CM1 | 1.5h | Introduction, Linear algebra and Differentiation reminders, and exercices | 2 June 2025 10am | B-120 | [Slides](./slides/01_introduction/main.pdf) |
+ CM2 | 1.5h | Steepest descent algorithm, Newton method and convexity | 2 June 2025 1.15pm | B-120 | [Slides](./slides/02_unconstrained_basics/main.pdf)
+ TD1 | 1.5h | Application to linear regression (1/2) | 2 June 2025 3pm | C-213 |
+ CM3 | 1.5h | Linesearch algorithms and their convergence | 3 June 2025 10am | B-120 | [Slides](./slides/03_unconstrained_linesearch/main.pdf)
+ TD2 | 1.5h | Linesearch in linear regression (2/2)| 3 June 2025 1.15pm | C-213 |
+ CM4 | 1.5h | Constrained optimization : linear programming and lagrangian methods | 3 June 2025 3pm | B-120 | [Slides](./slides/04_constrained_optim/main.pdf)
 
 ### Part II - Application to Image / Remote Sensing Problems (Week 1)
 
-Then we will apply those concepts in practice in inverse problem solving with examples in image denoising and pansharpening problems in remote sensing:
+Then we will apply those concepts in practice in inverse problem solving with examples in image denoising problems in remote sensing:
 
-* Formulating a cost function with constraints (sparsity, smoothness, etc)
+* Formulating an unconstrained optimization problem and solving it for a practical example
 * Numerical implementation in python
+
+This lab will be supervised by [Yassine Mhiri](https://y-mhiri.github.io).
 
  Session | Duration | Content | Date | Room |
 ---------|----------|---------|------|------|
@@ -77,7 +80,7 @@ Then we will apply those concepts in practice in inverse problem solving with ex
 
 We then move on to more complicated problems:
 
-* Trust regions methods 
+* Newton with linesearch and quasi-Newton methods
 * Proximal algorithms
 
 | Session | Duration | Content | Date | Room |
@@ -108,6 +111,13 @@ Students should have a decent understanding of basic linear algebra and differen
 ## Teaching Method
 
 Lectures will alternate between theoretical lectures, mathematical exercises and practical implementation in Python of the algorithms studied. A mini-project in Remote Sensing will also be given to illustrate on a real-world problem.
+
+## Ressources
+
+The course is based on several resources, including:
+* *Numerical Optimization* by J. Nocedal and S. Wright, for linesearch and Newton methods
+* *Proximal Algorithms* monograph by N. Parikh and S. Boyd, for proximal methods
+* *Deep Learning* by I. Goodfellow, Y. Bengio and A. Courville, for backpropagation and stochastic optimization
 
 ## Registration
 

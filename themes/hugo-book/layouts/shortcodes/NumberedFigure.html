@@ -33,7 +33,7 @@
       <h4>{{ . }}</h4>
     {{- end -}}
     <p>
-      <strong>Figure {{ $figureNumber }}:</strong> 
+      <strong>Figure {{ $figureNumber }}: </strong> 
       {{- with .Get "caption" -}}
         {{ . | markdownify }}
       {{- else -}}
