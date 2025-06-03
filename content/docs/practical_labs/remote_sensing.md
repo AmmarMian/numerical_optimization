@@ -7,9 +7,13 @@ weight: 20
 
 ## README
 
-- [Where to find the code](../code/remote_sensing_code.py)
-- [Content of the repo](../data/indian_pines/)
-- [Where to find the data](../data/indian_pines/Indian_pines_corrected.mat)
+- To get all the material for the labs, clone the following git repo : https://github.com/y-mhiri/hsi_unmixing_lab.
+- You can follow this lab in multiple level of difficulty 
+1. **The easiest way** : Answer only the theoretical question and follow the notebooks in `notebooks/` to do the programming
+2. **Intermediary level** : Implement your own code to answer the lab questions using the helper functions you'll find in `src/`
+3. **Expert level** : I guess you don't even need to clone the git repo...
+
+If anything don't hesitate to reach me at `yassine.mhiri@univ-smb.fr`.
 
 ## Introduction
 
@@ -50,19 +54,20 @@ Each pixel in a hyperspectral image contains a complete spectrum, which can be t
 >}}
 {{</center>}}
 
-In this lab session, we will work with an open dataset for hyperspectral data analysis: the **Indian Pines HSI dataset**. This dataset is widely used in the remote sensing community and contains agricultural fields with different crop types.
+In this lab session, we will work with an open dataset for hyperspectral data analysis: the **Pavia University HSI dataset**. This dataset is widely used in the remote sensing community and contains agricultural fields with different crop types.
 
 **Tasks:**
 
-1. **Open the Indian Pines dataset using the `loadmat` function from scipy** ([documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html)).
+1. **Open the PaviaU dataset. You can either use the helper function provided or use the `loadmat`function from `scipy.io`**.
+
 
 2. **What is the size of the image and how many spectral bands does the image contain?**
 
 {{<hiddenhint "Hint">}}
-The Indian Pines dataset typically has dimensions of 145×145 pixels with 200 spectral bands after noise removal. You can check the shape using `.shape` attribute in Python.
+The Pavia University dataset typically has dimensions of 145×145 pixels with 200 spectral bands after noise removal. You can check the shape using `.shape` attribute in Python.
 {{</hiddenhint>}}
 
-3. **Use `imshow` to display a few band images of the HSI cube at different wavelengths.** Try displaying bands at different spectral regions (e.g., visible, near-infrared, short-wave infrared).
+3. **Use `imshow` or the provided helper functions to display a few band images of the HSI cube at different wavelengths.** Try displaying bands at different spectral regions (e.g., visible, near-infrared, short-wave infrared).
 
 4. **Load and display the ground truth classification map.** This shows the different crop types present in the scene.
 
@@ -71,6 +76,8 @@ The Indian Pines dataset typically has dimensions of 145×145 pixels with 200 sp
 {{<hiddenhint "Hint">}}
 Use the ground truth labels to mask the hyperspectral data and compute the mean spectrum for each class. Different materials will have distinct spectral signatures, particularly in the near-infrared region.
 {{</hiddenhint>}}
+
+6. **Save the matrix formed by the spectra of all the classes in a .npy using `np.save`**
 
 ### 2. The Spectral Unmixing Linear Model
 
@@ -192,7 +199,7 @@ To evaluate the quality of spectral unmixing results, we need appropriate metric
    - **Root Mean Square Error (RMSE)**: Measures the pixel-wise reconstruction error.
    - **SSIM** : Measure a perceptual similiarity between images.
 
-Take a look at the documentation of scipy to find ..
+**You can either use the helper function implemented in the repo or use implementation for external libraries (`scipy`, `sklearn`).**
 
 2. **Implement a reconstruction and visualization function** that:
    - Reconstructs the hyperspectral image from estimated abundances
@@ -200,7 +207,7 @@ Take a look at the documentation of scipy to find ..
    - Shows abundance maps for each endmember
    - Computes and displays the evaluation metrics
 
-3. **Apply your unconstrained least squares solution** to the Indian Pines dataset:
+3. **Apply your unconstrained least squares solution** to the Pavia University dataset:
    - Use the mean spectra of the first 3-5 classes as endmembers
    - Compute the abundance maps
    - Evaluate the reconstruction quality
@@ -259,7 +266,7 @@ Use the method of Lagrange multipliers. Set $\nabla\_{\mathbf{a}_p} L = 0$ and $
 
 3. **Derive the closed-form expression** for $\lambda_p^*$ and the final solution.
 
-4. **Implement the sum-to-one constrained solution** and test it on the Indian Pines dataset.
+4. **Implement the sum-to-one constrained solution** and test it on the Pavia University dataset.
 
 5. **Display the results**: RGB composite, abundance maps, and compute evaluation metrics. **Comment on the improvements** compared to the unconstrained solution.
 
@@ -325,7 +332,7 @@ The projection step ensures that all iterates remain feasible while the gradient
 
 2. **Implement a projected gradient descent algorithm** to solve the non-negativity constrained problem.
 
-3. **Apply the non-negativity constrained method** to the Indian Pines dataset. Be carefull on how you choose the descent step size. Compare results with previous methods.
+3. **Apply the non-negativity constrained method** to the Pavia University dataset. Be carefull on how you choose the descent step size. Compare results with previous methods.
 
 ### 3. Fully Constrained Least Squares
 
@@ -371,7 +378,7 @@ $$\text{Proj}\_{\Delta^{K-1}}(\mathbf{v}) = \arg\min\_{\mathbf{x} \in \Delta^{K-
 
 2. **Modify the previous projected gradient descent algorithm to the Fully Constrained Least Square problem.**
 
-3. **Apply the fully constrained method** to the Indian Pines dataset.
+3. **Apply the fully constrained method** to the Pavia University dataset.
 
 4. **Compare all methods** (unconstrained, sum-to-one, non-negativity, fully constrained) in terms of:
    - Reconstruction quality (SAM, RMSE, SSIM)
