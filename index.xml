@@ -218,15 +218,15 @@ $$&lt;/p></description></item><item><title>I - Linear Regression models</title><
  &lt;a class="anchor" href="#readme">#&lt;/a>
 &lt;/h2>
 &lt;ul>
-&lt;li>&lt;a href="../code/remote_sensing_code.py">Where to find the code&lt;/a>&lt;/li>
-&lt;li>&lt;a href="../data/indian_pines/">Content of the repo&lt;/a>&lt;/li>
-&lt;li>&lt;a href="../data/indian_pines/Indian_pines_corrected.mat">Where to find the data&lt;/a>&lt;/li>
+&lt;li>To get all the material for the labs, clone the following git repo : &lt;a href="https://github.com/y-mhiri/hsi_unmixing_lab">https://github.com/y-mhiri/hsi_unmixing_lab&lt;/a>.&lt;/li>
+&lt;li>You can follow this lab in multiple level of difficulty&lt;/li>
 &lt;/ul>
-&lt;h2 id="introduction">
- Introduction
- &lt;a class="anchor" href="#introduction">#&lt;/a>
-&lt;/h2>
-&lt;p>In this lab session, we will explore one of the many applications of numerical optimization, namely &lt;strong>solving inverse problems&lt;/strong>. Inverse problems constitute a sub-field of applied mathematics with many applications in real-world data analysis. In this lab, you will work with &lt;strong>hyperspectral images&lt;/strong>, commonly used in &lt;strong>remote sensing&lt;/strong>.&lt;/p></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
+&lt;ol>
+&lt;li>&lt;strong>The easiest way&lt;/strong> : Answer only the theoretical question and follow the notebooks in &lt;code>notebooks/&lt;/code> to do the programming&lt;/li>
+&lt;li>&lt;strong>Intermediary level&lt;/strong> : Implement your own code to answer the lab questions using the helper functions you&amp;rsquo;ll find in &lt;code>src/&lt;/code>&lt;/li>
+&lt;li>&lt;strong>Expert level&lt;/strong> : I guess you don&amp;rsquo;t even need to clone the git repo&amp;hellip;&lt;/li>
+&lt;/ol>
+&lt;p>If anything don&amp;rsquo;t hesitate to reach me at &lt;code>yassine.mhiri@univ-smb.fr&lt;/code>.&lt;/p></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
  Digit recognition with multi-layer perceptron
  &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
 &lt;/h1>
