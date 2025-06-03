@@ -9,6 +9,8 @@
 \addbibresource{references.bib}
 
 \usepackage{tikz}
+\usepackage{tikz-3dplot}
+
 \usepackage{pgf-pie}  
 \usepackage{caption}
 \usepackage{subcaption}
@@ -217,6 +219,162 @@
   $$\mathcal{L}(\mathbf{x}, \lambda_1) = f(\mathbf{x}) - \lambda_1 c_1(\mathbf{x})$$
   $$\nabla_{\mathbf{x}} \mathcal{L}(\mathbf{x}^{\star}, \lambda_1^{\star}) = \mathbf{0}$$
 \end{frame}
+
+
+% Problem 1
+\begin{frame}
+\frametitle{Exercise 1}
+\begin{block}{Problem Statement}
+\textbf{Minimize:} $f(x_1, x_2) = x_1 x_2$
+
+\textbf{Subject to:} $x_1^2 + x_2^2 = 8$
+\end{block}
+
+\vspace{1cm}
+Find the minimum value and the point(s) where it occurs.
+\end{frame}
+
+% Solution 1
+\begin{frame}[allowframebreaks]
+\frametitle{Solution to Exercise 1}
+
+\textbf{Step 1: Set up the Lagrangian}
+$$L(x_1, x_2, \lambda) = x_1 x_2 + \lambda(x_1^2 + x_2^2 - 8)$$
+
+\textbf{Step 2: First-order conditions}
+\begin{align}
+\frac{\partial L}{\partial x_1} &= x_2 + 2\lambda x_1 = 0 \quad (1)\\
+\frac{\partial L}{\partial x_2} &= x_1 + 2\lambda x_2 = 0 \quad (2)\\
+\frac{\partial L}{\partial \lambda} &= x_1^2 + x_2^2 - 8 = 0 \quad (3)
+\end{align}
+
+\framebreak
+
+\textbf{Step 3: Solve the system}
+
+From equations (1) and (2):
+\begin{align}
+x_2 &= -2\lambda x_1\\
+x_1 &= -2\lambda x_2
+\end{align}
+
+Substituting: $x_1 = -2\lambda(-2\lambda x_1) = 4\lambda^2 x_1$
+
+If $x_1 \neq 0$: $1 = 4\lambda^2 \Rightarrow \lambda = \pm\frac{1}{2}$
+
+\framebreak
+
+\textbf{Case 1:} $\lambda = \frac{1}{2}$
+\begin{itemize}
+\item $x_2 = -x_1$
+\item From constraint: $x_1^2 + x_1^2 = 8 \Rightarrow x_1 = \pm 2\sqrt{2}$
+\item Critical points: $(2\sqrt{2}, -2\sqrt{2})$ and $(-2\sqrt{2}, 2\sqrt{2})$
+\end{itemize}
+
+\textbf{Case 2:} $\lambda = -\frac{1}{2}$
+\begin{itemize}
+\item $x_2 = x_1$
+\item From constraint: $2x_1^2 = 8 \Rightarrow x_1 = \pm 2$
+\item Critical points: $(2, 2)$ and $(-2, -2)$
+\end{itemize}
+
+\framebreak
+
+\textbf{Step 4: Evaluate the objective function}
+
+At $(2\sqrt{2}, -2\sqrt{2})$ and $(-2\sqrt{2}, 2\sqrt{2})$:
+$$f = (2\sqrt{2})(-2\sqrt{2}) = -8$$
+
+At $(2, 2)$ and $(-2, -2)$:
+$$f = (2)(2) = 4$$
+
+\vspace{0.5cm}
+\begin{block}{Answer}
+\textbf{Minimum value:} $-8$
+
+\textbf{Occurs at:} $(2\sqrt{2}, -2\sqrt{2})$ and $(-2\sqrt{2}, 2\sqrt{2})$
+\end{block}
+
+\end{frame}
+
+Problem 2
+\begin{frame}
+\frametitle{Exercise 2}
+\begin{block}{Problem Statement}
+\textbf{Minimize:} $f(x_1, x_2, x_3) = x_1^2 + x_2^2 + x_3^2$
+
+\textbf{Subject to:} 
+\begin{align}
+g_1: \quad & x_1 + x_2 + x_3 = 6\\
+g_2: \quad & x_1 - x_2 = 2
+\end{align}
+\end{block}
+
+\vspace{1cm}
+Find the minimum value and the point where it occurs.
+\end{frame}
+
+% Solution 2
+\begin{frame}[allowframebreaks]
+\frametitle{Solution to Exercise 2}
+
+\textbf{Step 1: Set up the Lagrangian}
+$$L = x_1^2 + x_2^2 + x_3^2 + \lambda_1(x_1 + x_2 + x_3 - 6) + \lambda_2(x_1 - x_2 - 2)$$
+
+\textbf{Step 2: First-order conditions}
+\begin{align}
+\frac{\partial L}{\partial x_1} &= 2x_1 + \lambda_1 + \lambda_2 = 0 \quad (1)\\
+\frac{\partial L}{\partial x_2} &= 2x_2 + \lambda_1 - \lambda_2 = 0 \quad (2)\\
+\frac{\partial L}{\partial x_3} &= 2x_3 + \lambda_1 = 0 \quad (3)\\
+\frac{\partial L}{\partial \lambda_1} &= x_1 + x_2 + x_3 - 6 = 0 \quad (4)\\
+\frac{\partial L}{\partial \lambda_2} &= x_1 - x_2 - 2 = 0 \quad (5)
+\end{align}
+
+\framebreak
+
+\textbf{Step 3: Solve for variables in terms of multipliers}
+
+From the first-order conditions:
+\begin{align}
+x_3 &= -\frac{\lambda_1}{2} \quad \text{from (3)}\\
+x_1 &= -\frac{\lambda_1 + \lambda_2}{2} \quad \text{from (1)}\\
+x_2 &= -\frac{\lambda_1 - \lambda_2}{2} \quad \text{from (2)}
+\end{align}
+
+\framebreak
+
+\textbf{Step 4: Use constraints to find multipliers}
+
+From constraint (5): $x_1 - x_2 = 2$
+$$-\frac{\lambda_1 + \lambda_2}{2} - \left(-\frac{\lambda_1 - \lambda_2}{2}\right) = 2$$
+$$-\frac{\lambda_2}{} = 2 \Rightarrow \lambda_2 = -2$$
+
+From constraint (4): $x_1 + x_2 + x_3 = 6$
+$$-\frac{\lambda_1 + \lambda_2}{2} - \frac{\lambda_1 - \lambda_2}{2} - \frac{\lambda_1}{2} = 6$$
+$$-\frac{3\lambda_1}{2} = 6 \Rightarrow \lambda_1 = -4$$
+
+\framebreak
+
+\textbf{Step 5: Find the solution}
+
+With $\lambda_1 = -4$ and $\lambda_2 = -2$:
+\begin{align}
+x_1 &= -\frac{(-4) + (-2)}{2} = 3\\
+x_2 &= -\frac{(-4) - (-2)}{2} = 1\\
+x_3 &= -\frac{(-4)}{2} = 2
+\end{align}
+
+\textbf{Verification:} $3 + 1 + 2 = 6$ and $3 - 1 = 2$ 
+
+\vspace{0.5cm}
+\begin{block}{Answer}
+\textbf{Minimum value:} $3^2 + 1^2 + 2^2 = 14$
+
+\textbf{Occurs at:} $(3, 1, 2)$
+\end{block}
+
+\end{frame}
+
 
 \subsection{A Single Inequality Constraint}
 \begin{frame}{Example 2: Single Inequality Constraint}
@@ -540,6 +698,33 @@
   \textbf{Next:} Algorithms to find points satisfying these conditions!
 \end{frame}
 
+
+
+\begin{frame}{Constrained Optimization Problem}
+
+\begin{block}{Exercise: 2D Optimization with Mixed Constraints}
+
+\begin{align}
+\text{minimize} \quad & f(x,y) = (x-2)^2 + (y-2)^2 \\
+\text{subject to:} \quad & g(x,y) = x + y - 2 = 0 \quad \text{(equality)} \\
+& h_1(x,y) = -x \leq 0 \quad \text{(i.e., } x \geq 0\text{)} \\
+& h_2(x,y) = -y \leq 0 \quad \text{(i.e., } y \geq 0\text{)}
+\end{align}
+
+\vspace{0.3cm}
+\textbf{Tasks:}
+\begin{enumerate}
+\item Write the Lagrangian function $L(x,y,\lambda,\mu_1,\mu_2)$
+\item Implement gradient descent on the Lagrangian
+\item Verify that $\mu_1^* = \mu_2^* = 0$ (inactive constraints)
+\end{enumerate}
+\end{block}
+
+\begin{alertblock}{Geometric Interpretation}
+Find the point closest to $(2,2)$ that lies on the line $x + y = 2$ and stays in the first quadrant.
+\end{alertblock}
+
+\end{frame}
 \end{document}
 
 
