@@ -209,11 +209,24 @@ $$&lt;/p></description></item><item><title>I - Linear Regression models</title><
  &lt;a class="anchor" href="#introduction">#&lt;/a>
 &lt;/h2>
 &lt;p>In this lab session, we will explore the fundamental concepts of numerical optimization through the lens of linear regression. We&amp;rsquo;ll begin with the simplest case and gradually build up to more complex scenarios, comparing analytical solutions with numerical methods at each step.&lt;/p>
-&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="remote-sensing-project">
- Remote sensing project
- &lt;a class="anchor" href="#remote-sensing-project">#&lt;/a>
+&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing Project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="solving-inverse-problems-in-remote-sensing">
+ Solving Inverse Problems in Remote Sensing
+ &lt;a class="anchor" href="#solving-inverse-problems-in-remote-sensing">#&lt;/a>
 &lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
+&lt;h2 id="readme">
+ README
+ &lt;a class="anchor" href="#readme">#&lt;/a>
+&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="../code/remote_sensing_code.py">Where to find the code&lt;/a>&lt;/li>
+&lt;li>&lt;a href="../data/indian_pines/">Content of the repo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="../data/indian_pines/Indian_pines_corrected.mat">Where to find the data&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>In this lab session, we will explore one of the many applications of numerical optimization, namely &lt;strong>solving inverse problems&lt;/strong>. Inverse problems constitute a sub-field of applied mathematics with many applications in real-world data analysis. In this lab, you will work with &lt;strong>hyperspectral images&lt;/strong>, commonly used in &lt;strong>remote sensing&lt;/strong>.&lt;/p></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
  Digit recognition with multi-layer perceptron
  &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
 &lt;/h1>
