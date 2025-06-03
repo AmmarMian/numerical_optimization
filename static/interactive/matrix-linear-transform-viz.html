@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Linear Transformation Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .matrix-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            padding: 10px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .matrix-input input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        .matrix-label {
+            text-align: center;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .reset-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        #visualization {
+            text-align: center;
+        }
+        .step-info {
+            text-align: center;
+            font-size: 18px;
+            margin: 10px 0;
+            color: #333;
+            min-height: 30px;
+        }
+        .grid-line {
+            stroke: #ddd;
+            stroke-width: 0.5;
+            fill: none;
+        }
+        .axis {
+            stroke: #666;
+            stroke-width: 2;
+        }
+        .point {
+            fill: #ff4444;
+            stroke: #cc0000;
+            stroke-width: 2;
+        }
+        .origin {
+            fill: #444;
+            stroke: #000;
+            stroke-width: 2;
+        }
+        .transformed-point {
+            fill: #4444ff;
+            stroke: #0000cc;
+            stroke-width: 2;
+        }
+        .basis-i {
+            stroke: #00aa00;
+            stroke-width: 3;
+            marker-end: url(#arrowhead-i);
+        }
+        .basis-j {
+            stroke: #aa0000;
+            stroke-width: 3;
+            marker-end: url(#arrowhead-j);
+        }
+        .arrow {
+            stroke: #666;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        .label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Matrix as Linear Transformation</h1>
+        
+        <div class="controls">
+            <div>
+                <div class="matrix-label">Transformation Matrix</div>
+                <div class="matrix-input">
+                    <input type="number" id="m11" value="1.2" step="0.1">
+                    <input type="number" id="m12" value="-0.5" step="0.1">
+                    <input type="number" id="m21" value="0.5" step="0.1">
+                    <input type="number" id="m22" value="1.2" step="0.1">
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <button class="prev-btn" onclick="previousStep()">← Previous</button>
+                    <button class="next-btn" onclick="nextStep()">Next →</button>
+                </div>
+                <button class="reset-btn" onclick="resetAnimation()">Reset</button>
+            </div>
+        </div>
+        
+        <div class="step-info" id="stepInfo">Step 1: Original 2D Grid with Basis Vectors</div>
+        
+        <div id="visualization"></div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #00aa00;"></div>
+                <span>i-vector (1,0)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #aa0000;"></div>
+                <span>j-vector (0,1)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #444; width: 8px; height: 8px; border-radius: 50%;"></div>
+                <span>Origin (0,0)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const width = 800;
+        const height = 600;
+        const scale = 40;
+        const gridRange = 8;
+        
+        // State
+        let currentStep = 0;
+        const totalSteps = 6;
+        let gridLines = [];
+        
+        // Create SVG
+        const svg = d3.select("#visualization")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+            
+        // Add arrow marker definitions
+        const defs = svg.append("defs");
+        
+        // Standard arrow
+        defs.append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#666");
+            
+        // Green arrow for i-vector
+        defs.append("marker")
+            .attr("id", "arrowhead-i")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#00aa00");
+            
+        // Red arrow for j-vector
+        defs.append("marker")
+            .attr("id", "arrowhead-j")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#aa0000");
+        
+        // Create main group centered
+        const g = svg.append("g")
+            .attr("transform", `translate(${width/2}, ${height/2})`);
+        
+        // Groups for different elements
+        const gridGroup = g.append("g").attr("class", "grid");
+        const axisGroup = g.append("g").attr("class", "axes");
+        const basisGroup = g.append("g").attr("class", "basis");
+        const pointGroup = g.append("g").attr("class", "points");
+        const arrowGroup = g.append("g").attr("class", "arrows");
+        
+        // Get matrix values
+        function getMatrix() {
+            return [
+                [parseFloat(document.getElementById("m11").value), parseFloat(document.getElementById("m12").value)],
+                [parseFloat(document.getElementById("m21").value), parseFloat(document.getElementById("m22").value)]
+            ];
+        }
+        
+        // Apply matrix transformation
+        function transform(point, matrix) {
+            return [
+                matrix[0][0] * point[0] + matrix[0][1] * point[1],
+                matrix[1][0] * point[0] + matrix[1][1] * point[1]
+            ];
+        }
+        
+        // Initialize grid lines data
+        function initializeGridLines() {
+            gridLines = [];
+            
+            // Vertical lines
+            for (let x = -gridRange; x <= gridRange; x++) {
+                if (x === 0) continue;
+                const line = [];
+                for (let y = -gridRange; y <= gridRange; y += 0.5) {
+                    line.push([x, y]);
+                }
+                gridLines.push({type: 'vertical', points: line});
+            }
+            
+            // Horizontal lines
+            for (let y = -gridRange; y <= gridRange; y++) {
+                if (y === 0) continue;
+                const line = [];
+                for (let x = -gridRange; x <= gridRange; x += 0.5) {
+                    line.push([x, y]);
+                }
+                gridLines.push({type: 'horizontal', points: line});
+            }
+        }
+        
+        // Draw grid with optional animation
+        function drawGrid(transformed = false, animate = false) {
+            const matrix = getMatrix();
+            
+            const lineGenerator = d3.line()
+                .x(d => d[0] * scale)
+                .y(d => -d[1] * scale);
+            
+            const lines = gridGroup.selectAll("path")
+                .data(gridLines);
+            
+            const enterLines = lines.enter()
+                .append("path")
+                .attr("class", "grid-line");
+            
+            const allLines = lines.merge(enterLines);
+            
+            if (animate) {
+                allLines.transition()
+                    .duration(1500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("d", d => {
+                        const transformedPoints = d.points.map(p => 
+                            transformed ? transform(p, matrix) : p
+                        );
+                        return lineGenerator(transformedPoints);
+                    });
+            } else {
+                allLines.attr("d", d => {
+                    const transformedPoints = d.points.map(p => 
+                        transformed ? transform(p, matrix) : p
+                    );
+                    return lineGenerator(transformedPoints);
+                });
+            }
+        }
+        
+        // Draw axes
+        function drawAxes() {
+            axisGroup.selectAll("*").remove();
+            
+            // X-axis
+            axisGroup.append("line")
+                .attr("class", "axis")
+                .attr("x1", -width/2 + 20)
+                .attr("y1", 0)
+                .attr("x2", width/2 - 20)
+                .attr("y2", 0);
+                
+            // Y-axis
+            axisGroup.append("line")
+                .attr("class", "axis")
+                .attr("x1", 0)
+                .attr("y1", -height/2 + 20)
+                .attr("x2", 0)
+                .attr("y2", height/2 - 20);
+                
+            // Labels
+            axisGroup.append("text")
+                .attr("class", "label")
+                .attr("x", width/2 - 30)
+                .attr("y", -5)
+                .text("X");
+                
+            axisGroup.append("text")
+                .attr("class", "label")
+                .attr("x", 5)
+                .attr("y", -height/2 + 30)
+                .text("Y");
+        }
+        
+        // Draw basis vectors
+        function drawBasisVectors(transformed = false, animate = false) {
+            const matrix = getMatrix();
+            
+            const iVector = transformed ? transform([1, 0], matrix) : [1, 0];
+            const jVector = transformed ? transform([0, 1], matrix) : [0, 1];
+            
+            // Remove existing vectors
+            if (!animate) {
+                basisGroup.selectAll("*").remove();
+            }
+            
+            // i-vector (green)
+            let iLine = basisGroup.select(".basis-i");
+            if (iLine.empty()) {
+                iLine = basisGroup.append("line")
+                    .attr("class", "basis-i")
+                    .attr("x1", 0)
+                    .attr("y1", 0);
+            }
+            
+            if (animate) {
+                iLine.transition()
+                    .duration(1500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("x2", iVector[0] * scale * 0.8)
+                    .attr("y2", -iVector[1] * scale * 0.8);
+            } else {
+                iLine.attr("x2", iVector[0] * scale * 0.8)
+                    .attr("y2", -iVector[1] * scale * 0.8);
+            }
+            
+            // j-vector (red)
+            let jLine = basisGroup.select(".basis-j");
+            if (jLine.empty()) {
+                jLine = basisGroup.append("line")
+                    .attr("class", "basis-j")
+                    .attr("x1", 0)
+                    .attr("y1", 0);
+            }
+            
+            if (animate) {
+                jLine.transition()
+                    .duration(1500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("x2", jVector[0] * scale * 0.8)
+                    .attr("y2", -jVector[1] * scale * 0.8);
+            } else {
+                jLine.attr("x2", jVector[0] * scale * 0.8)
+                    .attr("y2", -jVector[1] * scale * 0.8);
+            }
+            
+            // Labels
+            let iLabel = basisGroup.select(".i-label");
+            if (iLabel.empty()) {
+                iLabel = basisGroup.append("text")
+                    .attr("class", "i-label label")
+                    .style("fill", "#00aa00");
+            }
+            
+            if (animate) {
+                iLabel.transition()
+                    .duration(1500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("x", iVector[0] * scale * 0.9)
+                    .attr("y", -iVector[1] * scale * 0.9)
+                    .text(transformed ? `i'` : "i");
+            } else {
+                iLabel.attr("x", iVector[0] * scale * 0.9)
+                    .attr("y", -iVector[1] * scale * 0.9)
+                    .text(transformed ? `i'` : "i");
+            }
+            
+            let jLabel = basisGroup.select(".j-label");
+            if (jLabel.empty()) {
+                jLabel = basisGroup.append("text")
+                    .attr("class", "j-label label")
+                    .style("fill", "#aa0000");
+            }
+            
+            if (animate) {
+                jLabel.transition()
+                    .duration(1500)
+                    .ease(d3.easeCubicInOut)
+                    .attr("x", jVector[0] * scale * 0.9)
+                    .attr("y", -jVector[1] * scale * 0.9 - 10)
+                    .text(transformed ? `j'` : "j");
+            } else {
+                jLabel.attr("x", jVector[0] * scale * 0.9)
+                    .attr("y", -jVector[1] * scale * 0.9 - 10)
+                    .text(transformed ? `j'` : "j");
+            }
+        }
+        
+        // Draw origin point
+        function drawOrigin() {
+            if (pointGroup.select(".origin").empty()) {
+                pointGroup.append("circle")
+                    .attr("class", "origin")
+                    .attr("cx", 0)
+                    .attr("cy", 0)
+                    .attr("r", 5);
+                    
+                pointGroup.append("text")
+                    .attr("class", "origin-label label")
+                    .attr("x", 10)
+                    .attr("y", -10)
+                    .text("(0,0)")
+                    .style("fill", "#444");
+            }
+        }
+        
+        // Animation steps
+        function animateStep() {
+            const matrix = getMatrix();
+            const originalPoint = [2, 1];
+            const transformedPoint = transform(originalPoint, matrix);
+            
+            switch(currentStep) {
+                case 0:
+                    // Step 1: Show original grid with basis vectors
+                    document.getElementById("stepInfo").textContent = "Step 1: Original 2D Grid with Basis Vectors";
+                    drawGrid(false, false);
+                    drawBasisVectors(false, false);
+                    drawOrigin();
+                    pointGroup.selectAll(".point, .transformed-point").remove();
+                    pointGroup.selectAll(".point-label").remove();
+                    arrowGroup.selectAll("*").remove();
+                    break;
+                    
+                case 1:
+                    // Step 2: Show point at (2, 1)
+                    document.getElementById("stepInfo").textContent = "Step 2: Point at position (2, 1) = 2i + 1j";
+                    pointGroup.selectAll(".point, .transformed-point").remove();
+                    pointGroup.selectAll(".point-label").remove();
+                    
+                    pointGroup.append("circle")
+                        .attr("class", "point")
+                        .attr("cx", originalPoint[0] * scale)
+                        .attr("cy", -originalPoint[1] * scale)
+                        .attr("r", 0)
+                        .transition()
+                        .duration(500)
+                        .attr("r", 8);
+                        
+                    pointGroup.append("text")
+                        .attr("class", "point-label label")
+                        .attr("x", originalPoint[0] * scale + 15)
+                        .attr("y", -originalPoint[1] * scale + 5)
+                        .text("(2, 1)")
+                        .style("opacity", 0)
+                        .transition()
+                        .duration(500)
+                        .style("opacity", 1);
+                    break;
+                    
+                case 2:
+                    // Step 3: Show transformation
+                    document.getElementById("stepInfo").textContent = 
+                        `Step 3: Matrix transformation maps (2, 1) → (${transformedPoint[0].toFixed(1)}, ${transformedPoint[1].toFixed(1)})`;
+                    
+                    // Add transformed point
+                    pointGroup.append("circle")
+                        .attr("class", "transformed-point")
+                        .attr("cx", originalPoint[0] * scale)
+                        .attr("cy", -originalPoint[1] * scale)
+                        .attr("r", 8)
+                        .transition()
+                        .duration(1000)
+                        .attr("cx", transformedPoint[0] * scale)
+                        .attr("cy", -transformedPoint[1] * scale);
+                        
+                    // Add arrow
+                    arrowGroup.append("line")
+                        .attr("class", "arrow")
+                        .attr("x1", originalPoint[0] * scale)
+                        .attr("y1", -originalPoint[1] * scale)
+                        .attr("x2", originalPoint[0] * scale)
+                        .attr("y2", -originalPoint[1] * scale)
+                        .transition()
+                        .duration(1000)
+                        .attr("x2", transformedPoint[0] * scale - 10)
+                        .attr("y2", -transformedPoint[1] * scale);
+                        
+                    // Add label for transformed point
+                    pointGroup.append("text")
+                        .attr("class", "transformed-label label")
+                        .attr("x", transformedPoint[0] * scale + 15)
+                        .attr("y", -transformedPoint[1] * scale + 5)
+                        .text(`(${transformedPoint[0].toFixed(1)}, ${transformedPoint[1].toFixed(1)})`)
+                        .style("fill", "#0000cc")
+                        .style("opacity", 0)
+                        .transition()
+                        .delay(1000)
+                        .duration(500)
+                        .style("opacity", 1);
+                    break;
+                    
+                case 3:
+                    // Step 4: Show basis vector transformation
+                    document.getElementById("stepInfo").textContent = "Step 4: Basis vectors transform to new positions";
+                    pointGroup.selectAll(".point, .transformed-point").remove();
+                    pointGroup.selectAll(".point-label, .transformed-label").remove();
+                    arrowGroup.selectAll("*").remove();
+                    
+                    drawBasisVectors(true, true);
+                    break;
+                    
+                case 4:
+                    // Step 5: Transform the grid
+                    document.getElementById("stepInfo").textContent = "Step 5: Applying transformation to entire grid";
+                    
+                    // Animate grid transformation
+                    drawGrid(true, true);
+                    break;
+                    
+                case 5:
+                    // Step 6: Show point in new coordinate system
+                    document.getElementById("stepInfo").textContent = 
+                        "Step 6: Point (2, 1) = 2i' + 1j' in transformed coordinate system";
+                    
+                    // Show the transformed point
+                    pointGroup.append("circle")
+                        .attr("class", "transformed-point")
+                        .attr("cx", transformedPoint[0] * scale)
+                        .attr("cy", -transformedPoint[1] * scale)
+                        .attr("r", 0)
+                        .transition()
+                        .duration(500)
+                        .attr("r", 8);
+                        
+                    pointGroup.append("text")
+                        .attr("class", "label")
+                        .attr("x", transformedPoint[0] * scale + 15)
+                        .attr("y", -transformedPoint[1] * scale + 5)
+                        .text("Still (2, 1) in new basis")
+                        .style("fill", "#0000cc")
+                        .style("opacity", 0)
+                        .transition()
+                        .duration(500)
+                        .style("opacity", 1);
+                    break;
+            }
+        }
+        
+        // Control functions
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                animateStep();
+            }
+        }
+        
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                animateStep();
+            }
+        }
+        
+        function resetAnimation() {
+            currentStep = 0;
+            animateStep();
+        }
+        
+        // Initialize
+        initializeGridLines();
+        drawAxes();
+        animateStep();
+        
+        // Update when matrix values change
+        document.querySelectorAll('.matrix-input input').forEach(input => {
+            input.addEventListener('change', () => {
+                animateStep();
+            });
+        });
+    </script>
+</body>
+</html>

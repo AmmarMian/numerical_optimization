@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagrange Multiplier - Quadratic Function</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        svg {
+            background: white;
+        }
+        .constraint-circle {
+            fill: rgba(231, 76, 60, 0.1);
+            stroke: #e74c3c;
+            stroke-width: 3;
+        }
+        .level-curve {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+            opacity: 0.7;
+        }
+        .objective-center {
+            fill: #3498db;
+            stroke: white;
+            stroke-width: 2;
+        }
+        .grid-line {
+            stroke: #ecf0f1;
+            stroke-width: 0.5;
+        }
+        .axis {
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+        .tick-label {
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .point {
+            fill: #2c3e50;
+            stroke: white;
+            stroke-width: 2;
+            cursor: grab;
+        }
+        .point:hover {
+            fill: #34495e;
+        }
+        .point:active {
+            cursor: grabbing;
+        }
+        .gradient-vector {
+            stroke-width: 3;
+            marker-end: url(#arrowhead);
+        }
+        .grad-f {
+            stroke: #3498db;
+        }
+        .grad-c {
+            stroke: #27ae60;
+        }
+        .vector-label {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .half-space {
+            opacity: 0.3;
+        }
+        .descent-space {
+            fill: #3498db;
+        }
+        .feasible-space {
+            fill: #27ae60;
+        }
+        .intersection-space {
+            fill: #9b59b6;
+            opacity: 0.5;
+        }
+        .equation {
+            font-size: 14px;
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            fill: #2c3e50;
+        }
+        .case-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="visualization"></svg>
+    </div>
+
+    <script>
+        const width = 700;
+        const height = 700;
+        const margin = 50;
+        const radius = Math.sqrt(2);
+        
+        // Scale functions
+        const xScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([margin, width - margin]);
+        
+        const yScale = d3.scaleLinear()
+            .domain([-3, 3])
+            .range([height - margin, margin]);
+        
+        // Create SVG
+        const svg = d3.select("#visualization")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Define arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#333");
+        
+        // Draw grid
+        const gridGroup = svg.append("g").attr("class", "grid");
+        
+        for (let x = -3; x <= 3; x++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(x))
+                .attr("y1", yScale(-3))
+                .attr("x2", xScale(x))
+                .attr("y2", yScale(3));
+        }
+        
+        for (let y = -3; y <= 3; y++) {
+            gridGroup.append("line")
+                .attr("class", "grid-line")
+                .attr("x1", xScale(-3))
+                .attr("y1", yScale(y))
+                .attr("x2", xScale(3))
+                .attr("y2", yScale(y));
+        }
+        
+        // Draw axes
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(-3))
+            .attr("y1", yScale(0))
+            .attr("x2", xScale(3))
+            .attr("y2", yScale(0));
+        
+        svg.append("line")
+            .attr("class", "axis")
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(-3))
+            .attr("x2", xScale(0))
+            .attr("y2", yScale(3));
+        
+        // Axis labels
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(3))
+            .attr("y", yScale(0) - 10)
+            .text("x₁");
+        
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", xScale(0) + 10)
+            .attr("y", yScale(3))
+            .text("x₂");
+        
+        // Tick marks and labels
+        [-2, -1, 1, 2].forEach(tick => {
+            svg.append("line")
+                .attr("x1", xScale(tick))
+                .attr("y1", yScale(0) - 5)
+                .attr("x2", xScale(tick))
+                .attr("y2", yScale(0) + 5)
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(tick))
+                .attr("y", yScale(0) + 20)
+                .attr("text-anchor", "middle")
+                .text(tick);
+            
+            svg.append("line")
+                .attr("x1", xScale(0) - 5)
+                .attr("y1", yScale(tick))
+                .attr("x2", xScale(0) + 5)
+                .attr("y2", yScale(tick))
+                .attr("stroke", "#2c3e50")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("class", "tick-label")
+                .attr("x", xScale(0) - 15)
+                .attr("y", yScale(tick) + 4)
+                .attr("text-anchor", "middle")
+                .text(tick);
+        });
+        
+        // Level curves group
+        const levelCurves = svg.append("g").attr("class", "level-curves");
+        
+        // Half-spaces group
+        const halfSpaces = svg.append("g").attr("class", "half-spaces");
+        
+        // Mark the objective function center at (2,2)
+        svg.append("circle")
+            .attr("class", "objective-center")
+            .attr("cx", xScale(2))
+            .attr("cy", yScale(2))
+            .attr("r", 6);
+        
+        svg.append("text")
+            .attr("x", xScale(2) + 10)
+            .attr("y", yScale(2) - 10)
+            .attr("font-size", "12px")
+            .attr("fill", "#3498db")
+            .text("f min at (2,2)");
+        
+        // Constraint circle (feasible region)
+        svg.append("circle")
+            .attr("class", "constraint-circle")
+            .attr("cx", xScale(0))
+            .attr("cy", yScale(0))
+            .attr("r", xScale(radius) - xScale(0));
+        
+        // Gradient vectors group
+        const vectors = svg.append("g").attr("class", "vectors");
+        
+        // Equations group
+        const equations = svg.append("g").attr("class", "equations");
+        
+        // Points
+        let currentPoint = {x: radius/Math.sqrt(2), y: radius/Math.sqrt(2)};
+        
+        const point = svg.append("circle")
+            .attr("class", "point")
+            .attr("r", 8)
+            .attr("fill", "#e74c3c")
+            .call(d3.drag()
+                .on("drag", function(event) {
+                    const x = xScale.invert(event.x);
+                    const y = yScale.invert(event.y);
+                    // Project onto circle boundary
+                    const norm = Math.sqrt(x*x + y*y);
+                    if (norm > 0) {
+                        currentPoint.x = (x / norm) * radius;
+                        currentPoint.y = (y / norm) * radius;
+                    }
+                    updateVisualization();
+                }));
+        
+        function drawStaticLevelCurves() {
+            // Draw fixed level curves for f(x) = (x₁-2)² + (x₂-2)² = constant
+            // These are circles centered at (2,2)
+            const levels = [0.5, 1, 2, 4, 8, 12];
+            
+            levels.forEach(level => {
+                const levelRadius = Math.sqrt(level);
+                levelCurves.append("circle")
+                    .attr("class", "level-curve")
+                    .attr("cx", xScale(2))
+                    .attr("cy", yScale(2))
+                    .attr("r", (xScale(2 + levelRadius) - xScale(2)))
+                    .style("opacity", level === 2 ? 0.9 : 0.6);
+            });
+        }
+        
+        function updateVisualization() {
+            // Update point position
+            point
+                .attr("cx", xScale(currentPoint.x))
+                .attr("cy", yScale(currentPoint.y));
+            
+            // Clear existing elements
+            vectors.selectAll("*").remove();
+            halfSpaces.selectAll("*").remove();
+            equations.selectAll("*").remove();
+            
+            // Always on boundary now
+            equations.append("text")
+                .attr("class", "case-label")
+                .attr("x", 20)
+                .attr("y", 30)
+                .text("Quadratic Function: f(x) = (x₁-2)² + (x₂-2)²");
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 55)
+                .text("∇f^T d < 0  and  ∇c^T d ≥ 0");
+            
+            equations.append("text")
+                .attr("class", "equation")
+                .attr("x", 20)
+                .attr("y", 75)
+                .text("∇f = λ∇c, λ ≤ 0");
+            
+            // Draw gradient vectors
+            const gradScale = 60;
+            
+            // ∇f = [2(x₁-2), 2(x₂-2)] = [2(x-2), 2(y-2)]
+            const gradFx = 2 * (currentPoint.x - 2);
+            const gradFy = 2 * (currentPoint.y - 2);
+            const gradFNorm = Math.sqrt(gradFx * gradFx + gradFy * gradFy);
+            
+            if (gradFNorm > 1e-10) {
+                vectors.append("line")
+                    .attr("class", "gradient-vector grad-f")
+                    .attr("x1", xScale(currentPoint.x))
+                    .attr("y1", yScale(currentPoint.y))
+                    .attr("x2", xScale(currentPoint.x) + (gradFx / gradFNorm) * gradScale)
+                    .attr("y2", yScale(currentPoint.y) - (gradFy / gradFNorm) * gradScale);
+                
+                vectors.append("text")
+                    .attr("class", "vector-label")
+                    .attr("x", xScale(currentPoint.x) + (gradFx / gradFNorm) * gradScale + 10)
+                    .attr("y", yScale(currentPoint.y) - (gradFy / gradFNorm) * gradScale + 5)
+                    .attr("fill", "#3498db")
+                    .text("∇f");
+            }
+            
+            // ∇c = [-2x₁, -2x₂] (inward pointing)
+            const gradCx = -2 * currentPoint.x;
+            const gradCy = -2 * currentPoint.y;
+            const gradCNorm = Math.sqrt(gradCx * gradCx + gradCy * gradCy);
+            
+            vectors.append("line")
+                .attr("class", "gradient-vector grad-c")
+                .attr("x1", xScale(currentPoint.x))
+                .attr("y1", yScale(currentPoint.y))
+                .attr("x2", xScale(currentPoint.x) + (gradCx / gradCNorm) * gradScale * 0.8)
+                .attr("y2", yScale(currentPoint.y) - (gradCy / gradCNorm) * gradScale * 0.8);
+            
+            vectors.append("text")
+                .attr("class", "vector-label")
+                .attr("x", xScale(currentPoint.x) + (gradCx / gradCNorm) * gradScale * 0.8 + 10)
+                .attr("y", yScale(currentPoint.y) - (gradCy / gradCNorm) * gradScale * 0.8 + 5)
+                .attr("fill", "#27ae60")
+                .text("∇c");
+            
+            // Draw half-spaces centered at current point showing direction vectors d
+            const x0 = currentPoint.x;
+            const y0 = currentPoint.y;
+            const bound = 3;
+            const corners = [[-bound, -bound], [bound, -bound], [bound, bound], [-bound, bound]];
+            
+            // 1. Descent directions: ∇f^T d < 0 where ∇f = [2(x₀-2), 2(y₀-2)]
+            //    Condition: 2(x₀-2)(x-x₀) + 2(y₀-2)(y-y₀) < 0
+            //    Simplified: (x₀-2)(x-x₀) + (y₀-2)(y-y₀) < 0
+            //    Further: (x₀-2)x + (y₀-2)y < (x₀-2)x₀ + (y₀-2)y₀
+            const descentThreshold = (x0 - 2) * x0 + (y0 - 2) * y0;
+            
+            if (gradFNorm > 1e-10) {
+                const descentCorners = corners.filter(corner => {
+                    const [x, y] = corner;
+                    return (x0 - 2) * x + (y0 - 2) * y < descentThreshold - 1e-10;
+                });
+                
+                const descentPoints = [...descentCorners];
+                
+                // Add line intersections with viewport edges
+                const a = x0 - 2;
+                const b = y0 - 2;
+                
+                if (Math.abs(b) > 1e-10) {
+                    // Left edge: x = -bound
+                    const y_left = (descentThreshold - a * (-bound)) / b;
+                    if (y_left >= -bound && y_left <= bound) {
+                        descentPoints.push([-bound, y_left]);
+                    }
+                    // Right edge: x = bound
+                    const y_right = (descentThreshold - a * bound) / b;
+                    if (y_right >= -bound && y_right <= bound) {
+                        descentPoints.push([bound, y_right]);
+                    }
+                }
+                
+                if (Math.abs(a) > 1e-10) {
+                    // Bottom edge: y = -bound
+                    const x_bottom = (descentThreshold - b * (-bound)) / a;
+                    if (x_bottom >= -bound && x_bottom <= bound) {
+                        descentPoints.push([x_bottom, -bound]);
+                    }
+                    // Top edge: y = bound
+                    const x_top = (descentThreshold - b * bound) / a;
+                    if (x_top >= -bound && x_top <= bound) {
+                        descentPoints.push([x_top, bound]);
+                    }
+                }
+                
+                // Remove duplicates
+                const uniqueDescentPoints = [];
+                descentPoints.forEach(pt => {
+                    const exists = uniqueDescentPoints.some(existing => 
+                        Math.abs(existing[0] - pt[0]) < 1e-6 && Math.abs(existing[1] - pt[1]) < 1e-6
+                    );
+                    if (!exists) {
+                        uniqueDescentPoints.push(pt);
+                    }
+                });
+                
+                if (uniqueDescentPoints.length >= 3) {
+                    // Sort points clockwise
+                    const cx = uniqueDescentPoints.reduce((sum, p) => sum + p[0], 0) / uniqueDescentPoints.length;
+                    const cy = uniqueDescentPoints.reduce((sum, p) => sum + p[1], 0) / uniqueDescentPoints.length;
+                    
+                    uniqueDescentPoints.sort((a, b) => {
+                        const angleA = Math.atan2(a[1] - cy, a[0] - cx);
+                        const angleB = Math.atan2(b[1] - cy, b[0] - cx);
+                        return angleA - angleB;
+                    });
+                    
+                    const descentPointsStr = uniqueDescentPoints.map(p => `${xScale(p[0])},${yScale(p[1])}`).join(' ');
+                    halfSpaces.append("polygon")
+                        .attr("points", descentPointsStr)
+                        .attr("class", "half-space descent-space");
+                }
+            }
+            
+            // 2. Feasible directions: ∇c^T d ≥ 0 where ∇c = [-2x₀, -2y₀]  
+            //    Condition: -2x₀(x-x₀) - 2y₀(y-y₀) ≥ 0  =>  x₀x + y₀y ≤ x₀² + y₀²
+            const feasibleThreshold = x0 * x0 + y0 * y0;
+            
+            const feasibleCorners = corners.filter(corner => {
+                const [x, y] = corner;
+                return x0 * x + y0 * y <= feasibleThreshold + 1e-10;
+            });
+            
+            const feasiblePoints = [...feasibleCorners];
+            
+            // Add line intersections with viewport edges
+            if (Math.abs(y0) > 1e-10) {
+                // Left edge: x = -bound
+                const y_left = (feasibleThreshold - x0 * (-bound)) / y0;
+                if (y_left >= -bound && y_left <= bound) {
+                    feasiblePoints.push([-bound, y_left]);
+                }
+                // Right edge: x = bound  
+                const y_right = (feasibleThreshold - x0 * bound) / y0;
+                if (y_right >= -bound && y_right <= bound) {
+                    feasiblePoints.push([bound, y_right]);
+                }
+            }
+            
+            if (Math.abs(x0) > 1e-10) {
+                // Bottom edge: y = -bound
+                const x_bottom = (feasibleThreshold - y0 * (-bound)) / x0;
+                if (x_bottom >= -bound && x_bottom <= bound) {
+                    feasiblePoints.push([x_bottom, -bound]);
+                }
+                // Top edge: y = bound
+                const x_top = (feasibleThreshold - y0 * bound) / x0;
+                if (x_top >= -bound && x_top <= bound) {
+                    feasiblePoints.push([x_top, bound]);
+                }
+            }
+            
+            // Remove duplicates
+            const uniqueFeasiblePoints = [];
+            feasiblePoints.forEach(pt => {
+                const exists = uniqueFeasiblePoints.some(existing => 
+                    Math.abs(existing[0] - pt[0]) < 1e-6 && Math.abs(existing[1] - pt[1]) < 1e-6
+                );
+                if (!exists) {
+                    uniqueFeasiblePoints.push(pt);
+                }
+            });
+            
+            if (uniqueFeasiblePoints.length >= 3) {
+                // Sort points clockwise
+                const cx = uniqueFeasiblePoints.reduce((sum, p) => sum + p[0], 0) / uniqueFeasiblePoints.length;
+                const cy = uniqueFeasiblePoints.reduce((sum, p) => sum + p[1], 0) / uniqueFeasiblePoints.length;
+                
+                uniqueFeasiblePoints.sort((a, b) => {
+                    const angleA = Math.atan2(a[1] - cy, a[0] - cx);
+                    const angleB = Math.atan2(b[1] - cy, b[0] - cx);
+                    return angleA - angleB;
+                });
+                
+                const feasiblePointsStr = uniqueFeasiblePoints.map(p => `${xScale(p[0])},${yScale(p[1])}`).join(' ');
+                halfSpaces.append("polygon")
+                    .attr("points", feasiblePointsStr)
+                    .attr("class", "half-space feasible-space");
+            }
+        }
+        
+        // Draw static level curves once
+        drawStaticLevelCurves();
+        
+        // Initial visualization
+        updateVisualization();
+    </script>
+</body>
+</html>

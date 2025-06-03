@@ -1,0 +1,10 @@
+{{ $label := .Get 0 }}
+{{ $lemmaNumber := $.Page.Store.Get $label }}
+
+{{ if $lemmaNumber }}
+<a href="#{{ $label }}">lemma {{ $lemmaNumber }}</a>
+{{ else }}
+<a href="#{{ $label }}">this lemma</a>
+{{ end }}
+
+

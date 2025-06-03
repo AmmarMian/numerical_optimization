@@ -4,3 +4,5 @@ weight : 4
 ---
 
 # Modern trends
+
+Soon to be added.

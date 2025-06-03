@@ -17,7 +17,7 @@ theme = "hugo-book"
 [params.mathjax]
   enable = true
   inlineMath = [['\\(', '\\)'], ['$', '$']]
-  displayMath = [['\\[', '\\]'], ['$$', '$$']]
+  displayMath = [['\[', '\]'], ['$$', '$$']]
   processEnvironments = true
   processRefs = true
   skipHtmlTags = ['script', 'noscript', 'style', 'textarea', 'pre']

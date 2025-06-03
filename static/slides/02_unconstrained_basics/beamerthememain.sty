@@ -1,0 +1,248 @@
+\mode<presentation>
+
+\usetheme{Dresden}
+\usefonttheme{structurebold}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Requirement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{tikz}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins}
+\usetikzlibrary{calc,shadows.blur}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Template colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{c1}{HTML}{294B29}
+\definecolor{c2}{HTML}{50623A}
+\definecolor{c3}{HTML}{739072}
+\definecolor{c4}{HTML}{BFD8AF}
+\definecolor{c5}{HTML}{D24545}
+\definecolor{c6}{HTML}{A94438}
+
+\definecolor{green}{HTML}{50623A}
+\definecolor{red}{HTML}{850D0D}
+% \definecolor{main}{RGB}{0,126,161}
+\definecolor{main}{HTML}{002542}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Set Beamer colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% \definecolor{dark}{RGB}{0,126,161}
+\definecolor{dark}{HTML}{0D1B2A}
+\definecolor{text-dark}{HTML}{262C31}
+\definecolor{text-light}{HTML}{E9ECEF}
+\definecolor{light}{HTML}{F8F9FA}
+% \definecolor{bold}{RGB}{0,126,161}
+\definecolor{bold}{HTML}{415A77}
+
+
+\setbeamercolor{structure}{fg=text-dark, bg=dark}
+\setbeamercolor{titlelike}{fg=text-dark, bg=dark}
+\setbeamercolor{section in head/foot}{fg=text-light, bg=main}
+\setbeamercolor{subsection in head/foot}{fg=text-light, bg=main}
+
+%set title background color
+\setbeamercolor{title}{fg=dark-text, bg=light}
+
+\setbeamercolor{background canvas}{bg=light}
+
+
+
+\setbeamercolor{title page}{fg=text-dark, bg=light}
+
+% % set text colors
+\setbeamercolor{normal text}{fg=text-dark, bg=light}
+\setbeamercolor{alerted text}{fg=bold}
+%set block title color
+\setbeamercolor{box title}{fg=text-light, bg=main}
+\setbeamercolor{box body}{fg=text-dark, bg=light}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TOC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\setbeamercolor{section in toc}{fg=text-light}
+\setbeamercolor{subsection in toc}{fg=text-light} 
+
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamercolor{section in toc shaded}{fg=main!80}
+
+\setbeamertemplate{subsection in toc shaded}[default][100]
+\setbeamercolor{subsection in toc shaded}{fg=main!80}
+% \setbeamercolor{section number projected}{fg=alerted, bg=red,fg=white}
+
+
+
+\setbeamertemplate{section in toc}{\inserttocsectionnumber. \ \normalfont\inserttocsection}
+\setbeamertemplate{subsection in toc}{%
+  \hspace{1.2em}{\rule[0.3ex]{3pt}{3pt}}~ \footnotesize\inserttocsubsection\par}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Footline
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%if no page numbering no footline
+
+
+\setbeamertemplate{footline}{
+    \begin{center}
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \insertframenumber
+    \end{center}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Block environment using tcolorbox
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define tcolorbox styles for blocks
+\tcbset{
+    beamerbox/.style={
+        enhanced,
+        colback=light,%
+        drop shadow=main!50!light,
+        boxrule=1pt,
+        sharp corners,
+        left=8pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        colback=light,
+        coltitle=text-light,
+        colbacktitle=main,
+        fonttitle=\bfseries,
+        toptitle=6pt,
+        bottomtitle=6pt,
+        lefttitle=8pt,
+        righttitle=8pt,
+        attach boxed title to top left={yshift=-2mm, xshift=-2mm},
+        boxed title style={
+            enhanced,
+            boxrule=0pt,
+            sharp corners,
+        }
+    },
+    beamerboxalert/.style={
+        beamerbox,
+        colbacktitle=bold,
+        coltitle=text-light,
+    },
+    beamerboxexample/.style={
+        beamerbox,
+        colbacktitle=c2,
+        coltitle=text-light,
+    }
+}
+
+% Redefine block environments
+\setbeamertemplate{block begin}{%
+    \begin{tcolorbox}[beamerbox, title=\insertblocktitle]
+}
+\setbeamertemplate{block end}{%
+    \end{tcolorbox}
+}
+
+\setbeamertemplate{block alerted begin}{%
+    \begin{tcolorbox}[beamerboxalert, title=\insertblocktitle]
+}
+\setbeamertemplate{block alerted end}{%
+    \end{tcolorbox}
+}
+
+\setbeamertemplate{block example begin}{%
+    \begin{tcolorbox}[beamerboxexample, title=\insertblocktitle]
+}
+\setbeamertemplate{block example end}{%
+    \end{tcolorbox}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Navigation Symbol
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamertemplate{subsection in toc}[sections numbered]
+% No navigation symbol
+\setbeamertemplate{navigation symbols}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Itemize environment
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamercolor{itemize item}{fg=bold}
+\setbeamercolor{itemize subitem}{fg=bold}
+\setbeamertemplate{itemize items}[circle]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Frame title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\defbeamertemplate*{frametitle}{texsx}[1][]
+{
+
+  {\large \textbf{\insertframetitle}}
+
+}
+
+% {
+%   \begin{beamercolorbox}[wd=\paperwidth, ht=2em]{frametitle} 
+%     \begin{tikzpicture}
+%     \node (title) at (0,0) {\insertframetitle};
+%     \draw[line width=1pt,color=main] (title.west |- 0,-.5) -- (title.east |- 0,-.5);
+%   \end{tikzpicture}
+%   \end{beamercolorbox}
+% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Figures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setlength{\abovecaptionskip}{0pt plus 0pt minus 0pt} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamertemplate{title page}
+{ 
+  \begin{beamercolorbox}[wd=\the\paperwidth,ht=\the\paperheight, center, sep=5em]{title page}
+      \textbf{\inserttitle}\par%
+      \vspace*{2em}
+      \usebeamerfont{author}
+      \vspace*{1em}
+      \small
+      \insertauthor \par
+      \vfill
+      \vspace*{1em}
+      \begin{center}
+      \includegraphics[width=0.3\textwidth]{logos/listic-logo-horiz.png}
+      \hspace{10em}
+      \includegraphics[width=0.125\textwidth]{logos/Logo_USMB_web_vertical_grand_RVB.png}
+      \end{center}
+      \par
+      \insertdate
+    \end{beamercolorbox}%
+  % \vfill
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define command for citation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\citeinframe}[1]{- {\scriptsize [\emph{\textcolor{bold}{#1}}]}}
+
+
+\mode<all>
