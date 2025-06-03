@@ -1,11 +1,4 @@
 ---
-<<<<<<< HEAD
-title: I - Linear regression
-weight: 10
----
-
-# Linear Regression
-=======
 title: I - Linear Regression models
 weight: 10
 ---
@@ -390,4 +383,3 @@ It's actually possible to extend the linear regression model to nonlinear regres
 \end{equation}
 
 From this information and your own research , implement a nonlinear regression model using polynomial features. You can use the `PolynomialFeatures` class from `sklearn.preprocessing` to generate polynomial features.
->>>>>>> main
