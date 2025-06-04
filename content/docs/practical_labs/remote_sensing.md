@@ -250,22 +250,82 @@ where $\mathbf{1}$ is a vector of ones.
 
 **Tasks:**
 
-1. **Derive the Lagrangian** of the constrained optimization problem. For a single pixel $p$, the Lagrangian is:
-$$
-L(\mathbf{a}_p, \lambda_p) = \Vert\mathbf{S}\mathbf{a}_p - \mathbf{y}_p\Vert_2^2 + \lambda_p(1 - \mathbf{1}^T\mathbf{a}_p)
-$$
+1. **Derive the Lagrangian** of the constrained optimization problem
 
-2. **Compute the optimal solution** by setting the gradients to zero. Show that the solution is:
+{{<hiddenhint "Solution">}}
 $$
-\mathbf{a}_p^* = (\mathbf{S}^T\mathbf{S})^{-1}\mathbf{S}^T\mathbf{y}_p + (\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\lambda_p^*
+L(\mathbf{A}, \lambda) = \Vert\mathbf{S}\mathbf{A} - \mathbf{Y}\Vert_2^2 + \sum_{i=1}^n\lambda_i\left(1 - \sum_{k=1}^K a_{ik}\right)
 $$
-where $\lambda_p^*$ is chosen to satisfy the constraint.
+{{</hiddenhint>}}
+
+
+
+
+2. **Compute the optimal solution** by setting the gradients to zero.
 <!-- 
 {{<hiddenhint "Hint">}}
 Use the method of Lagrange multipliers. Set $\nabla\_{\mathbf{a}_p} L = 0$ and $\nabla\_{\lambda_p} L = 0$, then solve for $\lambda_p^*$ using the constraint.
 {{</hiddenhint>}} -->
 
-3. **Derive the closed-form expression** for $\lambda_p^*$ and the final solution.
+3. **Derive the closed-form expression** for $\lambda^*$ and the final solution.
+
+{{<hiddenhint "Solution">}}
+Recall that the matrix vector product 
+$$
+   (\mathbf{c}\mathbf{A})\_i = \sum\_{k} c\_k a\_{ki}, (\mathbf{A}\mathbf{c})\_k = \sum\_{i} a\_{ki} c\_i
+$$
+
+In the problem below, we note $\lambda\in\mathbb{R}^{n\times 1}$, $\mathbf{A}\in\mathbb{R}^{K\times n}$ and  $\mathbf{1}\_{d} = [1, ..., 1]^T \in\mathbb{R}^{d\times 1}$.
+
+The Lagrangian below can thus be expressed as,
+$$
+\begin{aligned}
+L(\mathbf{A}, \lambda) &= \Vert\mathbf{S}\mathbf{A} - \mathbf{Y}\Vert\_2^2 + \sum_{i=1}^n\lambda\_i - \sum_{i=1}^n \sum_{k=1}^K \lambda\_i a_{ik} \\\
+&= \Vert\mathbf{S}\mathbf{A} - \mathbf{Y}\Vert\_2^2 + \mathbf{1}\_n^T \mathbf{\lambda} - \sum\_{k=1}^K (\mathbf{A}\mathbf{\lambda})\_k \\\
+&= \Vert\mathbf{S}\mathbf{A} - \mathbf{Y}\Vert\_2^2 + \mathbf{1}\_n^T \mathbf{\lambda} - \mathbf{1}\_{K}^T\mathbf{A}\mathbf{\lambda}
+\end{aligned}
+$$
+
+The gradient of $L$ w.r.t to $\mathbf{A}$ and $\lambda$ reads,
+$$
+\begin{aligned}
+\nabla_{\mathbf{A}}f(\mathbf{A}) &= \mathbf{S}^T(\mathbf{S}\mathbf{A} - \mathbf{Y}) - \mathbf{1}\_{K}\mathbf{\lambda}^T \\\
+\nabla_{\mathbf{\lambda}}f(\mathbf{\lambda}) &= -\mathbf{A}^T\mathbf{1}\_{K} + \mathbf{1}_{n}
+\end{aligned}
+$$
+Note that $\mathbf{1}\_{K}\mathbf{\lambda}^T \in \mathbf{R}^{K\times n}$
+
+We can now solve the system of linear equation that cancels the gradients,
+$$
+\begin{aligned}
+\mathbf{S}^T(\mathbf{S}\mathbf{A} - \mathbf{Y}) - \mathbf{1}\_{K}\mathbf{\lambda}^T &= 0\\\
+-\mathbf{A}^T\mathbf{1}\_{K} + \mathbf{1}_{n} =& 0
+\end{aligned}
+$$
+
+Without extensive linear algebra we get
+
+$$
+\begin{aligned}
+\mathbf{A}^\*  &= (\mathbf{S}^T\mathbf{S})^{-1} \mathbf{S}^T \mathbf{Y} + (\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\_{K}\mathbf{\lambda}^T \\\
+\end{aligned}
+$$
+We notice that we can use the unconstrained solution to express this new constrained solution 
+$$
+\mathbf{A}^*  =  \mathbf{A}\_{\rm un}^\* + (\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\_{K}\mathbf{\lambda}^T 
+$$
+Injecting into the second equation we get
+$$
+\begin{aligned}
+-(\mathbf{A}\_{\rm un}^\* + (\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\_{K}\mathbf{\lambda}^T)^T\mathbf{1}\_{K} + \mathbf{1}\_{n} &= 0 \\\
+-\mathbf{A}\_{\rm un}^{\*^T}\mathbf{1}\_{K} - \mathbf{\lambda}\mathbf{1}\_{K}^T(\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\_{K} + \mathbf{1}\_{n} &= 0 \\\
+\end{aligned}
+$$
+$$
+\mathbf{\lambda}^{\*} =  \frac{\mathbf{1}\_{n} - \mathbf{A}\_{\rm un}^{\*^T}\mathbf{1}\_{K}}{\mathbf{1}\_{K}^T(\mathbf{S}^T\mathbf{S})^{-1}\mathbf{1}\_{K} }
+$$
+
+{{</hiddenhint>}} 
 
 4. **Implement the sum-to-one constrained solution** and test it on the Pavia University dataset.
 
