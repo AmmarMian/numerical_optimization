@@ -44,15 +44,16 @@ A **hyperspectral image (HSI)** captures information across a wide range of the 
 
 Each pixel in a hyperspectral image contains a complete spectrum, which can be thought of as a "fingerprint" of the materials present in that pixel. The spectral dimension provides rich information about the chemical and physical properties of the observed scene.
 
-{{<center>}}
+<center>
 {{<NumberedFigure
-  src="../../../../tikZ/hyperspectral/hsi_cube.svg"
+  src=" ../../../../../png/hyperspectral/hsi.png"
   alt="Hyperspectral image cube showing spatial and spectral dimensions"
-  width="500px"
+  width="600px"
   caption="A hyperspectral image cube with spatial dimensions (x,y) and spectral dimension (λ)"
   label="fig:hsi_cube"
 >}}
-{{</center>}}
+</center>
+
 
 In this lab session, we will work with an open dataset for hyperspectral data analysis: the **Pavia University HSI dataset**. This dataset is widely used in the remote sensing community and contains agricultural fields with different crop types.
 
@@ -91,7 +92,7 @@ In remote sensing, hyperspectral images of the Earth are composed of pixels that
 
 {{<center>}}
 {{<NumberedFigure
-  src="../../../../tikZ/hyperspectral/spectral_unmixing.svg"
+  src=" ../../../../../tikZ/hyperspectral_linear_mixing_model/main.svg"
   alt="Illustration of spectral unmixing process"
   width="600px"
   caption="Spectral unmixing: decomposing mixed pixel spectra into endmember spectra and abundances"
