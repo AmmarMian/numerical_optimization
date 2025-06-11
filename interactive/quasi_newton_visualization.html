@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasi-Newton Method Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #fafafa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #222;
+        }
+        
+        .equation {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            color: #555;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .control-group h3 {
+            margin: 0 0 12px 0;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 8px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #007AFF;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .svg-container {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .contour-line {
+            fill: none;
+            stroke: #e5e5e5;
+            stroke-width: 0.8;
+        }
+        
+        .axis {
+            stroke: #ccc;
+            stroke-width: 1;
+        }
+        
+        .axis text {
+            fill: #666;
+            font-size: 11px;
+        }
+        
+        .point {
+            cursor: move;
+        }
+        
+        .point-xk {
+            fill: #007AFF;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .point-xk1 {
+            fill: #FF3B30;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .vector-s {
+            stroke: #007AFF;
+            stroke-width: 2;
+            marker-end: url(#arrow-blue);
+        }
+        
+        .vector-y {
+            stroke: #FF9500;
+            stroke-width: 2;
+            marker-end: url(#arrow-orange);
+        }
+        
+        .gradient-k {
+            stroke: #34C759;
+            stroke-width: 1.5;
+            marker-end: url(#arrow-green);
+            stroke-dasharray: 3,3;
+        }
+        
+        .gradient-k1 {
+            stroke: #AF52DE;
+            stroke-width: 1.5;
+            marker-end: url(#arrow-purple);
+            stroke-dasharray: 3,3;
+        }
+        
+        .label {
+            font-size: 12px;
+            font-weight: 500;
+            fill: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            font-size: 0.85em;
+            color: #555;
+        }
+        
+        .grid-line {
+            stroke: #f0f0f0;
+            stroke-width: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quasi-Newton Method: Secant Equation</h1>
+        
+        <div class="equation">
+            <strong>B<sub>k+1</sub> s<sub>k</sub> = y<sub>k</sub></strong><br>
+            where s<sub>k</sub> = x<sub>k+1</sub> - x<sub>k</sub>, y<sub>k</sub> = ∇f<sub>k+1</sub> - ∇f<sub>k</sub>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h3>Function Parameters</h3>
+                <label>a (x² coefficient): <span id="a-value">1</span></label>
+                <input type="range" id="a-slider" min="0.1" max="3" step="0.1" value="1">
+                
+                <label>b (y² coefficient): <span id="b-value">2</span></label>
+                <input type="range" id="b-slider" min="0.1" max="3" step="0.1" value="2">
+                
+                <label>c (xy coefficient): <span id="c-value">0.5</span></label>
+                <input type="range" id="c-slider" min="-1" max="1" step="0.1" value="0.5">
+            </div>
+            
+            <div class="control-group">
+                <h3>Step Size</h3>
+                <label>α (step size): <span id="alpha-value">0.15</span></label>
+                <input type="range" id="alpha-slider" min="0.01" max="0.5" step="0.01" value="0.15">
+            </div>
+        </div>
+        
+        <div class="svg-container">
+            <svg id="visualization" width="800" height="600"></svg>
+        </div>
+        
+        <div class="info-panel">
+            <div id="info-display"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set up SVG and dimensions
+        const svg = d3.select("#visualization");
+        const width = 800;
+        const height = 600;
+        const margin = {top: 30, right: 30, bottom: 30, left: 30};
+        const plotWidth = width - margin.left - margin.right;
+        const plotHeight = height - margin.top - margin.bottom;
+        
+        // Create scales
+        const xScale = d3.scaleLinear().domain([-2.5, 2.5]).range([0, plotWidth]);
+        const yScale = d3.scaleLinear().domain([-2.5, 2.5]).range([plotHeight, 0]);
+        
+        // Create main group
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        // Define arrowhead markers
+        const defs = svg.append("defs");
+        
+        function createArrowMarker(id, color) {
+            defs.append("marker")
+                .attr("id", id)
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 8)
+                .attr("refY", 0)
+                .attr("markerWidth", 5)
+                .attr("markerHeight", 5)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .style("fill", color);
+        }
+        
+        createArrowMarker("arrow-blue", "#007AFF");
+        createArrowMarker("arrow-orange", "#FF9500");
+        createArrowMarker("arrow-green", "#34C759");
+        createArrowMarker("arrow-purple", "#AF52DE");
+        
+        // State variables
+        let params = {a: 1, b: 2, c: 0.5, alpha: 0.15};
+        let xk = {x: -1.2, y: 0.8};
+        let xk1 = {x: 0, y: 0};
+        
+        // Function and gradient definitions
+        function f(x, y) {
+            return params.a * x * x + params.b * y * y + params.c * x * y;
+        }
+        
+        function gradient(x, y) {
+            return {
+                x: 2 * params.a * x + params.c * y,
+                y: 2 * params.b * y + params.c * x
+            };
+        }
+        
+        // Update xk1 based on gradient descent step
+        function updateXk1() {
+            const grad = gradient(xk.x, xk.y);
+            xk1.x = xk.x - params.alpha * grad.x;
+            xk1.y = xk.y - params.alpha * grad.y;
+        }
+        
+        // Create contour visualization
+        function createContours() {
+            g.selectAll(".contour-group").remove();
+            
+            const n = 50;
+            const values = new Array(n * n);
+            
+            for (let j = 0, k = 0; j < n; ++j) {
+                for (let i = 0; i < n; ++i, ++k) {
+                    const x = xScale.invert(i * plotWidth / (n - 1));
+                    const y = yScale.invert(j * plotHeight / (n - 1));
+                    values[k] = f(x, y);
+                }
+            }
+            
+            const contours = d3.contours()
+                .size([n, n])
+                .thresholds(12)
+                (values);
+            
+            const contourGroup = g.append("g").attr("class", "contour-group");
+            
+            contourGroup.selectAll("path")
+                .data(contours)
+                .enter().append("path")
+                .attr("class", "contour-line")
+                .attr("d", d3.geoPath(d3.geoIdentity().scale(plotWidth / n)));
+        }
+        
+        // Draw visualization elements
+        function drawVisualization() {
+            updateXk1();
+            
+            // Calculate vectors and gradient endpoints
+            const sk = {x: xk1.x - xk.x, y: xk1.y - xk.y};
+            const gradk = gradient(xk.x, xk.y);
+            const gradk1 = gradient(xk1.x, xk1.y);
+            const yk = {x: gradk1.x - gradk.x, y: gradk1.y - gradk.y};
+            
+            // Calculate gradient endpoints
+            const gradScale = 0.3;
+            const gradEndK = {x: xk.x + gradk.x * gradScale, y: xk.y + gradk.y * gradScale};
+            const gradEndK1 = {x: xk1.x + gradk1.x * gradScale, y: xk1.y + gradk1.y * gradScale};
+            
+            // Remove existing elements
+            g.selectAll(".vector, .point, .gradient, .label").remove();
+            
+            // Draw step vector sk
+            g.append("line")
+                .attr("class", "vector vector-s")
+                .attr("x1", xScale(xk.x))
+                .attr("y1", yScale(xk.y))
+                .attr("x2", xScale(xk1.x))
+                .attr("y2", yScale(xk1.y));
+            
+            // Draw gradient difference vector yk from tip of grad_k to tip of grad_k1
+            g.append("line")
+                .attr("class", "vector vector-y")
+                .attr("x1", xScale(gradEndK.x))
+                .attr("y1", yScale(gradEndK.y))
+                .attr("x2", xScale(gradEndK1.x))
+                .attr("y2", yScale(gradEndK1.y));
+            
+            // Draw gradients
+            g.append("line")
+                .attr("class", "gradient gradient-k")
+                .attr("x1", xScale(xk.x))
+                .attr("y1", yScale(xk.y))
+                .attr("x2", xScale(gradEndK.x))
+                .attr("y2", yScale(gradEndK.y));
+            
+            g.append("line")
+                .attr("class", "gradient gradient-k1")
+                .attr("x1", xScale(xk1.x))
+                .attr("y1", yScale(xk1.y))
+                .attr("x2", xScale(gradEndK1.x))
+                .attr("y2", yScale(gradEndK1.y));
+            
+            // Draw points
+            const pointXk = g.append("circle")
+                .attr("class", "point point-xk")
+                .attr("cx", xScale(xk.x))
+                .attr("cy", yScale(xk.y))
+                .attr("r", 6);
+            
+            g.append("circle")
+                .attr("class", "point point-xk1")
+                .attr("cx", xScale(xk1.x))
+                .attr("cy", yScale(xk1.y))
+                .attr("r", 5);
+            
+            // Add point labels
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(xk.x) + 10)
+                .attr("y", yScale(xk.y) - 10)
+                .text("xₖ")
+                .style("fill", "#007AFF");
+            
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(xk1.x) + 10)
+                .attr("y", yScale(xk1.y) - 10)
+                .text("xₖ₊₁")
+                .style("fill", "#FF3B30");
+            
+            // Add vector labels next to arrows
+            const midSk = {x: (xk.x + xk1.x) / 2, y: (xk.y + xk1.y) / 2};
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(midSk.x) + 5)
+                .attr("y", yScale(midSk.y) - 8)
+                .text("sₖ")
+                .style("fill", "#007AFF");
+            
+            // y_k label at midpoint of the vector connecting gradient tips
+            const midYk = {x: (gradEndK.x + gradEndK1.x) / 2, y: (gradEndK.y + gradEndK1.y) / 2};
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(midYk.x) + 5)
+                .attr("y", yScale(midYk.y) - 8)
+                .text("yₖ")
+                .style("fill", "#FF9500");
+            
+            // Gradient labels
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(gradEndK.x) + 3)
+                .attr("y", yScale(gradEndK.y) - 3)
+                .text("∇fₖ")
+                .style("fill", "#34C759")
+                .style("font-size", "10px");
+            
+            g.append("text")
+                .attr("class", "label")
+                .attr("x", xScale(gradEndK1.x) + 3)
+                .attr("y", yScale(gradEndK1.y) - 3)
+                .text("∇fₖ₊₁")
+                .style("fill", "#AF52DE")
+                .style("font-size", "10px");
+            
+            // Update info panel
+            updateInfoPanel(sk, yk, gradk, gradk1);
+            
+            // Make xk draggable
+            pointXk.call(d3.drag()
+                .on("drag", function(event) {
+                    xk.x = xScale.invert(event.x);
+                    xk.y = yScale.invert(event.y);
+                    
+                    // Constrain to bounds
+                    xk.x = Math.max(-2.5, Math.min(2.5, xk.x));
+                    xk.y = Math.max(-2.5, Math.min(2.5, xk.y));
+                    
+                    drawVisualization();
+                }));
+        }
+        
+        function updateInfoPanel(sk, yk, gradk, gradk1) {
+            const info = document.getElementById('info-display');
+            info.innerHTML = `
+                xₖ = (${xk.x.toFixed(2)}, ${xk.y.toFixed(2)})   
+                xₖ₊₁ = (${xk1.x.toFixed(2)}, ${xk1.y.toFixed(2)})<br>
+                sₖ = (${sk.x.toFixed(2)}, ${sk.y.toFixed(2)})   
+                yₖ = (${yk.x.toFixed(2)}, ${yk.y.toFixed(2)})<br>
+                ∇fₖ = (${gradk.x.toFixed(2)}, ${gradk.y.toFixed(2)})   
+                ∇fₖ₊₁ = (${gradk1.x.toFixed(2)}, ${gradk1.y.toFixed(2)})<br><br>
+                f(x,y) = ${params.a}x² + ${params.b}y² + ${params.c}xy
+            `;
+        }
+        
+        // Draw minimal axes
+        function drawAxes() {
+            // X axis
+            g.append("line")
+                .attr("class", "axis")
+                .attr("x1", 0)
+                .attr("y1", yScale(0))
+                .attr("x2", plotWidth)
+                .attr("y2", yScale(0));
+            
+            // Y axis
+            g.append("line")
+                .attr("class", "axis")
+                .attr("x1", xScale(0))
+                .attr("y1", 0)
+                .attr("x2", xScale(0))
+                .attr("y2", plotHeight);
+            
+            // Minimal grid
+            const xTicks = [-2, -1, 1, 2];
+            const yTicks = [-2, -1, 1, 2];
+            
+            xTicks.forEach(tick => {
+                g.append("line")
+                    .attr("class", "grid-line")
+                    .attr("x1", xScale(tick))
+                    .attr("y1", 0)
+                    .attr("x2", xScale(tick))
+                    .attr("y2", plotHeight);
+                
+                g.append("text")
+                    .attr("x", xScale(tick))
+                    .attr("y", yScale(0) + 15)
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "10px")
+                    .style("fill", "#666")
+                    .text(tick);
+            });
+            
+            yTicks.forEach(tick => {
+                g.append("line")
+                    .attr("class", "grid-line")
+                    .attr("x1", 0)
+                    .attr("y1", yScale(tick))
+                    .attr("x2", plotWidth)
+                    .attr("y2", yScale(tick));
+                
+                g.append("text")
+                    .attr("x", xScale(0) - 15)
+                    .attr("y", yScale(tick) + 3)
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "10px")
+                    .style("fill", "#666")
+                    .text(tick);
+            });
+        }
+        
+        // Parameter control handlers
+        function setupControls() {
+            const sliders = ['a', 'b', 'c', 'alpha'];
+            
+            sliders.forEach(param => {
+                const slider = document.getElementById(`${param}-slider`);
+                const valueSpan = document.getElementById(`${param}-value`);
+                
+                slider.addEventListener('input', function() {
+                    params[param] = parseFloat(this.value);
+                    valueSpan.textContent = this.value;
+                    createContours();
+                    drawVisualization();
+                });
+            });
+        }
+        
+        // Initialize visualization
+        function init() {
+            drawAxes();
+            createContours();
+            drawVisualization();
+            setupControls();
+        }
+        
+        init();
+    </script>
+</body>
+</html>

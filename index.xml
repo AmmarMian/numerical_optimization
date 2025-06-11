@@ -51,7 +51,7 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
  Proximal methods
  &lt;a class="anchor" href="#proximal-methods">#&lt;/a>
 &lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
+&lt;p>We refer the reader to the monograph by &lt;a href="https://web.stanford.edu/~boyd/papers/pdf/prox_algs.pdf">Parikh and Boyd (2014)&lt;/a> for a comprehensive overview of proximal methods.&lt;/p></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
  Support Vector Machine
  &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
 &lt;/h1>
@@ -200,7 +200,15 @@ function attains its least value. A formal definition is :&lt;/p></description><
 &lt;p>The second part of this lecture is about minimizing functions subject to constraints on the variables. A general formulation for these problems is&lt;/p>
 &lt;p>$$
 \min_{\mathbf{x} \in \mathrm{R}^{n}} f(\mathbf{x}) \quad \text { subject to } \quad \begin{cases}c_{i}(\mathbf{x})=0, &amp;amp; i \in \mathcal{E}, \\ c_{i}(\mathbf{x}) \geq 0, &amp;amp; i \in \mathcal{I},\end{cases}
-$$&lt;/p></description></item><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
+$$&lt;/p></description></item><item><title>5b. Constrained optimization - Projected Gradient Descent</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_projected/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_projected/</guid><description>&lt;h1 id="understanding-saddle-points-in-constrained-optimization-from-kkt-conditions-to-projected-gradient-methods">
+ Understanding Saddle Points in Constrained Optimization: From KKT Conditions to Projected Gradient Methods
+ &lt;a class="anchor" href="#understanding-saddle-points-in-constrained-optimization-from-kkt-conditions-to-projected-gradient-methods">#&lt;/a>
+&lt;/h1>
+&lt;p>When we first encounter the Karush-Kuhn-Tucker (KKT) conditions in constrained optimization, they often appear as a collection of mathematical requirements that characterize optimal solutions. However, these conditions actually emerge from a deeper geometric structure that reveals why constrained optimization problems possess fundamentally different mathematical properties than their unconstrained counterparts. This exploration will guide you through understanding how constraint conflicts create saddle point structures in the Lagrangian, and how this mathematical insight leads naturally to practical algorithms.&lt;/p></description></item><item><title>6. Constrained optimization - Linear programming</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimization_linear/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/constrained_optimization_linear/</guid><description>&lt;h2 id="linear-programming">
+ Linear programming
+ &lt;a class="anchor" href="#linear-programming">#&lt;/a>
+&lt;/h2>
+&lt;p>Linear programs have a linear objective function and linear constraints, which may include both equalities and inequalities. The feasible set is a polytope, that is, a convex, connected set with flat, polygonal faces. The contours of the objective function are planar. The solution in this case is unique-a single vertex. A simple reorientation of the polytope or the objective gradient $\mathbf{c}$ could, however, make the solution nonunique; the optimal value $\mathbf{c}^{\mathrm{T}} \mathbf{x}$ could be the same on an entire edge. In higher dimensions, the set of optimal points can be a single vertex, an edge or face, or even the entire feasible set!&lt;/p></description></item><item><title>I - Linear Regression models</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/linear_regression/</guid><description>&lt;h1 id="linear-regression-models">
  Linear Regression models
  &lt;a class="anchor" href="#linear-regression-models">#&lt;/a>
 &lt;/h1>
@@ -263,4 +271,18 @@ $$&lt;/p></description></item><item><title>I - Linear Regression models</title><
 &lt;/h2>
 &lt;p>Consider the optimization problem:
 $\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p>
-&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item></channel></rss>
+&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item><item><title>Quasi-Newton methods memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/quasinewton/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/quasinewton/</guid><description>&lt;h1 id="bfgs-and-sr1-quasi-newton-methods">
+ BFGS and SR1 Quasi-Newton Methods
+ &lt;a class="anchor" href="#bfgs-and-sr1-quasi-newton-methods">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>Quasi-Newton methods are a class of optimization algorithms that approximate the Newton direction without requiring explicit computation of the Hessian matrix. These methods achieve superlinear convergence while avoiding the computational expense and potential numerical difficulties associated with second derivatives. The two most prominent quasi-Newton methods are the BFGS (Broyden-Fletcher-Goldfarb-Shanno) and SR1 (Symmetric Rank-One) methods.&lt;/p>
+&lt;h2 id="mathematical-setup">
+ Mathematical setup
+ &lt;a class="anchor" href="#mathematical-setup">#&lt;/a>
+&lt;/h2>
+&lt;p>Consider the optimization problem:
+$\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p></description></item></channel></rss>

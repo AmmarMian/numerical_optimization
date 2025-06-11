@@ -61,4 +61,18 @@
 &lt;/h2>
 &lt;p>Consider the optimization problem:
 $\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p>
-&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item></channel></rss>
+&lt;p>where $f: \mathbb{R}^n \to \mathbb{R}$ is a continuously differentiable function. At iteration $k$, we have:&lt;/p></description></item><item><title>Quasi-Newton methods memo</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/quasinewton/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/quasinewton/</guid><description>&lt;h1 id="bfgs-and-sr1-quasi-newton-methods">
+ BFGS and SR1 Quasi-Newton Methods
+ &lt;a class="anchor" href="#bfgs-and-sr1-quasi-newton-methods">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>Quasi-Newton methods are a class of optimization algorithms that approximate the Newton direction without requiring explicit computation of the Hessian matrix. These methods achieve superlinear convergence while avoiding the computational expense and potential numerical difficulties associated with second derivatives. The two most prominent quasi-Newton methods are the BFGS (Broyden-Fletcher-Goldfarb-Shanno) and SR1 (Symmetric Rank-One) methods.&lt;/p>
+&lt;h2 id="mathematical-setup">
+ Mathematical setup
+ &lt;a class="anchor" href="#mathematical-setup">#&lt;/a>
+&lt;/h2>
+&lt;p>Consider the optimization problem:
+$\min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})$&lt;/p></description></item></channel></rss>

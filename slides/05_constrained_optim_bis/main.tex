@@ -1,0 +1,297 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[utf8]{inputenc}
+% \usepackage[default,oldstyle,scale=0.95]{opensans}
+% \usepackage[T1]{fontenc}
+\usepackage{sansmathfonts}
+\usepackage[T1]{fontenc}
+
+\usepackage[natbib=true,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+
+\usepackage{pgf-pie}  
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{svg}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{math}
+\usetikzlibrary{backgrounds,calc,positioning}
+\usepackage{qrcode}
+\usepackage{siunitx}
+\usetikzlibrary{patterns,positioning,arrows.meta,decorations.pathreplacing}
+
+\usepackage{pgfplots}
+\usepackage{algorithm, algpseudocode}
+
+
+
+\usetheme{main}
+
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+
+
+\title[Numerical optimization]{Numerical optimization : theory and applications}
+
+\date[]{}
+\author[AM]{\textbf{Ammar Mian} \\ \footnotesize Associate professor, LISTIC, Université Savoie Mont Blanc}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+% \newcommand{\alert}[1]{{\textbf{\alert{#1}}}}
+
+
+%\input{macros.tex}
+
+
+\AtBeginBibliography{\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     END OF PREAMBLE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%
+
+
+  
+\begin{frame}[noframenumbering,plain]
+\titlepage
+\end{frame}
+\begingroup
+\setbeamercolor{background canvas}{bg=main}
+\setbeamercolor{titlelike}{fg=text-light, bg=light}
+\begin{frame}[noframenumbering,plain]{Outline}
+    \tableofcontents[]
+\end{frame}
+
+\endgroup
+
+\AtBeginSection[]{
+        \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[plain, noframenumbering]
+        \tableofcontents[currentsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+\AtBeginSubsection[]
+{
+    \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[noframenumbering, plain, label=]
+        % \frametitle{Plan}  
+        \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The Missing Piece: Understanding the Saddle Point Structure}
+  \textbf{What we covered previously:} KKT conditions tell us \emph{what} the solution looks like
+  
+  \vspace{0.3cm}
+  \textbf{What we missed:} \emph{How} to optimize the Lagrangian to find this solution
+  
+  \vspace{0.5cm}
+  \begin{block}{Key Question}
+    Given $\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) - \sum_{i} \lambda_i c_i(\mathbf{x})$, how do we optimize over $(\mathbf{x}, \boldsymbol{\lambda})$?
+  \end{block}
+  
+  \vspace{0.3cm}
+  \textbf{The fundamental insight:} The KKT conditions emerge from a \emph{saddle point} structure where:
+  \begin{itemize}
+    \item We \textcolor{blue}{\textbf{minimize}} over primal variables $\mathbf{x}$
+    \item We \textcolor{red}{\textbf{maximize}} over dual variables $\boldsymbol{\lambda} \geq 0$
+  \end{itemize}
+  
+  \vspace{0.3cm}
+  This opposite optimization behavior is \emph{not} arbitrary---it emerges naturally from the mathematical structure of constrained optimization.
+\end{frame}
+
+\begin{frame}{Why the Minus Sign Creates the Right Incentives}
+  Consider our Lagrangian: $\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) - \sum_{i} \lambda_i c_i(\mathbf{x})$
+  
+  \vspace{0.3cm}
+  \textbf{What happens if we minimize over both variables?}
+  
+  For inequality constraint $c_i(\mathbf{x}) \geq 0$:
+  \begin{itemize}
+    \item When $c_i(\mathbf{x}) > 0$ (constraint satisfied with slack)
+    \item Term $-\lambda_i c_i(\mathbf{x})$ becomes more negative as $\lambda_i$ increases
+    \item Minimizing over $\lambda_i$ would drive $\mathcal{L} \to +\infty$ 
+  \end{itemize}
+  
+  \vspace{0.3cm}
+  \begin{alertblock}{The Resolution}
+    We must \textbf{maximize} over $\lambda_i \geq 0$. When $c_i(\mathbf{x}) > 0$, maximization drives $\lambda_i \to 0$, consistent with complementarity: $\lambda_i c_i(\mathbf{x}) = 0$.
+  \end{alertblock}
+  
+  \vspace{0.3cm}
+  The minus sign in the Lagrangian creates the correct incentive structure for the dual variables to encode constraint shadow prices.
+\end{frame}
+
+\begin{frame}{The Saddle Point Property}
+  \begin{theorem}[Saddle Point Characterization]
+    $(\mathbf{x}^{\star}, \boldsymbol{\lambda}^{\star})$ solves the constrained optimization problem if and only if it is a saddle point of the Lagrangian:
+    $$\mathcal{L}(\mathbf{x}^{\star}, \boldsymbol{\lambda}) \leq \mathcal{L}(\mathbf{x}^{\star}, \boldsymbol{\lambda}^{\star}) \leq \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}^{\star})$$
+    for all feasible $\mathbf{x}$ and all $\boldsymbol{\lambda} \geq 0$.
+  \end{theorem}
+  
+  \vspace{0.3cm}
+  \textbf{Interpretation:}
+  \begin{itemize}
+    \item \textcolor{blue}{Left inequality}: $\mathcal{L}(\mathbf{x}^{\star}, \boldsymbol{\lambda})$ is \emph{maximized} over $\boldsymbol{\lambda}$ at $\boldsymbol{\lambda}^{\star}$
+    \item \textcolor{red}{Right inequality}: $\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}^{\star})$ is \emph{minimized} over $\mathbf{x}$ at $\mathbf{x}^{\star}$
+  \end{itemize}
+  
+  \vspace{0.3cm}
+  \begin{block}{Economic Insight}
+    Dual variables $\boldsymbol{\lambda}^{\star}$ represent \textbf{shadow prices}---the marginal value of relaxing constraints. Maximization over $\boldsymbol{\lambda}$ finds the economically meaningful constraint valuations.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Illustrative Example: The Saddle Point in Action}
+  \textbf{Problem:} $\min f(x) = -(x-3)^2$ subject to $x \geq 1$
+  
+  \textbf{Lagrangian:} $\mathcal{L}(x,\lambda) = -(x-3)^2 - \lambda(x-1)$
+  
+  \vspace{0.3cm}
+  \textbf{The conflict:} Objective wants $x \to -\infty$, constraint forces $x^{\star} = 1$
+  
+  \vspace{0.3cm}
+  \textbf{Saddle point analysis:}
+  \begin{align}
+    \frac{\partial \mathcal{L}}{\partial x} &= -2(x-3) - \lambda = 0 \quad \text{(Stationarity)}\\
+    \text{At } x^{\star} = 1: \quad &-2(1-3) - \lambda = 0 \Rightarrow \lambda^{\star} = 4
+  \end{align}
+  
+  \vspace{0.3cm}
+  \textbf{Verification of saddle property:}
+  \begin{itemize}
+    \item Fix $\lambda = 4$: $\mathcal{L}(x,4) = -(x-3)^2 - 4(x-1)$ has unique minimum at $x = 1$
+    \item Fix $x = 1$: $\mathcal{L}(1,\lambda) = -4$ (constant, satisfying max condition)
+  \end{itemize}
+  
+  \textbf{Shadow price:} $\lambda^{\star} = 4$ means relaxing $x \geq 1$ to $x \geq 1-\epsilon$ improves objective by $\approx 4\epsilon$.
+\end{frame}
+
+\begin{frame}{From Theory to Algorithm: Projected Gradient Method}
+  The saddle point structure naturally suggests an \textbf{alternating optimization} scheme:
+  
+  \vspace{0.5cm}
+  \begin{block}{Projected Gradient Algorithm}
+    \textbf{Initialize:} $\mathbf{x}^0, \boldsymbol{\lambda}^0 \geq 0$
+    
+    \textbf{For} $k = 0, 1, 2, \ldots$ \textbf{until convergence:}
+    \begin{align}
+      \mathbf{x}^{k+1} &= \mathbf{x}^k - \alpha_k \nabla_{\mathbf{x}} \mathcal{L}(\mathbf{x}^k, \boldsymbol{\lambda}^k) \tag{Primal descent}\\
+      \boldsymbol{\lambda}^{k+1} &= \max(0, \boldsymbol{\lambda}^k + \beta_k \nabla_{\boldsymbol{\lambda}} \mathcal{L}(\mathbf{x}^{k+1}, \boldsymbol{\lambda}^k)) \tag{Dual ascent}
+    \end{align}
+  \end{block}
+  
+  \vspace{0.3cm}
+  \textbf{Key components:}
+  \begin{itemize}
+    \item \textcolor{blue}{\textbf{Primal step}}: Gradient descent on $\mathcal{L}$ with respect to $\mathbf{x}$
+    \item \textcolor{red}{\textbf{Dual step}}: Projected gradient ascent on $\mathcal{L}$ with respect to $\boldsymbol{\lambda}$
+    \item \textbf{Projection}: $\max(0, \cdot)$ ensures dual feasibility $\boldsymbol{\lambda} \geq 0$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Understanding the Gradient Components}
+  For our general Lagrangian $\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) - \sum_{i} \lambda_i c_i(\mathbf{x})$:
+  
+  \vspace{0.3cm}
+  \textbf{Primal gradient:}
+  $$\nabla_{\mathbf{x}} \mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = \nabla f(\mathbf{x}) - \sum_{i} \lambda_i \nabla c_i(\mathbf{x})$$
+  
+  \textbf{Dual gradient:}
+  $$\frac{\partial \mathcal{L}}{\partial \lambda_i} = -c_i(\mathbf{x})$$
+  
+  \vspace{0.3cm}
+  \begin{block}{Algorithm Updates}
+    \begin{align}
+      \mathbf{x}^{k+1} &= \mathbf{x}^k - \alpha_k \left(\nabla f(\mathbf{x}^k) - \sum_{i} \lambda_i^k \nabla c_i(\mathbf{x}^k)\right)\\
+      \lambda_i^{k+1} &= \max(0, \lambda_i^k + \beta_k c_i(\mathbf{x}^{k+1})) \quad \forall i
+    \end{align}
+  \end{block}
+  
+  \textbf{Intuition:} Dual variables increase when constraints are violated ($c_i < 0$) and decrease when constraints have slack ($c_i > 0$), naturally driving toward complementarity.
+\end{frame}
+
+\begin{frame}{Algorithm Implementation for Our Exercise}
+  \textbf{Recall our problem:}
+  \begin{align}
+    \text{minimize} \quad & f(x,y) = (x-2)^2 + (y-2)^2 \\
+    \text{subject to:} \quad & g(x,y) = x + y - 2 = 0 \\
+    & h_1(x,y) = -x \leq 0, \quad h_2(x,y) = -y \leq 0
+  \end{align}
+  
+  \textbf{Lagrangian:}
+  $$\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) - \mu_1(-x) - \mu_2(-y)$$
+  
+  \textbf{Gradients:}
+  \begin{align}
+    \frac{\partial \mathcal{L}}{\partial x} &= 2(x-2) - \lambda + \mu_1\\
+    \frac{\partial \mathcal{L}}{\partial y} &= 2(y-2) - \lambda + \mu_2\\
+    \frac{\partial \mathcal{L}}{\partial \lambda} &= -(x + y - 2)\\
+    \frac{\partial \mathcal{L}}{\partial \mu_1} &= x, \quad \frac{\partial \mathcal{L}}{\partial \mu_2} = y
+  \end{align}
+\end{frame}
+
+\begin{frame}{Projected Gradient Steps for Our Exercise}
+  \textbf{Algorithm updates:}
+  \begin{align}
+    x^{k+1} &= x^k - \alpha(2(x^k-2) - \lambda^k + \mu_1^k)\\
+    y^{k+1} &= y^k - \alpha(2(y^k-2) - \lambda^k + \mu_2^k)\\
+    \lambda^{k+1} &= \lambda^k + \beta(x^{k+1} + y^{k+1} - 2)\\
+    \mu_1^{k+1} &= \max(0, \mu_1^k - \beta x^{k+1})\\
+    \mu_2^{k+1} &= \max(0, \mu_2^k - \beta y^{k+1})
+  \end{align}
+  
+  \vspace{0.3cm}
+  \textbf{Expected convergence:} $(x^{\star}, y^{\star}) = (1, 1)$ with $\lambda^{\star} = 2$, $\mu_1^{\star} = \mu_2^{\star} = 0$
+  
+  \vspace{0.3cm}
+  \begin{alertblock}{Key Insight}
+    The inequality constraints $x \geq 0, y \geq 0$ are \textbf{inactive} at the solution because the optimal point $(1,1)$ lies in the interior of the feasible region. Therefore $\mu_1^{\star} = \mu_2^{\star} = 0$ by complementarity.
+  \end{alertblock}
+\end{frame}
+
+
+\begin{frame}{Corrected Implementation and Key Takeaways}
+  \textbf{Implementation insight:} The projected gradient method will automatically handle the constraint activity determination through the projection steps.
+  
+  \vspace{0.3cm}
+  \textbf{Algorithm behavior:}
+  \begin{itemize}
+    \item Algorithm starts with some initial guess
+    \item Primal variables evolve toward $(1,1)$ due to objective function pull
+    \item Dual variables for inactive constraints get projected to zero
+    \item Equality constraint multiplier adjusts to maintain stationarity
+  \end{itemize}
+  
+  \vspace{0.5cm}
+  \begin{block}{Main Learning Objectives}
+    \textbf{1.} Saddle point structure emerges from constraint-objective conflicts
+    
+    \textbf{2.} Opposite optimization directions (min over $\mathbf{x}$, max over $\boldsymbol{\lambda}$) are mathematically necessary
+    
+    \textbf{3.} Projected gradient algorithm implements this structure computationally
+    
+    \textbf{4.} Shadow prices have economic meaning as constraint relaxation values
+  \end{block}
+\end{frame}
+\end{document}
+
+
