@@ -83,11 +83,11 @@ We then move on to more complicated problems:
 * Newton with linesearch and quasi-Newton methods
 * Proximal algorithms
 
-| Session | Duration | Content | Date | Room |
-|---------|----------|---------|------|------|
-| CM5 | 1.5h | Newton / Quasi Newton methods | 12 June 2025 10am | B-120 |
-| CM6 | 1.5h | Proximal methods | 12 June 2025 1.15pm | B-120 |
-| TD3 | 1.5h | Use of proximal methods in image processing | 12 June 2025 3pm | C-213 |
+| Session | Duration | Content | Date | Room | Slides |
+|---------|----------|---------|------|------|------|
+| CM5 | 1.5h | Projected Gradient then Newton / Quasi Newton methods | 12 June 2025 10am | B-120 | [Slides 1](./slides/05_constrained_optim_bis/main.pdf) /  [Slides 2](./slides/06_quasi_newton/main.pdf)|
+| CM6 | 1.5h | Study in autonomy | 12 June 2025 1.15pm | B-120 |
+| TD3 | 1.5h | Study in autonomy | 12 June 2025 3pm | C-213 |
 
 ### Part IV - Application to Machine Learning (Week 3)
 

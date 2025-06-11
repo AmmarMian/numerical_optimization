@@ -1,0 +1,448 @@
+\documentclass[aspectratio=1610]{beamer}
+\usepackage[utf8]{inputenc}
+% \usepackage[default,oldstyle,scale=0.95]{opensans}
+% \usepackage[T1]{fontenc}
+\usepackage{sansmathfonts}
+\usepackage[T1]{fontenc}
+
+\usepackage[natbib=true,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+\usepackage{tikz}
+\usepackage{pgf-pie}  
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{svg}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{math}
+\usetikzlibrary{backgrounds,calc,positioning}
+\usepackage{qrcode}
+\usepackage{siunitx}
+\usetikzlibrary{patterns,positioning,arrows.meta,decorations.pathreplacing}
+
+\usepackage{pgfplots}
+\usepackage{algorithm, algpseudocode}
+
+
+
+\usetheme{main}
+
+\captionsetup{font=scriptsize,labelfont=scriptsize}
+
+
+\title[Numerical optimization]{Numerical optimization : theory and applications}
+
+\date[]{}
+\author[AM]{\textbf{Ammar Mian} \\ \footnotesize Associate professor, LISTIC, Université Savoie Mont Blanc}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+% \newcommand{\alert}[1]{{\textbf{\alert{#1}}}}
+
+
+%\input{macros.tex}
+
+
+\AtBeginBibliography{\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     END OF PREAMBLE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%
+
+
+  
+\begin{frame}[noframenumbering,plain]
+\titlepage
+\end{frame}
+\begingroup
+\setbeamercolor{background canvas}{bg=main}
+\setbeamercolor{titlelike}{fg=text-light, bg=light}
+\begin{frame}[noframenumbering,plain]{Outline}
+    \tableofcontents[]
+\end{frame}
+
+\endgroup
+
+\AtBeginSection[]{
+        \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[plain, noframenumbering]
+        \tableofcontents[currentsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+\AtBeginSubsection[]
+{
+    \setbeamercolor{background canvas}{bg=main} 
+    \begin{frame}[noframenumbering, plain, label=]
+        % \frametitle{Plan}  
+        \tableofcontents[currentsection,currentsubsection]
+    \end{frame}
+    \setbeamercolor{background canvas}{bg=light} 
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Newton Method}
+
+\begin{frame}{Newton Method - Motivation}
+  \begin{block}{Key Insight}
+    \begin{itemize}
+      \item Steepest descent: navigating with only immediate slope
+      \item Newton method: having detailed topographic map
+      \item Incorporates curvature information (how slope changes)
+      \item Uses second-order Taylor approximation
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Strategy}
+    Instead of minimizing $f$ directly, minimize simpler quadratic approximation:
+    $$f(\mathbf{x}_k + \mathbf{p}) \approx f(\mathbf{x}_k) + \nabla f(\mathbf{x}_k)^T\mathbf{p} + \frac{1}{2}\mathbf{p}^T\nabla^2 f(\mathbf{x}_k)\mathbf{p}$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Newton Method - Algorithm}
+  \begin{block}{Derivation}
+    Setting gradient of quadratic approximation to zero:
+    $$\nabla f(\mathbf{x}_k) + \nabla^2 f(\mathbf{x}_k)\mathbf{p} = \mathbf{0}$$
+    
+    Solving for Newton step:
+    $$\mathbf{p}_k^N = -[\nabla^2 f(\mathbf{x}_k)]^{-1}\nabla f(\mathbf{x}_k)$$
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Newton Iteration}
+    $$\mathbf{x}_{k+1} = \mathbf{x}_k - [\nabla^2 f(\mathbf{x}_k)]^{-1}\nabla f(\mathbf{x}_k)$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Newton Method - Properties}
+  \begin{block}{Advantages}
+    \begin{itemize}
+      \item Recognizes elongated valley shapes via Hessian
+      \item Takes larger steps along valley floor, smaller steps perpendicular
+      \item Eliminates zigzag behavior of steepest descent
+      \item Natural step size of $\alpha = 1$
+      \item Quadratic convergence rate
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Special Property}
+    For quadratic functions: Newton method finds exact minimum in single step, regardless of conditioning!
+  \end{block}
+\end{frame}
+
+\begin{frame}{Newton Method - Challenges}
+  \begin{block}{Main Drawbacks}
+    \begin{itemize}
+      \item Requires computation of Hessian matrix $\nabla^2 f(\mathbf{x})$
+      \item Need to solve linear system at each iteration
+      \item Hessian may not be positive definite away from solution
+      \item Expensive: $O(n^3)$ operations per iteration
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{When Newton Fails}
+    When $\nabla^2 f_k$ is not positive definite:
+    \begin{itemize}
+      \item Newton direction may not be defined
+      \item May not satisfy descent condition $\nabla f_k^T \mathbf{p}_k^N < 0$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Quasi-Newton Methods}
+
+\begin{frame}{Quasi-Newton Methods - Motivation}
+  \begin{block}{Core Idea}
+    \begin{itemize}
+      \item Avoid computing exact Hessian $\nabla^2 f_k$
+      \item Use approximation $\mathbf{B}_k \approx \nabla^2 f_k$
+      \item Update approximation using gradient information
+      \item Achieve superlinear convergence without Hessian computation
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Quasi-Newton Direction}
+    $$\mathbf{p}_k = -\mathbf{B}_k^{-1} \nabla f_k$$
+    where $\mathbf{B}_k$ is updated after each step.
+  \end{block}
+\end{frame}
+
+\begin{frame}{The Secant Equation}
+  \begin{block}{Key Requirement}
+    We want $\mathbf{B}_{k+1}$ to satisfy:
+    $$\mathbf{B}_{k+1} \mathbf{s}_k = \mathbf{y}_k$$
+    where:
+    \begin{itemize}
+      \item $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$ (displacement)
+      \item $\mathbf{y}_k = \nabla f_{k+1} - \nabla f_k$ (gradient change)
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Curvature Condition}
+    For positive definite updates, we need:
+    $$\mathbf{s}_k^T \mathbf{y}_k > 0$$
+    This is guaranteed by Wolfe line search conditions.
+  \end{block}
+\end{frame}
+
+\subsection{BFGS Method}
+
+\begin{frame}{BFGS Method}
+  \begin{block}{Most Popular Quasi-Newton Method}
+    Named after Broyden, Fletcher, Goldfarb, and Shanno.
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{BFGS Update Formula}
+    $$\mathbf{H}_{k+1} = \left(\mathbf{I} - \rho_k \mathbf{s}_k \mathbf{y}_k^T\right) \mathbf{H}_k \left(\mathbf{I} - \rho_k \mathbf{y}_k \mathbf{s}_k^T\right) + \rho_k \mathbf{s}_k \mathbf{s}_k^T$$
+    where:
+    \begin{itemize}
+      \item $\mathbf{H}_k = \mathbf{B}_k^{-1}$ (inverse Hessian approximation)
+      \item $\rho_k = \frac{1}{\mathbf{y}_k^T \mathbf{s}_k}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{BFGS Algorithm}
+  \begin{block}{Algorithm Steps}
+    \begin{enumerate}
+      \item Choose initial $\mathbf{x}_0$ and $\mathbf{H}_0$ (often $\mathbf{H}_0 = \mathbf{I}$)
+      \item While $\|\nabla f_k\| > \epsilon$:
+      \begin{itemize}
+        \item Compute search direction: $\mathbf{p}_k = -\mathbf{H}_k \nabla f_k$
+        \item Line search: find $\alpha_k$ satisfying Wolfe conditions
+        \item Update: $\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k$
+        \item Compute: $\mathbf{s}_k = \mathbf{x}_{k+1} - \mathbf{x}_k$, $\mathbf{y}_k = \nabla f_{k+1} - \nabla f_k$
+        \item Update $\mathbf{H}_{k+1}$ using BFGS formula
+      \end{itemize}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}{BFGS Properties}
+  \begin{block}{Key Advantages}
+    \begin{itemize}
+      \item Only $O(n^2)$ operations per iteration
+      \item Superlinear convergence rate
+      \item Maintains positive definiteness automatically
+      \item Self-correcting: bad approximations get corrected
+      \item No second derivatives required
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Convergence Comparison}
+    \begin{center}
+    \begin{tabular}{|l|c|c|}
+    \hline
+    Method & Steepest Descent & BFGS \\
+    \hline
+    Iterations & 5264 & 34 \\
+    Convergence & Linear & Superlinear \\
+    \hline
+    \end{tabular}
+    \end{center}
+    Example on Rosenbrock function from $(-1.2, 1)$.
+  \end{block}
+\end{frame}
+
+\subsection{SR1 Method}
+
+\begin{frame}{Symmetric Rank-1 (SR1) Method}
+  \begin{block}{Rank-1 Update}
+    $$\mathbf{B}_{k+1} = \mathbf{B}_k + \frac{(\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k)(\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k)^T}{(\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k)^T \mathbf{s}_k}$$
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Key Differences from BFGS}
+    \begin{itemize}
+      \item Rank-1 update (vs. rank-2 for BFGS)
+      \item Does not maintain positive definiteness
+      \item Can handle indefinite Hessians
+      \item Often produces better Hessian approximations
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{SR1 Implementation Issues}
+  \begin{block}{Potential Problems}
+    \begin{itemize}
+      \item Denominator can vanish: $(\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k)^T \mathbf{s}_k = 0$
+      \item No symmetric rank-1 update may exist
+      \item Numerical instabilities possible
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Safeguard Strategy}
+    Skip update when:
+    $$|\mathbf{s}_k^T(\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k)| < r\|\mathbf{s}_k\|\|\mathbf{y}_k - \mathbf{B}_k \mathbf{s}_k\|$$
+    where $r \approx 10^{-8}$ is small tolerance.
+  \end{block}
+\end{frame}
+
+\begin{frame}{SR1 - Finite Termination Property}
+  \begin{block}{Remarkable Property}
+    For quadratic functions, SR1 method:
+    \begin{itemize}
+      \item Converges to minimizer in at most $n$ steps
+      \item Satisfies secant equation for \textbf{all} previous directions
+      \item Recovers exact Hessian: $\mathbf{H}_n = A^{-1}$ after $n$ steps
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Advantage over BFGS}
+    This property holds regardless of line search accuracy, while BFGS requires exact line search for similar guarantees.
+  \end{block}
+\end{frame}
+
+\subsection{Convergence Theory}
+
+\begin{frame}{Global Convergence}
+  \begin{block}{Zoutendijk's Condition}
+    For line search methods satisfying Wolfe conditions:
+    $$\sum_{k=0}^{\infty} \cos^2 \theta_k \|\nabla f_k\|^2 < \infty$$
+    where $\theta_k$ is angle between search direction and negative gradient.
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Newton-like Methods}
+    If $\mathbf{p}_k = -\mathbf{B}_k^{-1} \nabla f_k$ with bounded condition number:
+    $$\|\mathbf{B}_k\|\|\mathbf{B}_k^{-1}\| \leq M$$
+    Then: $\cos \theta_k \geq 1/M$ and $\lim_{k \to \infty} \|\nabla f_k\| = 0$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Rate of Convergence}
+  \begin{block}{Convergence Rates}
+    \begin{itemize}
+      \item \textbf{Steepest Descent:} Linear convergence
+      \item \textbf{Newton:} Quadratic convergence (near solution)
+      \item \textbf{Quasi-Newton:} Superlinear convergence
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Practical Performance}
+    \begin{itemize}
+      \item Newton: Fastest per iteration, but expensive
+      \item BFGS: Good balance of speed and cost
+      \item Steepest Descent: Slow but simple and robust
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Implementation Considerations}
+  \begin{block}{Step Size Strategy}
+    \begin{itemize}
+      \item Always try $\alpha = 1$ first (Newton step)
+      \item Use Wolfe conditions for line search
+      \item BFGS: accept $\alpha = 1$ eventually for superlinear convergence
+    \end{itemize}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Initial Hessian Approximation}
+    Common choices for $\mathbf{H}_0$:
+    \begin{itemize}
+      \item Identity matrix: $\mathbf{H}_0 = \mathbf{I}$
+      \item Scaled identity: $\mathbf{H}_0 = \beta \mathbf{I}$
+      \item After first step: $\mathbf{H}_0 = \frac{\mathbf{y}_0^T \mathbf{s}_0}{\mathbf{y}_0^T \mathbf{y}_0} \mathbf{I}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Summary}
+  \begin{block}{Method Comparison}
+    \begin{center}
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    Method & Cost/Iter & Convergence & Hessian \\
+    \hline
+    Steepest Descent & $O(n)$ & Linear & Not needed \\
+    Newton & $O(n^3)$ & Quadratic & Required \\
+    BFGS & $O(n^2)$ & Superlinear & Approximated \\
+    SR1 & $O(n^2)$ & Superlinear & Approximated \\
+    \hline
+    \end{tabular}
+    \end{center}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Practical Recommendation}
+    BFGS is the most widely used method due to its excellent balance of:
+    \begin{itemize}
+      \item Fast convergence (superlinear)
+      \item Moderate computational cost
+      \item Robust performance
+      \item No second derivatives required
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Exercises}
+
+\begin{frame}{Exercise 1: Himmelblau Function}
+  \begin{block}{Problem Statement}
+    Implement BFGS and SR1 methods to minimize the Himmelblau function:
+    $f(x_1, x_2) = (x_1^2 + x_2 - 11)^2 + (x_1 + x_2^2 - 7)^2$
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Tasks}
+    \begin{enumerate}
+      \item Compute the gradient $\nabla f(x_1, x_2)$ analytically
+      \item Implement both BFGS and SR1 algorithms with Wolfe line search
+      \item Test from starting points: $(0, 0)$, $(1, 1)$, $(-1, 1)$, $(4, 4)$
+      \item Compare convergence behavior, number of iterations, and final solutions
+      \item Plot convergence trajectories on contour plot
+    \end{enumerate}
+  \end{block}
+  
+\end{frame}
+
+\begin{frame}{Exercise 2: Mixed Function}
+  \begin{block}{Problem Statement}
+    Implement BFGS and SR1 methods to minimize:
+    $f(x_1, x_2) = \frac{1}{2}x_1^2 + x_1\cos(x_2)$
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{block}{Tasks}
+    \begin{enumerate}
+      \item Derive the gradient $\nabla f(x_1, x_2)$ and Hessian $\nabla^2 f(x_1, x_2)$
+      \item Implement BFGS, SR1, and exact Newton method
+      \item Use starting points: $(1, 0)$, $(2, \pi)$, $(-1, \pi/2)$
+      \item Compare all three methods in terms of:
+      \begin{itemize}
+        \item Convergence speed
+        \item Final solutions found
+        \item Robustness to different starting points
+      \end{itemize}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+
+\end{document}
+
+

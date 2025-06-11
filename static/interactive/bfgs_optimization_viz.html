@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFGS Optimization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .controls button {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            background: white;
+        }
+        
+        .controls button:hover {
+            background: #f5f5f5;
+        }
+        
+        .controls button:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+            color: #999;
+        }
+        
+        .stats {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .contour-line {
+            fill: none;
+            stroke: #ddd;
+            stroke-width: 1;
+        }
+        
+        .optimization-path {
+            fill: none;
+            stroke: #ff4444;
+            stroke-width: 2;
+        }
+        
+        .current-point {
+            fill: #ff4444;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .next-point {
+            fill: #2266ff;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .minimum-point {
+            fill: #00aa44;
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .gradient-vector-k {
+            stroke: #ff4444;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        
+        .gradient-vector-k1 {
+            stroke: #2266ff;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        
+        .descent-direction {
+            stroke: #00aa44;
+            stroke-width: 3;
+            marker-end: url(#arrowhead);
+        }
+        
+        .point-label {
+            font-size: 12px;
+            font-weight: bold;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        
+        .vector-label {
+            font-size: 10px;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        
+        svg {
+            border: 1px solid #ddd;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="stepBtn">Step</button>
+            <button id="resetBtn">Reset</button>
+            <input type="range" id="speedSlider" min="100" max="1500" value="600" step="100">
+        </div>
+        
+        <svg id="visualization" width="800" height="600"></svg>
+        
+        <div class="stats">
+            <span>Iteration: <span id="iterationStat">0</span></span>
+            <span>f(x,y): <span id="functionStat">-</span></span>
+            <span>Point: <span id="pointStat">-</span></span>
+            <span>|∇f|: <span id="gradientStat">-</span></span>
+        </div>
+    </div>
+
+    <script>
+        class BFGSOptimizer {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.iterations = [];
+                this.currentIteration = 0;
+                this.H = [[1, 0], [0, 1]];
+                this.isRunning = false;
+                this.hasStarted = false;
+            }
+            
+            objectiveFunction(x, y) {
+                // Himmelblau's function: f(x,y) = (x² + y - 11)² + (x + y² - 7)²
+                const term1 = Math.pow(x * x + y - 11, 2);
+                const term2 = Math.pow(x + y * y - 7, 2);
+                return term1 + term2;
+            }
+            
+            gradient(x, y) {
+                // Gradient of Himmelblau's function
+                const term1 = x * x + y - 11;
+                const term2 = x + y * y - 7;
+                const gx = 4 * x * term1 + 2 * term2;
+                const gy = 2 * term1 + 4 * y * term2;
+                return [gx, gy];
+            }
+            
+            matrixVectorMult(matrix, vector) {
+                return [
+                    matrix[0][0] * vector[0] + matrix[0][1] * vector[1],
+                    matrix[1][0] * vector[0] + matrix[1][1] * vector[1]
+                ];
+            }
+            
+            dotProduct(a, b) {
+                return a[0] * b[0] + a[1] * b[1];
+            }
+            
+            vectorSubtract(a, b) {
+                return [a[0] - b[0], a[1] - b[1]];
+            }
+            
+            vectorAdd(a, b) {
+                return [a[0] + b[0], a[1] + b[1]];
+            }
+            
+            scalarVectorMult(scalar, vector) {
+                return [scalar * vector[0], scalar * vector[1]];
+            }
+            
+            outerProduct(a, b) {
+                return [[a[0] * b[0], a[0] * b[1]], [a[1] * b[0], a[1] * b[1]]];
+            }
+            
+            matrixSubtract(A, B) {
+                return [
+                    [A[0][0] - B[0][0], A[0][1] - B[0][1]],
+                    [A[1][0] - B[1][0], A[1][1] - B[1][1]]
+                ];
+            }
+            
+            matrixAdd(A, B) {
+                return [
+                    [A[0][0] + B[0][0], A[0][1] + B[0][1]],
+                    [A[1][0] + B[1][0], A[1][1] + B[1][1]]
+                ];
+            }
+            
+            scalarMatrixMult(scalar, matrix) {
+                return [
+                    [scalar * matrix[0][0], scalar * matrix[0][1]],
+                    [scalar * matrix[1][0], scalar * matrix[1][1]]
+                ];
+            }
+            
+            lineSearch(x, y, direction) {
+                let alpha = 1.0;
+                const c1 = 1e-4;
+                const rho = 0.5;
+                
+                const f0 = this.objectiveFunction(x, y);
+                const grad0 = this.gradient(x, y);
+                const slope = this.dotProduct(grad0, direction);
+                
+                for (let i = 0; i < 20; i++) {
+                    const newX = x + alpha * direction[0];
+                    const newY = y + alpha * direction[1];
+                    const f1 = this.objectiveFunction(newX, newY);
+                    
+                    if (f1 <= f0 + c1 * alpha * slope) {
+                        return alpha;
+                    }
+                    alpha *= rho;
+                }
+                return alpha;
+            }
+            
+            step(x, y) {
+                const grad = this.gradient(x, y);
+                const direction = this.scalarVectorMult(-1, this.matrixVectorMult(this.H, grad));
+                const alpha = this.lineSearch(x, y, direction);
+                
+                const newX = x + alpha * direction[0];
+                const newY = y + alpha * direction[1];
+                const newGrad = this.gradient(newX, newY);
+                
+                const s = [alpha * direction[0], alpha * direction[1]];
+                const y_vec = this.vectorSubtract(newGrad, grad);
+                const rho = 1.0 / this.dotProduct(y_vec, s);
+                
+                if (Math.abs(rho) < 1e10 && Math.abs(this.dotProduct(y_vec, s)) > 1e-10) {
+                    const I = [[1, 0], [0, 1]];
+                    const rho_s_yT = this.scalarMatrixMult(rho, this.outerProduct(s, y_vec));
+                    const rho_y_sT = this.scalarMatrixMult(rho, this.outerProduct(y_vec, s));
+                    const rho_s_sT = this.scalarMatrixMult(rho, this.outerProduct(s, s));
+                    
+                    const term1 = this.matrixSubtract(I, rho_s_yT);
+                    const term2 = this.matrixSubtract(I, rho_y_sT);
+                    
+                    // Multiply matrices manually
+                    const H_temp = [
+                        [term1[0][0] * this.H[0][0] + term1[0][1] * this.H[1][0], 
+                         term1[0][0] * this.H[0][1] + term1[0][1] * this.H[1][1]],
+                        [term1[1][0] * this.H[0][0] + term1[1][1] * this.H[1][0], 
+                         term1[1][0] * this.H[0][1] + term1[1][1] * this.H[1][1]]
+                    ];
+                    
+                    const H_new_1 = [
+                        [H_temp[0][0] * term2[0][0] + H_temp[0][1] * term2[1][0], 
+                         H_temp[0][0] * term2[0][1] + H_temp[0][1] * term2[1][1]],
+                        [H_temp[1][0] * term2[0][0] + H_temp[1][1] * term2[1][0], 
+                         H_temp[1][0] * term2[0][1] + H_temp[1][1] * term2[1][1]]
+                    ];
+                    
+                    this.H = this.matrixAdd(H_new_1, rho_s_sT);
+                }
+                
+                return {
+                    x: newX,
+                    y: newY,
+                    fx: this.objectiveFunction(newX, newY),
+                    grad: newGrad,
+                    prevGrad: grad,
+                    stepSize: alpha,
+                    direction: direction
+                };
+            }
+            
+            optimize(startX, startY, maxIterations = 30) {
+                this.reset();
+                this.iterations = [];
+                
+                let x = startX;
+                let y = startY;
+                let grad = this.gradient(x, y);
+                
+                this.iterations.push({
+                    x: x,
+                    y: y,
+                    fx: this.objectiveFunction(x, y),
+                    grad: grad,
+                    prevGrad: null,
+                    stepSize: 0,
+                    direction: [0, 0]
+                });
+                
+                for (let i = 0; i < maxIterations; i++) {
+                    const result = this.step(x, y);
+                    this.iterations.push(result);
+                    
+                    x = result.x;
+                    y = result.y;
+                    
+                    const gradNorm = Math.sqrt(result.grad[0] * result.grad[0] + result.grad[1] * result.grad[1]);
+                    if (gradNorm < 1e-6) {
+                        break;
+                    }
+                }
+                
+                this.hasStarted = true;
+            }
+        }
+        
+        const svg = d3.select("#visualization");
+        const width = 800;
+        const height = 600;
+        const margin = { top: 20, right: 20, bottom: 30, left: 30 };
+        const plotWidth = width - margin.left - margin.right;
+        const plotHeight = height - margin.top - margin.bottom;
+        
+        const xScale = d3.scaleLinear().domain([-5, 5]).range([0, plotWidth]);
+        const yScale = d3.scaleLinear().domain([-5, 5]).range([plotHeight, 0]);
+        
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 8)
+            .attr("refY", 0)
+            .attr("markerWidth", 4)
+            .attr("markerHeight", 4)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#333");
+        
+        const optimizer = new BFGSOptimizer();
+        let animationId = null;
+        let clickPoint = null;
+        
+        function drawContours() {
+            const contourData = [];
+            const levels = [1, 5, 15, 40, 80, 150, 250, 400];
+            
+            levels.forEach(level => {
+                const points = [];
+                for (let i = 0; i <= 80; i++) {
+                    for (let j = 0; j <= 80; j++) {
+                        const x = -5 + (10 * i) / 80;
+                        const y = -5 + (10 * j) / 80;
+                        const fx = optimizer.objectiveFunction(x, y);
+                        
+                        if (Math.abs(fx - level) < level * 0.1) {
+                            points.push([x, y]);
+                        }
+                    }
+                }
+                
+                if (points.length > 8) {
+                    contourData.push({ level, points });
+                }
+            });
+            
+            contourData.forEach(({ level, points }) => {
+                // Group points into clusters to create separate contour lines
+                const clusters = [];
+                const visited = new Array(points.length).fill(false);
+                
+                for (let i = 0; i < points.length; i++) {
+                    if (visited[i]) continue;
+                    
+                    const cluster = [points[i]];
+                    visited[i] = true;
+                    
+                    // Find nearby points
+                    for (let j = i + 1; j < points.length; j++) {
+                        if (visited[j]) continue;
+                        
+                        const dist = Math.sqrt(
+                            Math.pow(points[i][0] - points[j][0], 2) + 
+                            Math.pow(points[i][1] - points[j][1], 2)
+                        );
+                        
+                        if (dist < 0.8) {
+                            cluster.push(points[j]);
+                            visited[j] = true;
+                        }
+                    }
+                    
+                    if (cluster.length > 3) {
+                        clusters.push(cluster);
+                    }
+                }
+                
+                clusters.forEach((cluster, idx) => {
+                    if (cluster.length > 3) {
+                        g.append("path")
+                            .datum(cluster)
+                            .attr("class", "contour-line")
+                            .attr("d", d3.line()
+                                .x(d => xScale(d[0]))
+                                .y(d => yScale(d[1]))
+                                .curve(d3.curveCardinal)
+                            );
+                    }
+                });
+            });
+        }
+        
+        function drawMinimum() {
+            // Himmelblau's function has 4 global minima
+            const minima = [
+                [3, 2],
+                [-2.805118, 3.131312],
+                [-3.779310, -3.283186],
+                [3.584428, -1.848126]
+            ];
+            
+            minima.forEach(min => {
+                g.append("circle")
+                    .attr("class", "minimum-point")
+                    .attr("cx", xScale(min[0]))
+                    .attr("cy", yScale(min[1]))
+                    .attr("r", 4);
+            });
+        }
+        
+        function updateVisualization() {
+            if (!optimizer.hasStarted || optimizer.iterations.length === 0) return;
+            
+            const currentIter = optimizer.currentIteration;
+            const iteration = optimizer.iterations[currentIter];
+            const nextIteration = currentIter < optimizer.iterations.length - 1 ? optimizer.iterations[currentIter + 1] : null;
+            
+            // Draw optimization path up to current iteration
+            const pathData = optimizer.iterations.slice(0, currentIter + 1);
+            const pathLine = d3.line()
+                .x(d => xScale(d.x))
+                .y(d => yScale(d.y));
+            
+            g.selectAll(".optimization-path").data([pathData])
+                .join("path")
+                .attr("class", "optimization-path")
+                .attr("d", pathLine);
+            
+            // Show current point x_k
+            g.selectAll(".current-point").data([iteration])
+                .join("circle")
+                .attr("class", "current-point")
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
+                .attr("r", 5);
+            
+            // Show next point x_{k+1} if it exists
+            if (nextIteration) {
+                g.selectAll(".next-point").data([nextIteration])
+                    .join("circle")
+                    .attr("class", "next-point")
+                    .attr("cx", d => xScale(d.x))
+                    .attr("cy", d => yScale(d.y))
+                    .attr("r", 5);
+            } else {
+                g.selectAll(".next-point").remove();
+            }
+            
+            const vectorScale = 0.15;
+            
+            // Show gradient at current point ∇f_k
+            if (iteration.grad) {
+                const gradK = [{
+                    x1: iteration.x,
+                    y1: iteration.y,
+                    x2: iteration.x + iteration.grad[0] * vectorScale,
+                    y2: iteration.y + iteration.grad[1] * vectorScale
+                }];
+                
+                g.selectAll(".gradient-vector-k").data(gradK)
+                    .join("line")
+                    .attr("class", "gradient-vector-k")
+                    .attr("x1", d => xScale(d.x1))
+                    .attr("y1", d => yScale(d.y1))
+                    .attr("x2", d => xScale(d.x2))
+                    .attr("y2", d => yScale(d.y2));
+                
+                // Label for ∇f_k
+                g.selectAll(".grad-label-k").data(gradK)
+                    .join("text")
+                    .attr("class", "vector-label grad-label-k")
+                    .attr("x", d => xScale(d.x2) + 10)
+                    .attr("y", d => yScale(d.y2))
+                    .text("∇f_k");
+            }
+            
+            // Show gradient at next point ∇f_{k+1}
+            if (nextIteration && nextIteration.grad) {
+                const gradK1 = [{
+                    x1: nextIteration.x,
+                    y1: nextIteration.y,
+                    x2: nextIteration.x + nextIteration.grad[0] * vectorScale,
+                    y2: nextIteration.y + nextIteration.grad[1] * vectorScale
+                }];
+                
+                g.selectAll(".gradient-vector-k1").data(gradK1)
+                    .join("line")
+                    .attr("class", "gradient-vector-k1")
+                    .attr("x1", d => xScale(d.x1))
+                    .attr("y1", d => yScale(d.y1))
+                    .attr("x2", d => xScale(d.x2))
+                    .attr("y2", d => yScale(d.y2));
+                
+                // Label for ∇f_{k+1}
+                g.selectAll(".grad-label-k1").data(gradK1)
+                    .join("text")
+                    .attr("class", "vector-label grad-label-k1")
+                    .attr("x", d => xScale(d.x2) + 10)
+                    .attr("y", d => yScale(d.y2))
+                    .text("∇f_{k+1}");
+            } else {
+                g.selectAll(".gradient-vector-k1").remove();
+                g.selectAll(".grad-label-k1").remove();
+            }
+            
+            // Show descent direction from x_k to x_{k+1}
+            if (nextIteration) {
+                const descentDir = [{
+                    x1: iteration.x,
+                    y1: iteration.y,
+                    x2: nextIteration.x,
+                    y2: nextIteration.y
+                }];
+                
+                g.selectAll(".descent-direction").data(descentDir)
+                    .join("line")
+                    .attr("class", "descent-direction")
+                    .attr("x1", d => xScale(d.x1))
+                    .attr("y1", d => yScale(d.y1))
+                    .attr("x2", d => xScale(d.x2))
+                    .attr("y2", d => yScale(d.y2));
+            } else {
+                g.selectAll(".descent-direction").remove();
+            }
+            
+            // Point labels
+            g.selectAll(".point-label-k").data([iteration])
+                .join("text")
+                .attr("class", "point-label point-label-k")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => yScale(d.y) - 15)
+                .text("x_k");
+            
+            if (nextIteration) {
+                g.selectAll(".point-label-k1").data([nextIteration])
+                    .join("text")
+                    .attr("class", "point-label point-label-k1")
+                    .attr("x", d => xScale(d.x))
+                    .attr("y", d => yScale(d.y) - 15)
+                    .text("x_{k+1}");
+            } else {
+                g.selectAll(".point-label-k1").remove();
+            }
+            
+            updateStats(iteration, currentIter);
+        }
+        
+        function updateStats(iteration, iterNum) {
+            document.getElementById("iterationStat").textContent = iterNum;
+            document.getElementById("functionStat").textContent = iteration.fx.toFixed(3);
+            document.getElementById("pointStat").textContent = `(${iteration.x.toFixed(2)}, ${iteration.y.toFixed(2)})`;
+            
+            if (iteration.grad) {
+                const gradNorm = Math.sqrt(iteration.grad[0] * iteration.grad[0] + iteration.grad[1] * iteration.grad[1]);
+                document.getElementById("gradientStat").textContent = gradNorm.toFixed(3);
+            }
+        }
+        
+        function animate() {
+            if (!optimizer.isRunning || optimizer.currentIteration >= optimizer.iterations.length - 1) {
+                optimizer.isRunning = false;
+                document.getElementById("startBtn").textContent = "Start";
+                return;
+            }
+            
+            optimizer.currentIteration++;
+            updateVisualization();
+            
+            const speed = parseInt(document.getElementById("speedSlider").value);
+            animationId = setTimeout(animate, speed);
+        }
+        
+        document.getElementById("startBtn").addEventListener("click", function() {
+            if (!clickPoint) return;
+            
+            if (!optimizer.hasStarted) {
+                optimizer.optimize(clickPoint[0], clickPoint[1]);
+                optimizer.currentIteration = 0;
+                updateVisualization();
+            }
+            
+            if (optimizer.isRunning) {
+                optimizer.isRunning = false;
+                clearTimeout(animationId);
+                this.textContent = "Start";
+            } else {
+                optimizer.isRunning = true;
+                this.textContent = "Pause";
+                animate();
+            }
+        });
+        
+        document.getElementById("stepBtn").addEventListener("click", function() {
+            if (!clickPoint) return;
+            
+            if (!optimizer.hasStarted) {
+                optimizer.optimize(clickPoint[0], clickPoint[1]);
+                optimizer.currentIteration = 0;
+                updateVisualization();
+                return;
+            }
+            
+            if (optimizer.currentIteration < optimizer.iterations.length - 1) {
+                optimizer.currentIteration++;
+                updateVisualization();
+            }
+        });
+        
+        document.getElementById("resetBtn").addEventListener("click", function() {
+            optimizer.reset();
+            clickPoint = null;
+            clearTimeout(animationId);
+            
+            g.selectAll(".optimization-path").remove();
+            g.selectAll(".current-point").remove();
+            g.selectAll(".next-point").remove();
+            g.selectAll(".gradient-vector-k").remove();
+            g.selectAll(".gradient-vector-k1").remove();
+            g.selectAll(".descent-direction").remove();
+            g.selectAll(".point-label").remove();
+            g.selectAll(".vector-label").remove();
+            
+            document.getElementById("iterationStat").textContent = "0";
+            document.getElementById("functionStat").textContent = "-";
+            document.getElementById("pointStat").textContent = "-";
+            document.getElementById("gradientStat").textContent = "-";
+            
+            document.getElementById("startBtn").textContent = "Start";
+        });
+        
+        svg.on("click", function(event) {
+            const [mouseX, mouseY] = d3.pointer(event);
+            const x = xScale.invert(mouseX - margin.left);
+            const y = yScale.invert(mouseY - margin.top);
+            
+            if (x >= -5 && x <= 5 && y >= -5 && y <= 5) {
+                clickPoint = [x, y];
+                optimizer.reset();
+                clearTimeout(animationId);
+                
+                g.selectAll(".optimization-path").remove();
+                g.selectAll(".current-point").remove();
+                g.selectAll(".next-point").remove();
+                g.selectAll(".gradient-vector-k").remove();
+                g.selectAll(".gradient-vector-k1").remove();
+                g.selectAll(".descent-direction").remove();
+                g.selectAll(".point-label").remove();
+                g.selectAll(".vector-label").remove();
+                
+                g.selectAll(".initial-point").data([clickPoint])
+                    .join("circle")
+                    .attr("class", "current-point initial-point")
+                    .attr("cx", d => xScale(d[0]))
+                    .attr("cy", d => yScale(d[1]))
+                    .attr("r", 5);
+                
+                const fx = optimizer.objectiveFunction(x, y);
+                const grad = optimizer.gradient(x, y);
+                const gradNorm = Math.sqrt(grad[0] * grad[0] + grad[1] * grad[1]);
+                
+                document.getElementById("iterationStat").textContent = "0";
+                document.getElementById("functionStat").textContent = fx.toFixed(3);
+                document.getElementById("pointStat").textContent = `(${x.toFixed(2)}, ${y.toFixed(2)})`;
+                document.getElementById("gradientStat").textContent = gradNorm.toFixed(3);
+                
+                document.getElementById("startBtn").textContent = "Start";
+            }
+        });
+        
+        drawContours();
+        drawMinimum();
+    </script>
+</body>
+</html>
