@@ -158,101 +158,111 @@ These gradients reveal the intuitive behavior of the algorithm. The primal updat
 
 ## **Exercise**: constrained optimization with mixed constraints
 
+
 Let us apply our understanding to a concrete problem that illustrates both the theoretical principles and the algorithmic implementation. This exercise demonstrates how the projected gradient method handles a mixture of equality and inequality constraints.
 
-**Problem setup:**
-\begin{equation}
+### Problem Setup
+
+$$
 \begin{aligned}
 \text{minimize} \quad & f(x,y) = (x-2)^2 + (y-2)^2 \\\\
 \text{subject to:} \quad & g(x,y) = x + y - 2 = 0 \\\\
 & h_1(x,y) = x \geq 0 \\\\
 & h_2(x,y) = y \geq 0
 \end{aligned}
-\label{eq:exercise_problem}
-\end{equation}
+$$
 
 This problem seeks the point closest to $(2,2)$ that lies on the line $x + y = 2$ while remaining in the first quadrant. The geometric intuition suggests that since the unconstrained minimizer $(2,2)$ lies on the line $x + y = 4$, and our constraint line is $x + y = 2$, the optimal point should be the point on $x + y = 2$ that is closest to $(2,2)$.
 
-**Lagrangian construction:**
+### Lagrangian Construction
 
-We reformulate the inequality constraints in the standard form $c_i(\mathbf{x}) \geq 0$, giving us $h_1(x,y) = x \geq 0$ and $h_2(x,y) = y \geq 0$. The Lagrangian becomes:
-\begin{equation}
-\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) - \mu_1(-x) - \mu_2(-y)
-\label{eq:exercise_lagrangian}
-\end{equation}
+For a problem with equality constraints $g_j(\mathbf{x}) = 0$ and inequality constraints $h_i(\mathbf{x}) \geq 0$, the standard Lagrangian is:
 
-Simplifying the inequality constraint terms:
-\begin{equation}
-\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) + \mu_1 x + \mu_2 y
-\label{eq:simplified_lagrangian}
-\end{equation}
+$$\mathcal{L}(\mathbf{x}, \lambda, \mu) = f(\mathbf{x}) - \sum_j \lambda_j g_j(\mathbf{x}) - \sum_i \mu_i h_i(\mathbf{x})$$
 
-**Gradient computations:**
+With our constraints:
+- Equality: $g(x,y) = x + y - 2 = 0$
+- Inequalities: $h_1(x,y) = x \geq 0$ and $h_2(x,y) = y \geq 0$
+
+The Lagrangian becomes:
+$$\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) - \mu_1 x - \mu_2 y$$
+
+### Gradient Computations
 
 The gradients required for the projected gradient algorithm are:
-\begin{equation}
+
+$$
 \begin{aligned}
-\frac{\partial \mathcal{L}}{\partial x} &= 2(x-2) - \lambda + \mu_1 \\\\
-\frac{\partial \mathcal{L}}{\partial y} &= 2(y-2) - \lambda + \mu_2 \\\\
+\frac{\partial \mathcal{L}}{\partial x} &= 2(x-2) - \lambda - \mu_1 \\\\
+\frac{\partial \mathcal{L}}{\partial y} &= 2(y-2) - \lambda - \mu_2 \\\\
 \frac{\partial \mathcal{L}}{\partial \lambda} &= -(x + y - 2) \\\\
-\frac{\partial \mathcal{L}}{\partial \mu_1} &= x \\\\
-\frac{\partial \mathcal{L}}{\partial \mu_2} &= y
+\frac{\partial \mathcal{L}}{\partial \mu_1} &= -x \\\\
+\frac{\partial \mathcal{L}}{\partial \mu_2} &= -y
 \end{aligned}
-\label{eq:exercise_gradients}
-\end{equation}
+$$
 
-**Projected gradient updates:**
+### Projected Gradient Updates
 
-The algorithm updates become:
-\begin{equation}
+The algorithm seeks to minimize $\mathcal{L}$ with respect to primal variables $(x,y)$ and maximize with respect to dual variables $(\lambda, \mu_1, \mu_2)$. The updates become:
+
+$$
 \begin{aligned}
-x^{k+1} &= x^k - \alpha(2(x^k-2) - \lambda^k + \mu_1^k) \\\\
-y^{k+1} &= y^k - \alpha(2(y^k-2) - \lambda^k + \mu_2^k) \\\\
-\lambda^{k+1} &= \lambda^k + \beta(x^{k+1} + y^{k+1} - 2) \\\\
-\mu_1^{k+1} &= \max(0, \mu_1^k - \beta x^{k+1}) \\\\
-\mu_2^{k+1} &= \max(0, \mu_2^k - \beta y^{k+1})
+x^{k+1} &= x^k - \alpha \frac{\partial \mathcal{L}}{\partial x} = x^k - \alpha(2(x^k-2) - \lambda^k - \mu_1^k) \\\\
+y^{k+1} &= y^k - \alpha \frac{\partial \mathcal{L}}{\partial y} = y^k - \alpha(2(y^k-2) - \lambda^k - \mu_2^k) \\\\
+\lambda^{k+1} &= \lambda^k + \beta \frac{\partial \mathcal{L}}{\partial \lambda} = \lambda^k + \beta(x^{k+1} + y^{k+1} - 2) \\\\
+\mu_1^{k+1} &= \Pi_{[0,\infty)} \left[\mu_1^k + \beta \frac{\partial \mathcal{L}}{\partial \mu_1}\right] = \max(0, \mu_1^k - \beta x^{k+1}) \\\\
+\mu_2^{k+1} &= \Pi_{[0,\infty)} \left[\mu_2^k + \beta \frac{\partial \mathcal{L}}{\partial \mu_2}\right] = \max(0, \mu_2^k - \beta y^{k+1})
 \end{aligned}
-\label{eq:exercise_updates}
-\end{equation}
+$$
 
-Note that for the equality constraint, we do not apply a projection to $\lambda^{k+1}$ since equality constraint multipliers can take any real value.
+Note that:
+- For the equality constraint, we do not project $\lambda^{k+1}$ since equality constraint multipliers can take any real value
+- For inequality constraints, we project $\mu_i$ onto $[0,\infty)$ to maintain dual feasibility
 
-**Analytical solution:**
+### Analytical Solution
 
-To understand what the algorithm should converge to, let us solve the problem analytically using the KKT conditions. At the optimal point, we expect the inequality constraints $x \geq 0$ and $y \geq 0$ to be inactive since the solution likely lies in the interior of the first quadrant.
+To understand what the algorithm should converge to, let us solve the problem analytically using the KKT conditions. At the optimal point, we need:
 
-If both inequality constraints are inactive, then $\mu_1^\star = \mu_2^\star = 0$ by complementarity. The KKT conditions reduce to:
-\begin{equation}
+#### KKT Conditions:
+1. **Stationarity:** $\nabla_x \mathcal{L} = 0$ and $\nabla_y \mathcal{L} = 0$
+2. **Primal feasibility:** $x + y - 2 = 0$, $x \geq 0$, $y \geq 0$
+3. **Dual feasibility:** $\mu_1 \geq 0$, $\mu_2 \geq 0$
+4. **Complementary slackness:** $\mu_1 x = 0$, $\mu_2 y = 0$
+
+Since the solution likely lies in the interior of the first quadrant (given the symmetry of the problem), we expect both inequality constraints to be inactive, meaning $\mu_1^\star = \mu_2^\star = 0$.
+
+With $\mu_1^\star = \mu_2^\star = 0$, the stationarity conditions become:
+$$
 \begin{aligned}
-2(x^\star-2) - \lambda^\star &= 0 \\\\
-2(y^\star-2) - \lambda^\star &= 0 \\\\
-x^\star + y^\star - 2 &= 0
+2(x^*-2) - \lambda^* &= 0 \\\\
+2(y^*-2) - \lambda^* &= 0 \\\\
+x^* + y^* - 2 &= 0
 \end{aligned}
-\label{eq:reduced_kkt}
-\end{equation}
+$$
 
-From the first two equations, we see that $2(x^\star-2) = 2(y^\star-2)$, which implies $x^\star = y^\star$. Substituting into the equality constraint:
-\begin{equation}
-x^\star + x^\star = 2 \Rightarrow x^\star = y^\star = 1
-\label{eq:optimal_point}
-\end{equation}
+From the first two equations: $2(x^*-2) = 2(y^*-2)$, which implies $x^* = y^*$.
+
+Substituting into the equality constraint:
+$$x^* + x^* = 2 \Rightarrow x^* = y^* = 1$$
 
 The Lagrange multiplier for the equality constraint is:
-\begin{equation}
-\lambda^\star = 2(1-2) = -2
-\label{eq:optimal_lambda}
-\end{equation}
+$$\lambda^* = 2(1-2) = -2$$
 
-The negative value indicates that if we could relax the constraint from $x + y = 2$ to $x + y = 2 + \epsilon$, the objective would worsen by approximately $2\epsilon$, which makes intuitive sense since we would be moving away from the unconstrained optimum.
+The negative value of $\lambda^*$ indicates that relaxing the constraint (increasing the right-hand side from 2 to $2 + \epsilon$) would worsen the objective by approximately $2\epsilon$.
 
-**Verification:**
+### Verification
 
-We can verify that $(x^\star, y^\star) = (1, 1)$ with $\lambda^\star = -2$ and $\mu_1^\star = \mu_2^\star = 0$ satisfies all KKT conditions:
-- **Stationarity:** $\nabla_{\mathbf{x}} \mathcal{L} = \mathbf{0}$ ✓
-- **Equality feasibility:** $1 + 1 - 2 = 0$ ✓  
-- **Inequality feasibility:** $1 \geq 0$ and $1 \geq 0$ ✓
-- **Dual feasibility:** $\mu_1^\star = 0 \geq 0$ and $\mu_2^\star = 0 \geq 0$ ✓
-- **Complementarity:** $\mu_1^\star \cdot 1 = 0$ and $\mu_2^\star \cdot 1 = 0$ ✓
+We verify that $(x^\star, y^\star) = (1, 1)$ with $\lambda^\star = -2$ and $\mu_1^\star = \mu_2^\star = 0$ satisfies all KKT conditions:
 
-The projected gradient algorithm will converge to this solution, automatically determining that the inequality constraints are inactive through the projection steps that drive $\mu_1$ and $\mu_2$ toward zero.
+- **Stationarity:** 
+  - $\frac{\partial \mathcal{L}}{\partial x} = 2(1-2) - (-2) - 0 = -2 + 2 = 0$ ✓
+  - $\frac{\partial \mathcal{L}}{\partial y} = 2(1-2) - (-2) - 0 = -2 + 2 = 0$ ✓
+- **Primal feasibility:** 
+  - $1 + 1 - 2 = 0$ ✓
+  - $1 \geq 0$ and $1 \geq 0$ ✓
+- **Dual feasibility:** $\mu_1^* = 0 \geq 0$ and $\mu_2^* = 0 \geq 0$ ✓
+- **Complementary slackness:** $\mu_1^\star \cdot 1 = 0$ and $\mu_2^\star \cdot 1 = 0$ ✓
 
+### Geometric Interpretation
+
+The solution $(1,1)$ is indeed the point on the line $x + y = 2$ that is closest to $(2,2)$. The projected gradient algorithm will converge to this solution, automatically determining that the inequality constraints are inactive through the projection steps that drive $\mu_1$ and $\mu_2$ toward zero.
