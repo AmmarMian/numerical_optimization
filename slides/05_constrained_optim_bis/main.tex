@@ -118,6 +118,7 @@
   This opposite optimization behavior is \emph{not} arbitrary---it emerges naturally from the mathematical structure of constrained optimization.
 \end{frame}
 
+
 \begin{frame}{Why the Minus Sign Creates the Right Incentives}
   Consider our Lagrangian: $\mathcal{L}(\mathbf{x}, \boldsymbol{\lambda}) = f(\mathbf{x}) - \sum_{i} \lambda_i c_i(\mathbf{x})$
   
@@ -128,16 +129,17 @@
   \begin{itemize}
     \item When $c_i(\mathbf{x}) > 0$ (constraint satisfied with slack)
     \item Term $-\lambda_i c_i(\mathbf{x})$ becomes more negative as $\lambda_i$ increases
-    \item Minimizing over $\lambda_i$ would drive $\mathcal{L} \to +\infty$ 
+    \item Minimizing over $\lambda_i$ would drive $\lambda_i \to +\infty$, making $\mathcal{L} \to -\infty$ 
+    \item This creates an unbounded optimization problem
   \end{itemize}
   
   \vspace{0.3cm}
   \begin{alertblock}{The Resolution}
-    We must \textbf{maximize} over $\lambda_i \geq 0$. When $c_i(\mathbf{x}) > 0$, maximization drives $\lambda_i \to 0$, consistent with complementarity: $\lambda_i c_i(\mathbf{x}) = 0$.
+    We must \textbf{maximize} over $\lambda_i \geq 0$. When $c_i(\mathbf{x}) > 0$, maximization drives $\lambda_i \to 0$ to make $\mathcal{L}$ as large as possible, giving us complementarity: $\lambda_i c_i(\mathbf{x}) = 0$.
   \end{alertblock}
   
   \vspace{0.3cm}
-  The minus sign in the Lagrangian creates the correct incentive structure for the dual variables to encode constraint shadow prices.
+  The minus sign in the Lagrangian creates the correct incentive structure for the dual variables to encode constraint shadow prices through the saddle point property.
 \end{frame}
 
 \begin{frame}{The Saddle Point Property}
@@ -234,40 +236,40 @@
   \begin{align}
     \text{minimize} \quad & f(x,y) = (x-2)^2 + (y-2)^2 \\
     \text{subject to:} \quad & g(x,y) = x + y - 2 = 0 \\
-    & h_1(x,y) = -x \leq 0, \quad h_2(x,y) = -y \leq 0
+    & h_1(x,y) = x \geq 0 \\
+    & h_2(x,y) = y \geq 0
   \end{align}
   
   \textbf{Lagrangian:}
-  $$\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) - \mu_1(-x) - \mu_2(-y)$$
+  $$\mathcal{L}(x,y,\lambda,\mu_1,\mu_2) = (x-2)^2 + (y-2)^2 - \lambda(x + y - 2) - \mu_1 x - \mu_2 y$$
   
   \textbf{Gradients:}
   \begin{align}
-    \frac{\partial \mathcal{L}}{\partial x} &= 2(x-2) - \lambda + \mu_1\\
-    \frac{\partial \mathcal{L}}{\partial y} &= 2(y-2) - \lambda + \mu_2\\
+    \frac{\partial \mathcal{L}}{\partial x} &= 2(x-2) - \lambda - \mu_1\\
+    \frac{\partial \mathcal{L}}{\partial y} &= 2(y-2) - \lambda - \mu_2\\
     \frac{\partial \mathcal{L}}{\partial \lambda} &= -(x + y - 2)\\
-    \frac{\partial \mathcal{L}}{\partial \mu_1} &= x, \quad \frac{\partial \mathcal{L}}{\partial \mu_2} = y
+    \frac{\partial \mathcal{L}}{\partial \mu_1} &= -x, \quad \frac{\partial \mathcal{L}}{\partial \mu_2} = -y
   \end{align}
 \end{frame}
 
 \begin{frame}{Projected Gradient Steps for Our Exercise}
   \textbf{Algorithm updates:}
   \begin{align}
-    x^{k+1} &= x^k - \alpha(2(x^k-2) - \lambda^k + \mu_1^k)\\
-    y^{k+1} &= y^k - \alpha(2(y^k-2) - \lambda^k + \mu_2^k)\\
+    x^{k+1} &= x^k - \alpha(2(x^k-2) - \lambda^k - \mu_1^k)\\
+    y^{k+1} &= y^k - \alpha(2(y^k-2) - \lambda^k - \mu_2^k)\\
     \lambda^{k+1} &= \lambda^k + \beta(x^{k+1} + y^{k+1} - 2)\\
     \mu_1^{k+1} &= \max(0, \mu_1^k - \beta x^{k+1})\\
     \mu_2^{k+1} &= \max(0, \mu_2^k - \beta y^{k+1})
   \end{align}
   
   \vspace{0.3cm}
-  \textbf{Expected convergence:} $(x^{\star}, y^{\star}) = (1, 1)$ with $\lambda^{\star} = 2$, $\mu_1^{\star} = \mu_2^{\star} = 0$
+  \textbf{Expected convergence:} $(x^{\star}, y^{\star}) = (1, 1)$ with $\lambda^{\star} = -2$, $\mu_1^{\star} = \mu_2^{\star} = 0$
   
   \vspace{0.3cm}
   \begin{alertblock}{Key Insight}
     The inequality constraints $x \geq 0, y \geq 0$ are \textbf{inactive} at the solution because the optimal point $(1,1)$ lies in the interior of the feasible region. Therefore $\mu_1^{\star} = \mu_2^{\star} = 0$ by complementarity.
   \end{alertblock}
 \end{frame}
-
 
 \begin{frame}{Corrected Implementation and Key Takeaways}
   \textbf{Implementation insight:} The projected gradient method will automatically handle the constraint activity determination through the projection steps.
@@ -278,20 +280,22 @@
     \item Algorithm starts with some initial guess
     \item Primal variables evolve toward $(1,1)$ due to objective function pull
     \item Dual variables for inactive constraints get projected to zero
-    \item Equality constraint multiplier adjusts to maintain stationarity
+    \item Equality constraint multiplier converges to $\lambda^{\star} = -2$
   \end{itemize}
   
   \vspace{0.5cm}
   \begin{block}{Main Learning Objectives}
     \textbf{1.} Saddle point structure emerges from constraint-objective conflicts
     
-    \textbf{2.} Opposite optimization directions (min over $\mathbf{x}$, max over $\boldsymbol{\lambda}$) are mathematically necessary
+    \textbf{2.} Opposite optimization directions (min over $\mathbf{x}$, max over $\boldsymbol{\lambda}, \boldsymbol{\mu}$) are mathematically necessary
     
     \textbf{3.} Projected gradient algorithm implements this structure computationally
     
-    \textbf{4.} Shadow prices have economic meaning as constraint relaxation values
+    \textbf{4.} Shadow prices have economic meaning: $\lambda^{\star} = -2$ means relaxing the constraint worsens the objective
   \end{block}
 \end{frame}
+
+
 \end{document}
 
 
