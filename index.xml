@@ -1,8 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Introduction on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/</link><description>Recent content in Introduction on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/index.xml" rel="self" type="application/rss+xml"/><item><title>1. From Linear regression to perceptron</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</guid><description>&lt;h1 id="from-linear-regression-to-perceptron">
- From Linear regression to perceptron
- &lt;a class="anchor" href="#from-linear-regression-to-perceptron">#&lt;/a>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Introduction on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/</link><description>Recent content in Introduction on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/index.xml" rel="self" type="application/rss+xml"/><item><title>1. Machine learning fundamentals</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/fundamentals/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/fundamentals/</guid><description>&lt;h1 id="machine-learning-fundamentals-through-optimization">
+ Machine learning fundamentals through optimization
+ &lt;a class="anchor" href="#machine-learning-fundamentals-through-optimization">#&lt;/a>
 &lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong>: This lecture bridges our study of numerical optimization with machine learning, showing how the optimization techniques we&amp;rsquo;ve developed provide the mathematical foundation for learning from data.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="machine-learning-vs-traditional-programming">
+ Machine learning vs traditional programming
+ &lt;a class="anchor" href="#machine-learning-vs-traditional-programming">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="traditional-programming-paradigm">
+ Traditional programming paradigm
+ &lt;a class="anchor" href="#traditional-programming-paradigm">#&lt;/a>
+&lt;/h3>
+&lt;p>In traditional programming, we explicitly encode rules and logic to transform inputs into outputs. The paradigm follows a straightforward path: we receive input data, apply hand-crafted rules, and produce an output. This approach has served us well for many deterministic problems, but it encounters significant limitations when dealing with complex pattern recognition tasks.&lt;/p></description></item><item><title>1. Optimization problems</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/optimization_problems/</guid><description>&lt;h1 id="optimization-problems">
  Optimization problems
  &lt;a class="anchor" href="#optimization-problems">#&lt;/a>
 &lt;/h1>
@@ -47,15 +58,26 @@ then the problem is said to be a &lt;strong>constrained optimization&lt;/strong>
 &lt;blockquote>
 &lt;p>Linear algebra is one of the foundational branches of mathematics, with applications spanning from engineering and computer science to economics and physics. This document is extracted from the textbook &lt;strong>Matrix Differential Calculus with Applications in Statistics and Econometrics&lt;/strong> from Jan R. Magnus; Heinz Neudecker, adapting the notations to the ones used in the lectures.&lt;/p>
 &lt;/blockquote>
-&lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item><item><title>2. Proximal methods</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</guid><description>&lt;h1 id="proximal-methods">
+&lt;p>In this chapter, we summarize some of the well-known definitions and theorems of matrix algebra. Most of the theorems will be proved.&lt;/p></description></item><item><title>2. Classification and support vector machines</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="classification-and-support-vector-machines">
+ Classification and support vector machines
+ &lt;a class="anchor" href="#classification-and-support-vector-machines">#&lt;/a>
+&lt;/h1>
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong>: This lecture extends our optimization framework to classification problems, introducing the perceptron algorithm and support vector machines (SVMs). We&amp;rsquo;ll see how the constrained optimization techniques from previous lectures lead to powerful classification methods.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="classification-problems-in-depth">
+ Classification problems in depth
+ &lt;a class="anchor" href="#classification-problems-in-depth">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="types-of-classification">
+ Types of classification
+ &lt;a class="anchor" href="#types-of-classification">#&lt;/a>
+&lt;/h3>
+&lt;p>In our previous lecture, we introduced binary classification through logistic regression. Let&amp;rsquo;s now formalize the broader classification framework and understand how different formulations connect to optimization problems.&lt;/p></description></item><item><title>2. Proximal methods</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/advanced/proximal_methods/</guid><description>&lt;h1 id="proximal-methods">
  Proximal methods
  &lt;a class="anchor" href="#proximal-methods">#&lt;/a>
 &lt;/h1>
-&lt;p>We refer the reader to the monograph by &lt;a href="https://web.stanford.edu/~boyd/papers/pdf/prox_algs.pdf">Parikh and Boyd (2014)&lt;/a> for a comprehensive overview of proximal methods.&lt;/p></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
- Support Vector Machine
- &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
-&lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>2. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
+&lt;p>We refer the reader to the monograph by &lt;a href="https://web.stanford.edu/~boyd/papers/pdf/prox_algs.pdf">Parikh and Boyd (2014)&lt;/a> for a comprehensive overview of proximal methods.&lt;/p></description></item><item><title>2. Unconstrained optimization : basics</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/fundamentals/unconstrained_optimization/</guid><description>&lt;h1 id="unconstrained-optimization---basics">
  Unconstrained optimization - basics
  &lt;a class="anchor" href="#unconstrained-optimization---basics">#&lt;/a>
 &lt;/h1>
@@ -217,7 +239,26 @@ $$&lt;/p></description></item><item><title>5b. Constrained optimization - Projec
  &lt;a class="anchor" href="#introduction">#&lt;/a>
 &lt;/h2>
 &lt;p>In this lab session, we will explore the fundamental concepts of numerical optimization through the lens of linear regression. We&amp;rsquo;ll begin with the simplest case and gradually build up to more complex scenarios, comparing analytical solutions with numerical methods at each step.&lt;/p>
-&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing Project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="solving-inverse-problems-in-remote-sensing">
+&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - MNIST and Fashion-MNIST Classification</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="mnist-and-fashion-mnist-classification">
+ MNIST and Fashion-MNIST Classification
+ &lt;a class="anchor" href="#mnist-and-fashion-mnist-classification">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>In this lab session, we explore handwritten digit recognition using the MNIST dataset, progressing from classical machine learning approaches to modern deep learning techniques. We then apply transfer learning to the more challenging Fashion-MNIST dataset. This progression mirrors the historical development of the field while providing hands-on experience with key optimization concepts.&lt;/p>
+&lt;p>The session is divided into three parts:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Part I&lt;/strong>: Classical approaches using Multi-Layer Perceptrons (MLP) and Support Vector Machines (SVM)&lt;/li>
+&lt;li>&lt;strong>Part II&lt;/strong>: Deep learning with Convolutional Neural Networks (CNN)&lt;/li>
+&lt;li>&lt;strong>Part III&lt;/strong>: Transfer learning applied to Fashion-MNIST&lt;/li>
+&lt;/ul>
+&lt;h2 id="learning-objectives">
+ Learning objectives
+ &lt;a class="anchor" href="#learning-objectives">#&lt;/a>
+&lt;/h2>
+&lt;p>By the end of this session, you should be able to:&lt;/p></description></item><item><title>II - Remote Sensing Project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="solving-inverse-problems-in-remote-sensing">
  Solving Inverse Problems in Remote Sensing
  &lt;a class="anchor" href="#solving-inverse-problems-in-remote-sensing">#&lt;/a>
 &lt;/h1>
@@ -234,11 +275,7 @@ $$&lt;/p></description></item><item><title>5b. Constrained optimization - Projec
 &lt;li>&lt;strong>Intermediary level&lt;/strong> : Implement your own code to answer the lab questions using the helper functions you&amp;rsquo;ll find in &lt;code>src/&lt;/code>&lt;/li>
 &lt;li>&lt;strong>Expert level&lt;/strong> : I guess you don&amp;rsquo;t even need to clone the git repo&amp;hellip;&lt;/li>
 &lt;/ol>
-&lt;p>If anything don&amp;rsquo;t hesitate to reach me at &lt;code>yassine.mhiri@univ-smb.fr&lt;/code>.&lt;/p></description></item><item><title>III - Digit recognition</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="digit-recognition-with-multi-layer-perceptron">
- Digit recognition with multi-layer perceptron
- &lt;a class="anchor" href="#digit-recognition-with-multi-layer-perceptron">#&lt;/a>
-&lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
+&lt;p>If anything don&amp;rsquo;t hesitate to reach me at &lt;code>yassine.mhiri@univ-smb.fr&lt;/code>.&lt;/p></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
  Lab Environment Setup
  &lt;a class="anchor" href="#lab-environment-setup">#&lt;/a>
 &lt;/h1>

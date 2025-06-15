@@ -1,12 +1,34 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>III - Machine Learning problems on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/</link><description>Recent content in III - Machine Learning problems on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/index.xml" rel="self" type="application/rss+xml"/><item><title>1. From Linear regression to perceptron</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/perceptron/</guid><description>&lt;h1 id="from-linear-regression-to-perceptron">
- From Linear regression to perceptron
- &lt;a class="anchor" href="#from-linear-regression-to-perceptron">#&lt;/a>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>III - Machine Learning problems on Numerical optimization</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/</link><description>Recent content in III - Machine Learning problems on Numerical optimization</description><generator>Hugo</generator><language>fr</language><atom:link href="http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/index.xml" rel="self" type="application/rss+xml"/><item><title>1. Machine learning fundamentals</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/fundamentals/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/fundamentals/</guid><description>&lt;h1 id="machine-learning-fundamentals-through-optimization">
+ Machine learning fundamentals through optimization
+ &lt;a class="anchor" href="#machine-learning-fundamentals-through-optimization">#&lt;/a>
 &lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>2. Support Vector Machine</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="support-vector-machine">
- Support Vector Machine
- &lt;a class="anchor" href="#support-vector-machine">#&lt;/a>
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong>: This lecture bridges our study of numerical optimization with machine learning, showing how the optimization techniques we&amp;rsquo;ve developed provide the mathematical foundation for learning from data.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="machine-learning-vs-traditional-programming">
+ Machine learning vs traditional programming
+ &lt;a class="anchor" href="#machine-learning-vs-traditional-programming">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="traditional-programming-paradigm">
+ Traditional programming paradigm
+ &lt;a class="anchor" href="#traditional-programming-paradigm">#&lt;/a>
+&lt;/h3>
+&lt;p>In traditional programming, we explicitly encode rules and logic to transform inputs into outputs. The paradigm follows a straightforward path: we receive input data, apply hand-crafted rules, and produce an output. This approach has served us well for many deterministic problems, but it encounters significant limitations when dealing with complex pattern recognition tasks.&lt;/p></description></item><item><title>2. Classification and support vector machines</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/svm/</guid><description>&lt;h1 id="classification-and-support-vector-machines">
+ Classification and support vector machines
+ &lt;a class="anchor" href="#classification-and-support-vector-machines">#&lt;/a>
 &lt;/h1>
-&lt;p>Soon to be added.&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
+&lt;blockquote>
+&lt;p>&lt;strong>Note&lt;/strong>: This lecture extends our optimization framework to classification problems, introducing the perceptron algorithm and support vector machines (SVMs). We&amp;rsquo;ll see how the constrained optimization techniques from previous lectures lead to powerful classification methods.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="classification-problems-in-depth">
+ Classification problems in depth
+ &lt;a class="anchor" href="#classification-problems-in-depth">#&lt;/a>
+&lt;/h2>
+&lt;h3 id="types-of-classification">
+ Types of classification
+ &lt;a class="anchor" href="#types-of-classification">#&lt;/a>
+&lt;/h3>
+&lt;p>In our previous lecture, we introduced binary classification through logistic regression. Let&amp;rsquo;s now formalize the broader classification framework and understand how different formulations connect to optimization problems.&lt;/p></description></item><item><title>3. Neural Networks</title><link>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/lectures/machine_learning/neural_networks/</guid><description>&lt;h1 id="neural-networks">
  Neural Networks
  &lt;a class="anchor" href="#neural-networks">#&lt;/a>
 &lt;/h1>
