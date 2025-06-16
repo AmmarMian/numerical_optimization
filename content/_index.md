@@ -97,6 +97,8 @@ We finally apply all those concepts with a focus on machine learning training pr
 * Shallow models: Optimization for linear/logistic regression, support vector machine, perceptron and MLP
 * Deep models: Formulating the back propagation algorithm for common layers
 
+For this part, we will rely on Rémi Flamary's slides available at [here](https://remi.flamary.com/cours/intro_ml.html) and [here](https://remi.flamary.com/cours/optim_ds.html).
+
 | Session | Duration | Content | Date | Room |
 |---------|----------|---------|------|------|
 | Lecture | CM7 | 1.5h | Stochastic optimisation | 12 June 2025 1.15pm | B-120 |

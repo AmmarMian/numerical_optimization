@@ -1,6 +1,6 @@
 ---
-title: II - MNIST and Fashion-MNIST Classification
-weight: 20
+title: III - MNIST and Fashion-MNIST Classification
+weight: 25
 ---
 
 # MNIST and Fashion-MNIST Classification
@@ -13,6 +13,8 @@ The session is divided into three parts:
 - **Part I**: Classical approaches using Multi-Layer Perceptrons (MLP) and Support Vector Machines (SVM)
 - **Part II**: Deep learning with Convolutional Neural Networks (CNN)
 - **Part III**: Transfer learning applied to Fashion-MNIST
+
+> **Note:** For this lab you will need a running Python with packages: `numpy`, `matplotlib`, `scikit-learn`, `pandase`, `torch`, `torchvision`.
 
 ## Learning objectives
 
