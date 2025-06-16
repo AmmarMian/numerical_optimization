@@ -16,6 +16,7 @@ The session is divided into three parts:
 
 > **Note:** For this lab you will need a running Python with packages: `numpy`, `matplotlib`, `scikit-learn`, `pandase`, `torch`, `torchvision`.
 
+
 ## Learning objectives
 
 By the end of this session, you should be able to:
@@ -24,6 +25,8 @@ By the end of this session, you should be able to:
 - Build and train CNNs using PyTorch
 - Apply transfer learning to improve model performance
 - Understand the trade-offs between different optimization strategies
+
+> You need to implement a backpropagation procedure for MLP. Since we didn't have time to cover this, we refer to [this ressource](https://visionbook.mit.edu/backpropagation.html).
 
 ## Part I: Classical Machine Learning Approaches
 
