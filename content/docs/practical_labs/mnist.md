@@ -28,6 +28,8 @@ By the end of this session, you should be able to:
 
 > You need to implement a backpropagation procedure for MLP. Since we didn't have time to cover this, we refer to [this ressource](https://visionbook.mit.edu/backpropagation.html).
 
+> A solution to this lab is available [here](https://github.com/AmmarMian/MNIST_lab) but don't just look at it! Try to implement the code yourself first, and then compare your solution with the provided one.
+
 ## Part I: Classical Machine Learning Approaches
 
 ### 1. Introduction and Data Exploration
