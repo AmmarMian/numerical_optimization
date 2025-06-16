@@ -7,26 +7,7 @@
  &lt;a class="anchor" href="#introduction">#&lt;/a>
 &lt;/h2>
 &lt;p>In this lab session, we will explore the fundamental concepts of numerical optimization through the lens of linear regression. We&amp;rsquo;ll begin with the simplest case and gradually build up to more complex scenarios, comparing analytical solutions with numerical methods at each step.&lt;/p>
-&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - MNIST and Fashion-MNIST Classification</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="mnist-and-fashion-mnist-classification">
- MNIST and Fashion-MNIST Classification
- &lt;a class="anchor" href="#mnist-and-fashion-mnist-classification">#&lt;/a>
-&lt;/h1>
-&lt;h2 id="introduction">
- Introduction
- &lt;a class="anchor" href="#introduction">#&lt;/a>
-&lt;/h2>
-&lt;p>In this lab session, we explore handwritten digit recognition using the MNIST dataset, progressing from classical machine learning approaches to modern deep learning techniques. We then apply transfer learning to the more challenging Fashion-MNIST dataset. This progression mirrors the historical development of the field while providing hands-on experience with key optimization concepts.&lt;/p>
-&lt;p>The session is divided into three parts:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Part I&lt;/strong>: Classical approaches using Multi-Layer Perceptrons (MLP) and Support Vector Machines (SVM)&lt;/li>
-&lt;li>&lt;strong>Part II&lt;/strong>: Deep learning with Convolutional Neural Networks (CNN)&lt;/li>
-&lt;li>&lt;strong>Part III&lt;/strong>: Transfer learning applied to Fashion-MNIST&lt;/li>
-&lt;/ul>
-&lt;h2 id="learning-objectives">
- Learning objectives
- &lt;a class="anchor" href="#learning-objectives">#&lt;/a>
-&lt;/h2>
-&lt;p>By the end of this session, you should be able to:&lt;/p></description></item><item><title>II - Remote Sensing Project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="solving-inverse-problems-in-remote-sensing">
+&lt;p>Linear regression is perhaps the most fundamental problem in machine learning and statistics. While it has a closed-form solution, implementing numerical optimization methods for this problem provides excellent intuition for more complex optimization scenarios where analytical solutions don&amp;rsquo;t exist.&lt;/p></description></item><item><title>II - Remote Sensing Project</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/remote_sensing/</guid><description>&lt;h1 id="solving-inverse-problems-in-remote-sensing">
  Solving Inverse Problems in Remote Sensing
  &lt;a class="anchor" href="#solving-inverse-problems-in-remote-sensing">#&lt;/a>
 &lt;/h1>
@@ -43,7 +24,23 @@
 &lt;li>&lt;strong>Intermediary level&lt;/strong> : Implement your own code to answer the lab questions using the helper functions you&amp;rsquo;ll find in &lt;code>src/&lt;/code>&lt;/li>
 &lt;li>&lt;strong>Expert level&lt;/strong> : I guess you don&amp;rsquo;t even need to clone the git repo&amp;hellip;&lt;/li>
 &lt;/ol>
-&lt;p>If anything don&amp;rsquo;t hesitate to reach me at &lt;code>yassine.mhiri@univ-smb.fr&lt;/code>.&lt;/p></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
+&lt;p>If anything don&amp;rsquo;t hesitate to reach me at &lt;code>yassine.mhiri@univ-smb.fr&lt;/code>.&lt;/p></description></item><item><title>III - MNIST and Fashion-MNIST Classification</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/mnist/</guid><description>&lt;h1 id="mnist-and-fashion-mnist-classification">
+ MNIST and Fashion-MNIST Classification
+ &lt;a class="anchor" href="#mnist-and-fashion-mnist-classification">#&lt;/a>
+&lt;/h1>
+&lt;h2 id="introduction">
+ Introduction
+ &lt;a class="anchor" href="#introduction">#&lt;/a>
+&lt;/h2>
+&lt;p>In this lab session, we explore handwritten digit recognition using the MNIST dataset, progressing from classical machine learning approaches to modern deep learning techniques. We then apply transfer learning to the more challenging Fashion-MNIST dataset. This progression mirrors the historical development of the field while providing hands-on experience with key optimization concepts.&lt;/p>
+&lt;p>The session is divided into three parts:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Part I&lt;/strong>: Classical approaches using Multi-Layer Perceptrons (MLP) and Support Vector Machines (SVM)&lt;/li>
+&lt;li>&lt;strong>Part II&lt;/strong>: Deep learning with Convolutional Neural Networks (CNN)&lt;/li>
+&lt;li>&lt;strong>Part III&lt;/strong>: Transfer learning applied to Fashion-MNIST&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;strong>Note:&lt;/strong> For this lab you will need a running Python with packages: &lt;code>numpy&lt;/code>, &lt;code>matplotlib&lt;/code>, &lt;code>scikit-learn&lt;/code>, &lt;code>pandase&lt;/code>, &lt;code>torch&lt;/code>, &lt;code>torchvision&lt;/code>.&lt;/p></description></item><item><title>Lab environment</title><link>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://ammarmian.github.io/numerical_optimization/docs/practical_labs/environment/</guid><description>&lt;h1 id="lab-environment-setup">
  Lab Environment Setup
  &lt;a class="anchor" href="#lab-environment-setup">#&lt;/a>
 &lt;/h1>
